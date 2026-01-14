@@ -383,7 +383,7 @@
             margin: 20px 0;
         }
         
-        .restart-btn, .continue-btn, .new-topic-btn, .full-restart-btn {
+        .restart-btn, .continue-btn {
             background: var(--success);
             color: white;
             padding: 12px 30px;
@@ -396,7 +396,7 @@
             transition: all 0.2s;
         }
         
-        .restart-btn:hover, .continue-btn:hover, .new-topic-btn:hover, .full-restart-btn:hover {
+        .restart-btn:hover, .continue-btn:hover {
             background: #3ab7e4;
             transform: scale(1.05);
         }
@@ -804,26 +804,22 @@
         function randomizeOptions(options, correctIndex) {
             const correctAnswer = options[correctIndex];
             const incorrectAnswers = options.filter((_, i) => i !== correctIndex);
-            const shuffledIncorrect = shuffleArray(incorrectAnswers);
             
-            const positions = Array.from({length: options.length}, (_, i) => i);
-            const correctPos = Math.floor(Math.random() * options.length);
-            
+            // Create new options array with correct answer in random position
             const newOptions = [];
-            let incorrectIndex = 0;
+            const correctPosition = Math.floor(Math.random() * options.length);
             
             for (let i = 0; i < options.length; i++) {
-                if (i === correctPos) {
+                if (i === correctPosition) {
                     newOptions.push(correctAnswer);
                 } else {
-                    newOptions.push(shuffledIncorrect[incorrectIndex++]);
+                    newOptions.push(incorrectAnswers.pop());
                 }
             }
             
-            return { 
-                options: newOptions, 
-                correctIndex: newOptions.indexOf(correctAnswer) 
-            };
+            // Find new correct index
+            const newCorrectIndex = newOptions.indexOf(correctAnswer);
+            return { options: newOptions, correctIndex: newCorrectIndex };
         }
         
         // App state
@@ -920,24 +916,22 @@
             // Randomize options for missing-word exercises
             if (exercise.type === 'missing-word') {
                 const randomized = randomizeOptions(exercise.options, exercise.correct);
-                exercise.currentOptions = randomized.options;
-                exercise.currentCorrect = randomized.correctIndex;
-            }
-            
-            // Randomize topics for TTS exercises
-            if (exercise.type === 'tts') {
-                const topics = [...exercise.topics];
-                const correctTopic = topics[exercise.correct];
-                const shuffledTopics = shuffleArray(topics);
-                const newCorrectIndex = shuffledTopics.indexOf(correctTopic);
-                
-                exercise.currentTopics = shuffledTopics;
-                exercise.currentCorrect = newCorrectIndex;
+                exercise.randomizedOptions = randomized.options;
+                exercise.randomizedCorrect = randomized.correctIndex;
             }
             
             if (exercise.type === 'missing-word') {
                 renderMissingWordExercise(exercise);
             } else if (exercise.type === 'tts') {
+                // Randomize topics for TTS exercises
+                const topics = [...exercise.topics];
+                const correctTopic = topics[exercise.correct];
+                const shuffledTopics = shuffleArray(topics);
+                const newCorrectIndex = shuffledTopics.indexOf(correctTopic);
+                
+                exercise.shuffledTopics = shuffledTopics;
+                exercise.shuffledCorrect = newCorrectIndex;
+                
                 renderTTsExercise(exercise);
             }
         }
@@ -960,8 +954,8 @@
             const optionsContainer = document.createElement('div');
             optionsContainer.className = 'options-container';
             
-            const options = exercise.currentOptions;
-            const correctIndex = exercise.currentCorrect;
+            const options = exercise.randomizedOptions || exercise.options;
+            const correctIndex = exercise.randomizedCorrect !== undefined ? exercise.randomizedCorrect : exercise.correct;
             
             options.forEach((option, index) => {
                 const optionBtn = document.createElement('button');
@@ -969,8 +963,8 @@
                 optionBtn.textContent = option;
                 optionBtn.dataset.index = index;
                 
-                // Only disable if user has already answered
-                if (userAnswers[currentExercise] !== undefined && userAnswers[currentExercise] !== null) {
+                // Restore previous answer if exists
+                if (userAnswers[currentExercise] !== null) {
                     optionBtn.disabled = true;
                     if (index === userAnswers[currentExercise]) {
                         optionBtn.classList.add('selected');
@@ -1002,6 +996,7 @@
         
         // Handle missing word answer
         function handleMissingWordAnswer(selectedIndex, correctIndex) {
+            const exercise = currentExercises[currentExercise];
             userAnswers[currentExercise] = selectedIndex;
             
             // Update points
@@ -1028,7 +1023,6 @@
             
             // Show feedback
             const feedback = document.getElementById('feedback');
-            const exercise = currentExercises[currentExercise];
             if (selectedIndex === correctIndex) {
                 feedback.textContent = `Correct! ${exercise.explanation}`;
                 feedback.className = 'feedback correct';
@@ -1081,8 +1075,8 @@
             const topicsContainer = document.createElement('div');
             topicsContainer.className = 'topics-container';
             
-            const topics = exercise.currentTopics;
-            const correctIndex = exercise.currentCorrect;
+            const topics = exercise.shuffledTopics || exercise.topics;
+            const correctIndex = exercise.shuffledCorrect !== undefined ? exercise.shuffledCorrect : exercise.correct;
             
             topics.forEach((topic, index) => {
                 const topicCard = document.createElement('div');
@@ -1090,8 +1084,8 @@
                 topicCard.textContent = topic;
                 topicCard.dataset.index = index;
                 
-                // Only lock if user has already answered
-                if (userAnswers[currentExercise] !== undefined && userAnswers[currentExercise] !== null) {
+                // Restore previous answer if exists
+                if (userAnswers[currentExercise] !== null) {
                     topicCard.classList.add('locked');
                     if (index === userAnswers[currentExercise]) {
                         topicCard.classList.add('selected');
@@ -1116,6 +1110,7 @@
         
         // Handle TTS answer
         function handleTTSAnswer(selectedIndex, correctIndex) {
+            const exercise = currentExercises[currentExercise];
             userAnswers[currentExercise] = selectedIndex;
             
             // Update points
@@ -1135,7 +1130,6 @@
             
             // Show feedback
             const feedback = document.getElementById('feedback');
-            const exercise = currentExercises[currentExercise];
             if (selectedIndex === correctIndex) {
                 feedback.textContent = `Correct! ${exercise.explanation}`;
                 feedback.className = 'feedback correct';
@@ -1182,24 +1176,18 @@
             
             const nextBtn = document.createElement('button');
             nextBtn.className = 'btn btn-next';
-            // Change label based on mode
-            if (isTopicMode) {
-                nextBtn.textContent = currentExercise === currentExercises.length - 1 ? 'Finish Topic' : 'Next';
-            } else {
-                nextBtn.textContent = currentExercise === currentExercises.length - 1 ? 'Finish' : 'Next';
-            }
-            nextBtn.disabled = userAnswers[currentExercise] === undefined || userAnswers[currentExercise] === null;
+            nextBtn.textContent = currentExercise === currentExercises.length - 1 ? 'Finish' : 'Next';
+            nextBtn.disabled = userAnswers[currentExercise] === null;
             nextBtn.addEventListener('click', () => {
                 if (currentExercise < currentExercises.length - 1) {
                     currentExercise++;
                     loadExercise(currentExercise);
                     updateProgress();
                 } else {
-                    // Reached the end
                     if (isTopicMode) {
-                        showTopicCompletion();
+                        showCompletionScreen(true);
                     } else {
-                        showInitialCompletion();
+                        showCompletionScreen(false);
                     }
                 }
             });
@@ -1216,27 +1204,24 @@
             progressText.textContent = `${currentExercise + 1}/${currentExercises.length}`;
         }
         
-        // Show initial completion screen
-        function showInitialCompletion() {
+        // Show completion screen
+        function showCompletionScreen(isTopic) {
             exerciseContainer.classList.add('hidden');
-            finalScore.textContent = points;
-            completionScreen.classList.remove('hidden');
-        }
-        
-        // Show topic completion screen
-        function showTopicCompletion() {
-            exerciseContainer.classList.add('hidden');
-            completionScreen.innerHTML = `
-                <h2>Great Job! 🌟</h2>
-                <p>You've completed the topic exercises!</p>
-                <div class="final-score">Topic Score: <span id="topic-final-score">${points}</span> points</div>
-                <button class="new-topic-btn" id="new-topic-btn">Choose Another Topic</button>
-                <button class="full-restart-btn" id="full-restart-btn">Restart All</button>
-            `;
-            completionScreen.classList.remove('hidden');
-            
-            document.getElementById('new-topic-btn').addEventListener('click', showTopicSelection);
-            document.getElementById('full-restart-btn').addEventListener('click', restartApp);
+            if (isTopic) {
+                completionScreen.innerHTML = `
+                    <h2>Great Job! 🌟</h2>
+                    <p>You've completed the topic exercises!</p>
+                    <div class="final-score">Topic Score: <span id="topic-final-score">${points}</span> points</div>
+                    <button class="continue-btn" id="new-topic-btn">Choose Another Topic</button>
+                    <button class="restart-btn" id="full-restart-btn">Restart All</button>
+                `;
+                completionScreen.classList.remove('hidden');
+                document.getElementById('new-topic-btn').addEventListener('click', showTopicSelection);
+                document.getElementById('full-restart-btn').addEventListener('click', restartApp);
+            } else {
+                finalScore.textContent = points;
+                completionScreen.classList.remove('hidden');
+            }
         }
         
         // Show topic selection screen
@@ -1251,11 +1236,13 @@
             isTopicMode = true;
             currentExercises = topicExercises[topic];
             currentExercise = 0;
-            // Reset user answers for new topic
             userAnswers = new Array(currentExercises.length).fill(null);
             exerciseContainer.classList.remove('hidden');
             updateProgress();
             loadExercise(currentExercise);
+            
+            // Update progress text to show topic exercises count
+            progressText.textContent = `${currentExercise + 1}/${currentExercises.length}`;
         }
         
         // Restart the app
