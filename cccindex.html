@@ -1,0 +1,739 @@
+html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deutsch Lernen Pro</title>
+    <style>
+        /* --- CSS VARIABLES & RESET --- */
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
+            --success-gradient: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            --accent-color: #ff0080;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-main: #2d3748;
+            --text-light: #718096;
+            --success: #38a169;
+            --error: #e53e3e;
+            --font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            --radius: 20px;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body {
+            font-family: var(--font-family);
+            background: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding-bottom: 40px;
+        }
+        /* --- LAYOUT --- */
+        .container { max-width: 800px; margin: 0 auto; padding: 0 16px; }
+        section { margin-bottom: 40px; opacity: 1; transition: opacity 0.5s ease; }
+        section.faded { opacity: 0.5; pointer-events: none; }
+        h2 { color: #4a5568; margin-bottom: 20px; border-left: 5px solid #764ba2; padding-left: 10px; }
+        /* --- SCOREBOARD --- */
+        .scoreboard {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 10px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        .progress-container {
+            height: 10px;
+            background: #e2e8f0;
+            border-radius: 5px;
+            overflow: hidden;
+            width: 100%;
+        }
+        .progress-bar {
+            height: 100%;
+            background: var(--primary-gradient);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        .score-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #555;
+            margin-top: 5px;
+        }
+        /* --- HEADER --- */
+        header {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 40px 0 60px;
+            text-align: center;
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
+            margin-bottom: -30px; /* Overlap effect */
+            box-shadow: var(--shadow);
+        }
+        header h1 { color: white; font-size: 2.2rem; margin-bottom: 5px; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        header p { opacity: 0.9; font-size: 1rem; }
+        /* --- CARDS --- */
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            margin-bottom: 24px;
+            border: 1px solid #edf2f7;
+            transition: transform 0.2s;
+        }
+        .card-header { margin-bottom: 16px; border-bottom: 2px solid #f7fafc; padding-bottom: 10px; }
+        .card-title { font-size: 1.2rem; color: #553c9a; font-weight: bold; display: flex; align-items: center; justify-content: space-between;}
+        .card-subtitle { font-size: 0.85rem; color: var(--text-light); }
+        .badge {
+            display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: bold; color: white; text-transform: uppercase;
+        }
+        .bg-easy { background: #48bb78; }
+        .bg-med { background: #ed8936; }
+        .bg-hard { background: #f56565; }
+        /* --- EXERCISE: MATCHING --- */
+        .matching-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .match-item {
+            background: #f8f9fa; border: 2px solid #e2e8f0; border-radius: 10px; padding: 12px;
+            text-align: center; cursor: pointer; transition: all 0.2s; user-select: none; font-weight: 500;
+        }
+        .match-item.selected { border-color: #764ba2; background: #ebf4ff; transform: scale(1.03); }
+        .match-item.matched { border-color: var(--success); background: #f0fff4; opacity: 0.6; pointer-events: none; text-decoration: line-through; }
+        .match-item.wrong { border-color: var(--error); background: #fff5f5; opacity: 0.6; pointer-events: none; text-decoration: line-through; color: var(--error); }
+        /* --- EXERCISE: FILL IN BLANK --- */
+        .word-bank { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; padding: 10px; background: #edf2f7; border-radius: 10px; justify-content: center; }
+        .draggable-word {
+            background: white; border: 1px solid #cbd5e0; padding: 6px 12px; border-radius: 15px; cursor: pointer;
+            box-shadow: 0 2px 0 #a0aec0; font-size: 0.9rem; transition: all 0.2s;
+        }
+        .draggable-word:active { transform: translateY(2px); box-shadow: none; }
+        .draggable-word.used { opacity: 0.3; pointer-events: none; text-decoration: line-through; background: #e2e8f0; }
+        .sentence-row { display: flex; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 5px; font-size: 1rem; }
+        .blank-slot {
+            display: inline-block; min-width: 90px; border-bottom: 2px solid #764ba2; padding: 0 8px;
+            color: #764ba2; font-weight: bold; text-align: center; cursor: pointer; background: #f7fafc;
+            border-radius: 4px 4px 0 0; min-height: 1.8rem; transition: background 0.3s;
+        }
+        .blank-slot.filled { background: #d6bcfa; border-bottom-color: var(--success); color: #2d3748; }
+        /* One Chance: Wrong State for Blanks */
+        .blank-slot.failed { background: #fed7d7; border-bottom-color: var(--error); color: #c53030; pointer-events: none; }
+
+        /* --- EXERCISE: FLASHCARDS --- */
+        .flashcard-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 15px; }
+        .flashcard { background-color: transparent; height: 150px; perspective: 1000px; cursor: pointer; }
+        .flashcard-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; border-radius: 12px; box-shadow: var(--shadow); }
+        .flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
+        .flashcard-front, .flashcard-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; border-radius: 12px; flex-direction: column; }
+        .flashcard-front { background: white; font-size: 3rem; }
+        .flashcard-back { background: var(--secondary-gradient); color: white; transform: rotateY(180deg); font-size: 1.1rem; font-weight: bold; padding: 5px; }
+        /* --- EXERCISE: MCQ --- */
+        .mcq-option { display: block; width: 100%; padding: 12px; margin-bottom: 8px; background: white; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; text-align: left; font-size: 1rem; transition: all 0.2s; }
+        .mcq-option:hover { border-color: #764ba2; background: #f7fafc; }
+        .mcq-option.correct { background-color: #c6f6d5; border-color: #48bb78; color: #22543d; }
+        .mcq-option.wrong { background-color: #fed7d7; border-color: #f56565; color: #822727; }
+        /* --- EXERCISE: FAMILY TREE --- */
+        .tree-container { display: flex; flex-direction: column; align-items: center; margin-top: 20px; user-select: none; }
+        .tree-level { display: flex; justify-content: center; gap: 30px; position: relative; margin-bottom: 35px; }
+        .tree-level::before { content: ''; position: absolute; top: -20px; left: 50%; transform: translateX(-50%); width: 2px; height: 20px; background: #cbd5e0; }
+        .tree-level:last-child::before { display: none; }
+        .tree-node {
+            width: 70px; height: 70px; background: white; border: 3px solid #805ad5; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            text-align: center; font-size: 0.75rem; font-weight: bold; cursor: pointer; position: relative; transition: all 0.2s; padding: 5px; z-index: 2;
+        }
+        .tree-node.filled { background: var(--primary-gradient); color: white; border-color: white; box-shadow: 0 0 10px rgba(118, 75, 162, 0.5); }
+        .tree-node:hover { transform: scale(1.1); }
+        /* One Chance: Failed State for Tree */
+        .tree-node.failed { background: #fed7d7; border-color: #e53e3e; color: #c53030; pointer-events: none; opacity: 0.8; }
+        
+        .node-labels { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 20px; padding: 15px; background: #fff; border-radius: 12px; border: 1px dashed #cbd5e0; }
+        .node-label { padding: 6px 12px; background: #edf2f7; border-radius: 15px; font-size: 0.85rem; cursor: pointer; border: 1px solid #cbd5e0; }
+        .node-label.active { background: #805ad5; color: white; border-color: #805ad5; transform: translateY(-2px); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .node-label.hidden { display: none; }
+        /* --- FINISH MODAL / BUTTON --- */
+        .finish-section {
+            text-align: center; margin-top: 40px; padding: 30px; background: white; border-radius: var(--radius); box-shadow: var(--shadow);
+        }
+        .btn {
+            background: var(--primary-gradient); color: white; border: none; padding: 12px 30px; border-radius: 30px; font-size: 1.1rem; cursor: pointer;
+            box-shadow: 0 4px 15px rgba(118, 75, 162, 0.4); transition: transform 0.2s;
+        }
+        .btn:hover { transform: translateY(-2px); }
+        .btn-secondary { background: white; color: #805ad5; border: 2px solid #805ad5; margin-left: 10px; }
+        /* FOOTER */
+        footer { text-align: center; color: #a0aec0; font-size: 0.8rem; margin-top: 40px; padding-top: 20px; border-top: 1px solid #e2e8f0; }
+
+        /* Mobile Adjustments */
+        @media (max-width: 600px) {
+            .matching-grid { grid-template-columns: 1fr; }
+            .tree-level { gap: 15px; }
+            header h1 { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Deutsch Lernen</h1>
+            <p>Level <span id="level-indicator">1</span> of 5</p>
+        </div>
+    </header>
+    <!-- SCOREBOARD -->
+    <div class="scoreboard">
+        <div class="container">
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            <div class="score-text">
+                <span>Score: <span id="score-val">0</span> / <span id="max-score-val">0</span></span>
+                <span id="percentage-val">0%</span>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <!-- SECTION I: ANIMALS -->
+        <h2>I. Tiere & Eigenschaften</h2>
+        <!-- I.A Matching -->
+        <section class="card" id="sec-matching">
+            <div class="card-header">
+                <span class="badge bg-easy">Einfach</span>
+                <div class="card-title">A. Matching</div>
+                <div class="card-subtitle">Match German to English (One Chance!)</div>
+            </div>
+            <div class="matching-grid" id="matching-container"></div>
+        </section>
+        <!-- I.B Fill in Blank -->
+        <section class="card" id="sec-fill">
+            <div class="card-header">
+                <span class="badge bg-med">Mittel</span>
+                <div class="card-title">B. Fill in the Blank</div>
+                <div class="card-subtitle">Tap a word, then tap the gap (One Chance!)</div>
+            </div>
+            <div class="word-bank" id="word-bank"></div>
+            <div id="sentences-container"></div>
+        </section>
+        <!-- I.C Flashcards -->
+        <section class="card" id="sec-flash">
+            <div class="card-header">
+                <span class="badge bg-med">Mittel</span>
+                <div class="card-title">C. Flashcards</div>
+                <div class="card-subtitle">Tap to flip & practice</div>
+            </div>
+            <div class="flashcard-grid" id="flashcard-container"></div>
+        </section>
+        <!-- I.D Adjectives Matching -->
+        <section class="card" id="sec-adj">
+            <div class="card-header">
+                <span class="badge bg-hard">Schwer</span>
+                <div class="card-title">D. Adjectives Matching</div>
+            </div>
+            <div class="matching-grid" id="adj-container"></div>
+        </section>
+        <!-- SECTION II: FAMILY -->
+        <h2>II. Familie & Pronomen</h2>
+        <!-- II.A MCQ -->
+        <section class="card" id="sec-mcq">
+            <div class="card-header">
+                <span class="badge bg-easy">Einfach</span>
+                <div class="card-title">A. Multiple Choice</div>
+            </div>
+            <div id="mcq-container"></div>
+        </section>
+        <!-- II.B Writing (Static) -->
+        <section class="card" id="sec-write">
+            <div class="card-header">
+                <span class="badge bg-med">Mittel</span>
+                <div class="card-title">B. Free Writing</div>
+                <div class="card-subtitle">Write a sentence about your family.</div>
+            </div>
+            <textarea id="writing-area" placeholder="e.g. Ich habe eine Schwester..."></textarea>
+            <button class="btn" style="font-size: 0.9rem; padding: 8px 16px;" onclick="showToast('Saved! (In a real app, teacher would check this)')">Save Note</button>
+        </section>
+        <!-- II.C Family Tree -->
+        <section class="card" id="sec-tree">
+            <div class="card-header">
+                <span class="badge bg-hard">Schwer</span>
+                <div class="card-title">C. Family Tree</div>
+                <div class="card-subtitle">Drag labels to the tree (One Chance!)</div>
+            </div>
+            <div class="tree-container">
+                <div class="tree-level">
+                    <!-- BUG FIX: Changed data-ans to data-key to prevent overwriting on level reload -->
+                    <div class="tree-node" data-key="top1">?</div>
+                    <div class="tree-node" data-key="top2">?</div>
+                </div>
+                <div class="tree-level">
+                    <div class="tree-node" data-key="mid1">?</div>
+                    <div class="tree-node" data-key="mid2">?</div>
+                </div>
+                <div class="tree-level">
+                    <div class="tree-node" data-key="bot">?</div>
+                </div>
+            </div>
+            <div class="node-labels" id="node-labels"></div>
+        </section>
+        <!-- FINISH & REFRESH -->
+        <div class="finish-section">
+            <h3>Finished the exercises?</h3>
+            <p>Check your score and load the next vocabulary set!</p>
+            <br>
+            <button class="btn" onclick="finishLevel()">Finish & Next Level</button>
+        </div>
+    </div>
+
+    <footer>Deutsch Lernen Pro v1.2</footer>
+
+    <!-- TOAST -->
+    <div id="toast" style="visibility: hidden; min-width: 250px; background-color: #333; color: #fff; text-align: center; border-radius: 8px; padding: 16px; position: fixed; z-index: 200; left: 50%; bottom: 30px; transform: translateX(-50%); opacity: 0; transition: opacity 0.3s;">Message</div>
+    <script>
+        // --- 5 SETS OF DATA ---
+        const quizSets = [
+            {
+                // SET 1: Original
+                animals: [
+                    { de: "Der Hund", en: "Dog", emoji: "🐶" },
+                    { de: "Die Katze", en: "Cat", emoji: "🐱" },
+                    { de: "Der Fisch", en: "Fish", emoji: "🐟" },
+                    { de: "Der Hamster", en: "Hamster", emoji: "🐹" },
+                    { de: "Der Vogel", en: "Bird", emoji: "🐦" }
+                ],
+                adjectives: [
+                    { q: "schnell", a: "das Pferd" },
+                    { q: "fleißig", a: "der Vogel" },
+                    { q: "klein", a: "der Hamster" },
+                    { q: "laut", a: "der Hund" },
+                    { q: "flauschig", a: "das Schaf" }
+                ],
+                family: {
+                    mcq: [
+                        { q: "Mother", opts: ["der Vater", "die Mutter", "der Bruder"], ans: "die Mutter" },
+                        { q: "Father", opts: ["die Schwester", "der Vater", "das Kind"], ans: "der Vater" },
+                        { q: "Brother", opts: ["der Vater", "der Bruder", "die Mutter"], ans: "der Bruder" }
+                    ],
+                    tree: { top1: "die Oma", top2: "der Opa", mid1: "die Mutter", mid2: "der Vater", bot: "das Kind" }
+                },
+                fill: [
+                    { pre: "Ich habe", post: "Sie ist braun.", ans: "die Katze" },
+                    { pre: "", post: "bellt laut.", ans: "Der Hund" },
+                    { pre: "Das ist ein", post: ".", ans: "Fisch" }
+                ],
+                words: ["die Katze", "Der Hund", "Fisch", "Vogel", "Tier"]
+            },
+            {
+                // SET 2: Farm & Extended Family
+                animals: [
+                    { de: "Das Pferd", en: "Horse", emoji: "🐴" },
+                    { de: "Die Kuh", en: "Cow", emoji: "🐮" },
+                    { de: "Das Schwein", en: "Pig", emoji: "🐷" },
+                    { de: "Das Schaf", en: "Sheep", emoji: "🐑" },
+                    { de: "Die Ente", en: "Duck", emoji: "🦆" }
+                ],
+                adjectives: [
+                    { q: "groß", a: "das Pferd" },
+                    { q: "langsam", a: "die Kuh" },
+                    { q: "schmutzig", a: "das Schwein" },
+                    { q: "weich", a: "das Schaf" },
+                    { q: "nass", a: "die Ente" }
+                ],
+                family: {
+                    mcq: [
+                        { q: "Grandmother", opts: ["die Tante", "die Oma", "die Mutter"], ans: "die Oma" },
+                        { q: "Grandfather", opts: ["der Opa", "der Onkel", "der Vater"], ans: "der Opa" },
+                        { q: "Aunt", opts: ["die Tante", "die Cousine", "die Oma"], ans: "die Tante" }
+                    ],
+                    tree: { top1: "Urgroßmutter", top2: "Urgroßvater", mid1: "Tante", mid2: "Onkel", bot: "Cousin" }
+                },
+                fill: [
+                    { pre: "Das ist", post: ". Es ist groß.", ans: "Pferd" },
+                    { pre: "", post: "macht Muuuuh.", ans: "Kuh" },
+                    { pre: "Ich sehe eine", post: ".", ans: "Ente" }
+                ],
+                words: ["Pferd", "Kuh", "Schwein", "Ente", "Huhn"]
+            },
+            {
+                // SET 3: Wild Animals
+                animals: [
+                    { de: "Der Löwe", en: "Lion", emoji: "🦁" },
+                    { de: "Der Tiger", en: "Tiger", emoji: "🐯" },
+                    { de: "Der Elefant", en: "Elephant", emoji: "🐘" },
+                    { de: "Der Affe", en: "Monkey", emoji: "🐒" },
+                    { de: "Die Giraffe", en: "Giraffe", emoji: "🦒" }
+                ],
+                adjectives: [
+                    { q: "stark", a: "der Löwe" },
+                    { q: "gestreift", a: "der Tiger" },
+                    { q: "schwer", a: "der Elefant" },
+                    { q: "clever", a: "der Affe" },
+                    { q: "hoch", a: "die Giraffe" }
+                ],
+                family: {
+                    mcq: [
+                        { q: "Uncle", opts: ["der Cousin", "der Onkel", "der Bruder"], ans: "der Onkel" },
+                        { q: "Cousin (m)", opts: ["der Cousin", "der Neffe", "der Sohn"], ans: "der Cousin" },
+                        { q: "Niece", opts: ["die Nichte", "die Tochter", "die Cousine"], ans: "die Nichte" }
+                    ],
+                    tree: { top1: "Tante", top2: "Onkel", mid1: "Mutter", mid2: "Vater", bot: "Ich" }
+                },
+                fill: [
+                    { pre: "Der", post: "brüllt.", ans: "Löwe" },
+                    { pre: "", post: "hat einen langen Rüssel.", ans: "Elefant" },
+                    { pre: "Die", post: "hat einen langen Hals.", ans: "Giraffe" }
+                ],
+                words: ["Löwe", "Tiger", "Elefant", "Affe", "Giraffe"]
+            },
+            {
+                // SET 4: Small Creatures & Relatives
+                animals: [
+                    { de: "Die Maus", en: "Mouse", emoji: "🐭" },
+                    { de: "Die Biene", en: "Bee", emoji: "🐝" },
+                    { de: "Die Ameise", en: "Ant", emoji: "🐜" },
+                    { de: "Der Schmetterling", en: "Butterfly", emoji: "🦋" },
+                    { de: "Die Schnecke", en: "Snail", emoji: "🐌" }
+                ],
+                adjectives: [
+                    { q: "klein", a: "die Maus" },
+                    { q: "beschäftigt", a: "die Biene" },
+                    { q: "schwach", a: "die Ameise" },
+                    { q: "bunt", a: "der Schmetterling" },
+                    { q: "langsam", a: "die Schnecke" }
+                ],
+                family: {
+                    mcq: [
+                        { q: "Son", opts: ["die Tochter", "der Bruder", "der Sohn"], ans: "der Sohn" },
+                        { q: "Daughter", opts: ["die Schwester", "die Tochter", "die Nichte"], ans: "die Tochter" },
+                        { q: "Parents", opts: ["die Eltern", "die Kinder", "die Geschwister"], ans: "die Eltern" }
+                    ],
+                    tree: { top1: "Großmutter", top2: "Großvater", mid1: "Tochter", mid2: "Sohn", bot: "Enkel" }
+                },
+                fill: [
+                    { pre: "Die", post: "ist sehr klein.", ans: "Maus" },
+                    { pre: "", post: "fliegt zu Blumen.", ans: "Biene" },
+                    { pre: "Die", post: "kriecht langsam.", ans: "Schnecke" }
+                ],
+                words: ["Maus", "Biene", "Ameise", "Schmetterling", "Schnecke"]
+            },
+            {
+                // SET 5: Mixed Review
+                animals: [
+                    { de: "Der Hahn", en: "Rooster", emoji: "🐓" },
+                    { de: "Die Gans", en: "Goose", emoji: "🦢" },
+                    { de: "Der Hase", en: "Rabbit", emoji: "🐇" },
+                    { de: "Der Frosch", en: "Frog", emoji: "🐸" },
+                    { de: "Der Wolf", en: "Wolf", emoji: "🐺" }
+                ],
+                adjectives: [
+                    { q: "hungrig", a: "der Wolf" },
+                    { q: "grün", a: "der Frosch" },
+                    { q: "schnell", a: "der Hase" },
+                    { q: "laut", a: "der Hahn" },
+                    { q: "weiß", a: "die Gans" }
+                ],
+                family: {
+                    mcq: [
+                        { q: "Siblings", opts: ["die Eltern", "die Geschwister", "die Kinder"], ans: "die Geschwister" },
+                        { q: "Husband", opts: ["der Mann", "der Vater", "der Freund"], ans: "der Mann" },
+                        { q: "Wife", opts: ["die Mutter", "die Frau", "die Schwester"], ans: "die Frau" }
+                    ],
+                    tree: { top1: "Frau", top2: "Mann", mid1: "Schwester", mid2: "Bruder", bot: "Baby" }
+                },
+                fill: [
+                    { pre: "Der", post: "kräht am Morgen.", ans: "Hahn" },
+                    { pre: "", post: "quakt.", ans: "Frosch" },
+                    { pre: "Der", post: "isst Karotten.", ans: "Hase" }
+                ],
+                words: ["Hahn", "Gans", "Hase", "Frosch", "Wolf"]
+            }
+        ];
+        // --- STATE ---
+        let currentLevel = 0;
+        let score = 0;
+        let maxScore = 0;
+        // --- CORE FUNCTIONS ---
+        function initApp() {
+            loadLevel(currentLevel);
+        }
+        function loadLevel(index) {
+            // Reset State
+            score = 0;
+            maxScore = 0;
+            document.getElementById('writing-area').value = ""; // Clear text area
+            // Update Header
+            document.getElementById('level-indicator').textContent = index + 1;
+            // DOM Elements
+            const data = quizSets[index];
+            // 1. Render Matching (Animals)
+            const matchPairs = data.animals.map(a => ({ id: a.en, text: a.de, side: 'left' }))
+                .concat(data.animals.map(a => ({ id: a.en, text: a.en, side: 'right' })));
+            setupMatching('matching-container', matchPairs);
+            // 2. Render Flashcards
+            setupFlashcards(data.animals);
+            // 3. Render Adjectives Matching
+            const adjPairs = data.adjectives.map(a => ({ id: a.a, text: a.q, side: 'left' }))
+                .concat(data.adjectives.map(a => ({ id: a.a, text: a.a, side: 'right' })));
+            setupMatching('adj-container', adjPairs);
+            // 4. Render MCQ
+            setupMCQ(data.family.mcq);
+            // 5. Render Fill Blank
+            setupFillBlank(data.fill, data.words);
+            // 6. Render Family Tree
+            setupFamilyTree(data.family.tree);
+            updateScoreUI();
+        }
+        function updateScore(points) {
+            score += points;
+            updateScoreUI();
+        }
+        function updateScoreUI() {
+            document.getElementById('score-val').textContent = score;
+            document.getElementById('max-score-val').textContent = maxScore;
+            const pct = maxScore === 0 ? 0 : Math.round((score / maxScore) * 100);
+            document.getElementById('percentage-val').textContent = pct + "%";
+            document.getElementById('progress-bar').style.width = pct + "%";
+        }
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.style.opacity = 1;
+            t.style.visibility = 'visible';
+            setTimeout(() => { t.style.opacity = 0; t.style.visibility = 'hidden'; }, 2500);
+        }
+        function finishLevel() {
+            const pct = maxScore === 0 ? 0 : Math.round((score / maxScore) * 100);
+            let msg = `Level ${currentLevel + 1} Complete! Score: ${pct}%`;
+            if (pct > 80) msg += " - Sehr gut!";
+            else if (pct > 50) msg += " - Gut gemacht!";
+            else msg += " - Weiter üben!";
+            if(confirm(msg + "\n\nLoad next vocabulary set?")) {
+                currentLevel++;
+                if(currentLevel >= quizSets.length) {
+                    alert("Congratulations! You have completed all 5 levels. Restarting...");
+                    currentLevel = 0;
+                }
+                // Visual transition
+                document.querySelectorAll('.card').forEach(c => c.style.opacity = '0.5');
+                setTimeout(() => {
+                    loadLevel(currentLevel);
+                    document.querySelectorAll('.card').forEach(c => c.style.opacity = '1');
+                    window.scrollTo({top: 0, behavior: 'smooth'});
+                }, 500);
+            }
+        }
+        // --- EXERCISE LOGIC ---
+        // 1. MATCHING (Updated for One Chance)
+        function setupMatching(containerId, items) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            maxScore += items.length / 2;
+            let selected = null;
+            // Shuffle items
+            items.sort(() => Math.random() - 0.5);
+            items.forEach(item => {
+                const el = document.createElement('div');
+                el.className = 'match-item';
+                el.textContent = item.text;
+                el.dataset.id = item.id;
+                el.onclick = () => {
+                    if(el.classList.contains('matched') || el.classList.contains('wrong')) return; // Already used
+                    if(selected === el) {
+                        el.classList.remove('selected');
+                        selected = null;
+                        return;
+                    }
+                    if(!selected) {
+                        el.classList.add('selected');
+                        selected = el;
+                    } else {
+                        // Check match
+                        if(selected.dataset.id === el.dataset.id) {
+                            el.classList.add('matched');
+                            selected.classList.add('matched');
+                            selected.classList.remove('selected');
+                            selected = null;
+                            updateScore(1);
+                        } else {
+                            // ONE CHANCE LOGIC: Lock wrong answers immediately
+                            el.classList.add('wrong');
+                            selected.classList.add('wrong');
+                            selected.classList.remove('selected');
+                            selected = null;
+                            showToast("Falsch! Versuchen Sie es nicht erneut.");
+                        }
+                    }
+                };
+                container.appendChild(el);
+            });
+        }
+        // 2. FILL BLANK (Updated for One Chance)
+        function setupFillBlank(sentences, wordList) {
+            const container = document.getElementById('sentences-container');
+            const bank = document.getElementById('word-bank');
+            container.innerHTML = '';
+            bank.innerHTML = '';
+            maxScore += sentences.length;
+            let selectedWord = null;
+            // Words
+            wordList.forEach(w => {
+                const el = document.createElement('div');
+                el.className = 'draggable-word';
+                el.textContent = w;
+                el.onclick = () => {
+                    if(el.classList.contains('used')) return;
+                    document.querySelectorAll('.draggable-word').forEach(x => x.style.borderColor = '#cbd5e0');
+                    el.style.borderColor = '#805ad5';
+                    selectedWord = { text: w, el: el };
+                };
+                bank.appendChild(el);
+            });
+            // Sentences
+            sentences.forEach((s, idx) => {
+                const row = document.createElement('div');
+                row.className = 'sentence-row';
+                row.innerHTML = `<span>${s.pre}</span> <div class="blank-slot" data-ans="${s.ans}" data-idx="${idx}"></div> <span>${s.post}</span>`;
+                const slot = row.querySelector('.blank-slot');
+                slot.onclick = () => {
+                    if(!selectedWord) { showToast("Select a word first!"); return; }
+                    if(slot.classList.contains('filled') || slot.classList.contains('failed')) return;
+                    
+                    slot.textContent = selectedWord.text;
+                    
+                    const cleanSel = selectedWord.text.toLowerCase().trim();
+                    const cleanAns = s.ans.toLowerCase().trim();
+                    
+                    if(cleanSel === cleanAns || cleanAns.includes(cleanSel)) {
+                        slot.classList.add('filled');
+                        selectedWord.el.classList.add('used');
+                        selectedWord.el.style.borderColor = '#cbd5e0';
+                        selectedWord = null;
+                        updateScore(1);
+                    } else {
+                        // ONE CHANCE LOGIC: Lock the slot as failed
+                        slot.classList.add('failed');
+                        selectedWord.el.classList.add('used'); // Consume word
+                        selectedWord.el.style.borderColor = '#cbd5e0';
+                        selectedWord = null;
+                        showToast("Falsch! This answer is locked.");
+                    }
+                };
+                container.appendChild(row);
+            });
+        }
+        // 3. FLASHCARDS
+        function setupFlashcards(animals) {
+            const container = document.getElementById('flashcard-container');
+            container.innerHTML = '';
+            animals.forEach(a => {
+                const card = document.createElement('div');
+                card.className = 'flashcard';
+                card.innerHTML = `
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">${a.emoji}</div>
+                        <div class="flashcard-back">${a.de}<br><small style="font-weight:normal">${a.en}</small></div>
+                    </div>
+                `;
+                card.onclick = () => card.classList.toggle('flipped');
+                container.appendChild(card);
+            });
+        }
+        // 4. MCQ (Already one chance, but verified logic)
+        function setupMCQ(questions) {
+            const container = document.getElementById('mcq-container');
+            container.innerHTML = '';
+            maxScore += questions.length;
+            questions.forEach((q, idx) => {
+                const qDiv = document.createElement('div');
+                qDiv.style.marginBottom = "15px";
+                qDiv.innerHTML = `<p style="font-weight:bold; margin-bottom:5px;">${idx+1}. ${q.q}</p>`;
+                q.opts.forEach(opt => {
+                    const btn = document.createElement('button');
+                    btn.className = 'mcq-option';
+                    btn.textContent = opt;
+                    btn.onclick = function() {
+                        if(qDiv.classList.contains('answered')) return;
+                        qDiv.classList.add('answered');
+                        const allBtns = qDiv.querySelectorAll('.mcq-option');
+                        allBtns.forEach(b => b.disabled = true);
+                        if(opt === q.ans) {
+                            this.classList.add('correct');
+                            updateScore(1);
+                        } else {
+                            this.classList.add('wrong');
+                            allBtns.forEach(b => { if(b.textContent === q.ans) b.classList.add('correct'); });
+                        }
+                    };
+                    qDiv.appendChild(btn);
+                });
+                container.appendChild(qDiv);
+            });
+        }
+        // 5. FAMILY TREE (Updated for Bug Fix + One Chance)
+        function setupFamilyTree(treeData) {
+            const labelsCont = document.getElementById('node-labels');
+            labelsCont.innerHTML = '';
+            const nodes = document.querySelectorAll('.tree-node');
+            maxScore += nodes.length;
+            let activeLabel = null;
+
+            // Reset nodes visuals
+            nodes.forEach(node => {
+                node.textContent = "?";
+                node.classList.remove('filled');
+                node.classList.remove('failed'); // Remove failed state from previous level
+                
+                // BUG FIX: Use data-key to get the answer from data, set it to data-ans for checking
+                // This prevents overwriting the key on level reload
+                const key = node.dataset.key;
+                if (treeData[key]) {
+                    node.dataset.ans = treeData[key];
+                } else {
+                    node.dataset.ans = "Unknown"; 
+                    console.error("Missing key in treeData:", key);
+                }
+            });
+
+            const labels = Object.values(treeData);
+            labels.forEach(lbl => {
+                const span = document.createElement('div');
+                span.className = 'node-label';
+                span.textContent = lbl;
+                span.onclick = () => {
+                    if(activeLabel) activeLabel.classList.remove('active');
+                    span.classList.add('active');
+                    activeLabel = span;
+                };
+                labelsCont.appendChild(span);
+            });
+
+            nodes.forEach(node => {
+                node.onclick = () => {
+                    if(!activeLabel) { showToast("Tap a label below first!"); return; }
+                    if(node.classList.contains('filled') || node.classList.contains('failed')) return;
+                    
+                    if(activeLabel.textContent.trim() === node.dataset.ans.trim()) {
+                        node.textContent = activeLabel.textContent;
+                        node.classList.add('filled');
+                        activeLabel.classList.add('hidden');
+                        activeLabel = null;
+                        updateScore(1);
+                    } else {
+                        // ONE CHANCE LOGIC: Lock node as failed
+                        node.classList.add('failed');
+                        activeLabel.classList.remove('active'); // Return label to pool
+                        activeLabel = null;
+                        showToast("Falsch! Position is now locked.");
+                    }
+                };
+            });
+        }
+        // Start
+        window.onload = initApp;
+    </script>
+</body>
+</html>
+```
