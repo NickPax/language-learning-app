@@ -169,7 +169,7 @@
         .tree-node:hover { transform: scale(1.1); }
         .node-labels { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 20px; padding: 15px; background: #fff; border-radius: 12px; border: 1px dashed #cbd5e0; }
         .node-label { padding: 6px 12px; background: #edf2f7; border-radius: 15px; font-size: 0.85rem; cursor: pointer; border: 1px solid #cbd5e0; }
-        .node-label.active { background: #805ad5; color: white; border-color: #805ad5; transform: translateY(-2px); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .node-label.active { background: #805ad5; color: white; border-color: #805ad5; transform: translateY(-2px); }
         .node-label.hidden { display: none; }
 
         /* --- FINISH MODAL / BUTTON --- */
@@ -346,7 +346,7 @@
                 fill: [
                     { pre: "Ich habe", post: "Sie ist braun.", ans: "die Katze" },
                     { pre: "", post: "bellt laut.", ans: "Der Hund" },
-                    { pre: "Das ist ein", post: ".", ans: "Fisch" }
+                    { pre: "Das ist ein", post: ".", ans: "Fisch" } // Simplified logic
                 ],
                 words: ["die Katze", "Der Hund", "Fisch", "Vogel", "Tier"]
             },
@@ -662,8 +662,9 @@
                     slot.classList.add('filled');
 
                     // Check: allow partial match or specific set match
-                    const cleanSel = selectedWord.text.toLowerCase().trim();
-                    const cleanAns = s.ans.toLowerCase().trim();
+                    // To make it user friendly, check if selected text contains answer or answer contains text (case insensitive)
+                    const cleanSel = selectedWord.text.toLowerCase();
+                    const cleanAns = s.ans.toLowerCase();
                     
                     if(cleanSel === cleanAns || cleanAns.includes(cleanSel)) {
                         slot.style.backgroundColor = "#c6f6d5";
@@ -744,16 +745,15 @@
         // 5. FAMILY TREE
         function setupFamilyTree(treeData) {
             const labelsCont = document.getElementById('node-labels');
-            labelsCont.innerHTML = ''; // Clear old labels
+            labelsCont.innerHTML = '';
             const nodes = document.querySelectorAll('.tree-node');
             maxScore += nodes.length;
 
             // Reset nodes visuals
-            nodes.forEach(node => {
-                node.textContent = "?";
-                node.classList.remove('filled');
-                // FIXED BUG: Used 'node' instead of 'n' here
-                node.dataset.ans = treeData[node.dataset.ans] || "Unknown"; 
+            nodes.forEach(n => {
+                n.textContent = "?";
+                n.classList.remove('filled');
+                n.dataset.ans = treeData[n.dataset.ans] || "Unknown"; // Update answer data
             });
 
             const labels = Object.values(treeData);
@@ -776,7 +776,7 @@
                     if(!activeLabel) { showToast("Tap a label below first!"); return; }
                     if(node.classList.contains('filled')) return;
 
-                    if(activeLabel.textContent.trim() === node.dataset.ans.trim()) {
+                    if(activeLabel.textContent === node.dataset.ans) {
                         node.textContent = activeLabel.textContent;
                         node.classList.add('filled');
                         activeLabel.classList.add('hidden');
