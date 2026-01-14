@@ -46,7 +46,7 @@
         }
         
         .container {
-            max-width: 900px;
+            max-width: 800px;
             margin: 0 auto;
         }
         
@@ -417,7 +417,6 @@
             transition: all 0.3s;
             font-weight: 600;
             color: var(--text);
-            position: relative;
         }
         
         .topic-option:hover {
@@ -431,22 +430,6 @@
             font-size: 2rem;
             margin-bottom: 10px;
             color: var(--primary);
-        }
-        
-        .score-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: var(--success);
-            color: white;
-            border-radius: 50%;
-            width: 28px;
-            height: 28px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
-            font-weight: bold;
         }
         
         .hidden {
@@ -474,12 +457,6 @@
                 flex-direction: column;
                 gap: 15px;
             }
-            
-            .score-badge {
-                width: 24px;
-                height: 24px;
-                font-size: 0.7rem;
-            }
         }
     </style>
 </head>
@@ -495,10 +472,10 @@
             </div>
         </header>
         
-        <div class="progress-container hidden" id="progress-container">
+        <div class="progress-container">
             <div class="progress-header">
                 <span>Progress</span>
-                <span id="progress-text">0/5</span>
+                <span id="progress-text">0/10</span>
             </div>
             <div class="progress-bar">
                 <div class="progress-fill" id="progress-fill"></div>
@@ -509,440 +486,308 @@
             </div>
         </div>
         
-        <div class="exercise-container hidden" id="exercise-container">
+        <div class="exercise-container" id="exercise-container">
             <!-- Exercises will be loaded here -->
         </div>
         
         <div class="completion-screen hidden" id="completion-screen">
-            <h2>Great Job! 🌟</h2>
-            <p>You've completed the topic!</p>
-            <div class="final-score">Your Score: <span id="final-score">0</span>/50 points</div>
-            <button class="new-topic-btn" id="new-topic-btn">Choose Another Topic</button>
-            <button class="restart-btn" id="restart-topic-btn">Retry This Topic</button>
+            <h2>Congratulations! 🎉</h2>
+            <p>You've completed all 10 exercises!</p>
+            <div class="final-score">Final Score: <span id="final-score">0</span> points</div>
+            <button class="continue-btn" id="continue-btn">Choose a New Topic</button>
+            <button class="restart-btn" id="restart-btn">Restart All</button>
         </div>
         
-        <div class="topic-selection-screen" id="topic-selection-screen">
-            <h2>Choose a Topic to Learn</h2>
-            <p>Select any topic to start learning German!</p>
-            <div class="topic-options" id="topic-options-container">
-                <!-- Topics will be populated here -->
+        <div class="topic-selection-screen hidden" id="topic-selection-screen">
+            <h2>Choose Your Next Topic</h2>
+            <p>Select a topic to continue learning German!</p>
+            <div class="topic-options">
+                <div class="topic-option" data-topic="food">
+                    <i class="fas fa-utensils"></i>
+                    Food & Dining
+                </div>
+                <div class="topic-option" data-topic="travel">
+                    <i class="fas fa-plane"></i>
+                    Travel & Directions
+                </div>
+                <div class="topic-option" data-topic="family">
+                    <i class="fas fa-users"></i>
+                    Family & Friends
+                </div>
+                <div class="topic-option" data-topic="shopping">
+                    <i class="fas fa-shopping-bag"></i>
+                    Shopping
+                </div>
+                <div class="topic-option" data-topic="hobbies">
+                    <i class="fas fa-film"></i>
+                    Hobbies & Leisure
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        // All 10 topics with 5 exercises each
-        const allTopics = {
-            food: {
-                name: "Food & Dining",
-                icon: "fa-utensils",
-                exercises: [
-                    {
-                        type: "missing-word",
-                        sentence: "Ich hätte gern eine Flasche ___.",
-                        options: ["Wasser", "Haus", "Auto", "Stuhl"],
-                        correct: 0,
-                        explanation: "'Wasser' (water) is a common drink order."
-                    },
-                    {
-                        type: "tts",
-                        audioText: "Die Suppe schmeckt ausgezeichnet! Können wir bitte die Rechnung haben?",
-                        topics: ["Complaining", "Praising food", "Asking for directions", "Ordering clothes"],
-                        correct: 1,
-                        explanation: "The speaker is praising the soup and asking for the bill."
-                    },
-                    {
-                        type: "missing-word",
-                        sentence: "Was kostet das ___?",
-                        options: ["Menü", "Mond", "Maus", "Mütze"],
-                        correct: 0,
-                        explanation: "'Menü' means menu in a restaurant context."
-                    },
-                    {
-                        type: "tts",
-                        audioText: "Ich bin Vegetarier. Haben Sie vegetarische Gerichte?",
-                        topics: ["Dietary needs", "Allergies", "Cooking at home", "Fast food"],
-                        correct: 0,
-                        explanation: "The speaker is asking about vegetarian options."
-                    },
-                    {
-                        type: "missing-word",
-                        sentence: "Ich möchte gerne ___ bestellen.",
-                        options: ["ein Bier", "ein Buch", "ein Bett", "ein Boot"],
-                        correct: 0,
-                        explanation: "'Ein Bier' (a beer) is a common order in German-speaking countries."
-                    }
-                ]
+        // Initial exercises (10 levels)
+        const initialExercises = [
+            {
+                type: "missing-word",
+                sentence: "Ich ___ einen Apfel essen.",
+                options: ["möchte", "willst", "wollen", "möchtest"],
+                correct: 0,
+                explanation: "The correct phrase is 'Ich möchte' (I would like)."
             },
-            travel: {
-                name: "Travel & Directions",
-                icon: "fa-plane",
-                exercises: [
-                    {
-                        type: "missing-word",
-                        sentence: "Wo ist der nächste ___?",
-                        options: ["Bahnhof", "Banane", "Bär", "Buch"],
-                        correct: 0,
-                        explanation: "'Bahnhof' means train station."
-                    },
-                    {
-                        type: "tts",
-                        audioText: "Entschuldigung, wie komme ich zum Museum? Ist es weit von hier?",
-                        topics: ["Asking for directions", "Buying tickets", "Checking into a hotel", "Renting a car"],
-                        correct: 0,
-                        explanation: "The speaker is asking how to get to the museum."
-                    },
-                    {
-                        type: "missing-word",
-                        sentence: "Ich brauche ein ___ für drei Nächte.",
-                        options: ["Zimmer", "Zucker", "Zeitung", "Zug"],
-                        correct: 0,
-                        explanation: "'Zimmer' means room (in a hotel)."
-                    },
-                    {
-                        type: "tts",
-                        audioText: "Der Zug nach Köln fährt von Gleis 5 ab. Achtung, bitte beeilen Sie sich!",
-                        topics: ["Train announcements", "Flight information", "Bus schedules", "Taxi services"],
-                        correct: 0,
-                        explanation: "This is a train announcement about departure from platform 5."
-                    },
-                    {
-                        type: "missing-word",
-                        sentence: "Wie viel kostet eine Fahrkarte nach ___?",
-                        options: ["Hamburg", "Hund", "Haus", "Hand"],
-                        correct: 0,
-                        explanation: "'Hamburg' is a major German city."
-                    }
-                ]
+            {
+                type: "missing-word",
+                sentence: "Wir ___ nach Berlin fahren.",
+                options: ["werden", "wird", "wirst", "werde"],
+                correct: 0,
+                explanation: "'Wir werden' is the correct future tense form for 'we'."
             },
-            family: {
-                name: "Family & Friends",
-                icon: "fa-users",
-                exercises: [
-                    {
-                        type: "missing-word",
-                        sentence: "Das ist meine ___.",
-                        options: ["Schwester", "Schule", "Schuh", "Schlange"],
-                        correct: 0,
-                        explanation: "'Schwester' means sister."
-                    },
-                    {
-                        type: "tts",
-                        audioText: "Mein Vater arbeitet als Arzt und meine Mutter ist Lehrerin.",
-                        topics: ["Professions", "Hobbies", "Daily routine", "Family members"],
-                        correct: 3,
-                        explanation: "The speaker is talking about their parents (family members)."
-                    },
-                    {
-                        type: "missing-word",
-                        sentence: "Hast du ___?",
-                        options: ["Geschwister", "Geschenke", "Gitarre", "Garten"],
-                        correct: 0,
-                        explanation: "'Geschwister' means siblings."
-                    },
-                    {
-                        type: "tts",
-                        audioText: "Meine Großeltern wohnen in einem kleinen Dorf in Bayern.",
-                        topics: ["Family members", "Travel plans", "Housing", "Weather"],
-                        correct: 0,
-                        explanation: "The speaker is talking about their grandparents (family members)."
-                    },
-                    {
-                        type: "missing-word",
-                        sentence: "Wir feiern morgen ___ Geburtstag.",
-                        options: ["Omas", "Obst", "Ofen", "Ohr"],
-                        correct: 0,
-                        explanation: "'Omas Geburtstag' means grandmother's birthday."
-                    }
-                ]
+            {
+                type: "tts",
+                audioText: "Guten Tag! Wie geht es Ihnen? Ich heiße Anna und komme aus München.",
+                topics: ["Greetings", "Shopping", "Travel", "Food"],
+                correct: 0,
+                explanation: "This is a greeting conversation introducing oneself."
             },
-            shopping: {
-                name: "Shopping",
-                icon: "fa-shopping-bag",
-                exercises: [
-                    {
-                        type: "missing-word",
-                        sentence: "Wie viel kostet diese ___?",
-                        options: ["Jacke", "Jahr", "Junge", "Joghurt"],
-                        correct: 0,
-                        explanation: "'Jacke' means jacket (an item of clothing)."
-                    },
-                    {
-                        type: "tts",
-                        audioText: "Haben Sie diese Schuhe auch in Größe 42?",
-                        topics: ["Asking for size", "Returning items", "Asking for price", "Opening hours"],
-                        correct: 0,
-                        explanation: "The speaker is asking if shoes are available in size 42."
-                    },
-                    {
-                        type: "missing-word",
-                        sentence: "Ich möchte diese Hose ___.",
-                        options: ["umtauschen", "unterrichten", "überlegen", "üben"],
-                        correct: 0,
-                        explanation: "'Umtauschen' means to exchange (return an item)."
-                    },
-                    {
-                        type: "tts",
-                        audioText: "Die Kasse ist an der linken Seite des Geschäfts.",
-                        topics: ["Finding the cashier", "Asking for discounts", "Product availability", "Store layout"],
-                        correct: 0,
-                        explanation: "The speaker is being told where the cashier is located."
-                    },
-                    {
-                        type: "missing-word",
-                        sentence: "Gibt es hier einen ___?",
-                        options: ["Rabatt", "Regen", "Rucksack", "Restaurant"],
-                        correct: 0,
-                        explanation: "'Rabatt' means discount."
-                    }
-                ]
+            {
+                type: "tts",
+                audioText: "Entschuldigung, wo ist der Bahnhof? Ich muss den Zug nach Hamburg nehmen.",
+                topics: ["Directions", "Shopping", "Weather", "Family"],
+                correct: 0,
+                explanation: "The speaker is asking for directions to the train station."
             },
-            hobbies: {
-                name: "Hobbies & Leisure",
-                icon: "fa-film",
-                exercises: [
-                    {
-                        type: "missing-word",
-                        sentence: "Ich spiele gern ___.",
-                        options: ["Klavier", "Käse", "Kiste", "Kugel"],
-                        correct: 0,
-                        explanation: "'Klavier' means piano."
-                    },
-                    {
-                        type: "tts",
-                        audioText: "Am Samstag gehe ich ins Kino, um den neuen Marvel-Film zu sehen.",
-                        topics: ["Going to the movies", "Reading books", "Playing sports", "Cooking"],
-                        correct: 0,
-                        explanation: "The speaker is going to the cinema to watch a movie."
-                    },
-                    {
-                        type: "missing-word",
-                        sentence: "Mein Hobby ist ___.",
-                        options: ["Fotografieren", "Fenster", "Fisch", "Feder"],
-                        correct: 0,
-                        explanation: "'Fotografieren' means photography."
-                    },
-                    {
-                        type: "tts",
-                        audioText: "Ich lese jeden Abend vor dem Schlafengehen ein Buch.",
-                        topics: ["Reading", "Writing", "Painting", "Dancing"],
-                        correct: 0,
-                        explanation: "The speaker reads a book every evening before bed."
-                    },
-                    {
-                        type: "missing-word",
-                        sentence: "Am Wochenende gehe ich oft ___.",
-                        options: ["wandern", "warten", "waschen", "wünschen"],
-                        correct: 0,
-                        explanation: "'Wandern' means hiking."
-                    }
-                ]
+            {
+                type: "missing-word",
+                sentence: "___ du Deutsch sprechen?",
+                options: ["Kannst", "Können", "Kann", "Könnt"],
+                correct: 0,
+                explanation: "'Kannst' is the correct conjugation for 'you' (informal singular)."
             },
-            animals: {
-                name: "Animals & Nature",
-                icon: "fa-paw",
-                exercises: [
-                    {
-                        type: "missing-word",
-                        sentence: "Der ___ bellt laut.",
-                        options: ["Hund", "Hut", "Haus", "Hand"],
-                        correct: 0,
-                        explanation: "'Hund' means dog."
-                    },
-                    {
-                        type: "tts",
-                        audioText: "Im Wald gibt es viele Tiere wie Rehe, Füchse und Eichhörnchen.",
-                        topics: ["City life", "Forest animals", "Ocean creatures", "Farm animals"],
-                        correct: 1,
-                        explanation: "The sentence describes forest animals."
-                    },
-                    {
-                        type: "missing-word",
-                        sentence: "Die ___ fliegt hoch am Himmel.",
-                        options: ["Vogel", "Vase", "Vogt", "Voll"],
-                        correct: 0,
-                        explanation: "'Vogel' means bird."
-                    },
-                    {
-                        type: "tts",
-                        audioText: "Im Frühling blühen die Blumen und die Bäume bekommen neue Blätter.",
-                        topics: ["Seasons", "Weather", "Gardening", "Nature cycles"],
-                        correct: 3,
-                        explanation: "The sentence describes natural cycles in spring."
-                    },
-                    {
-                        type: "missing-word",
-                        sentence: "Ich sehe einen ___ im Zoo.",
-                        options: ["Löwe", "Löffel", "Lokal", "Lied"],
-                        correct: 0,
-                        explanation: "'Löwe' means lion."
-                    }
-                ]
+            {
+                type: "missing-word",
+                sentence: "Ich esse gern ___ zum Frühstück.",
+                options: ["Brot", "Buch", "Bus", "Ball"],
+                correct: 0,
+                explanation: "'Brot' (bread) is a common breakfast food in Germany."
             },
-            work: {
-                name: "Work & Office",
-                icon: "fa-briefcase",
-                exercises: [
-                    {
-                        type: "missing-word",
-                        sentence: "Ich habe ein ___ mit meinem Chef.",
-                        options: ["Meeting", "Messer", "Mantel", "Mond"],
-                        correct: 0,
-                        explanation: "'Meeting' is commonly used in German office contexts."
-                    },
-                    {
-                        type: "tts",
-                        audioText: "Könnten Sie mir bitte die Präsentation per E-Mail schicken?",
-                        topics: ["Making requests", "Complaining", "Socializing", "Giving orders"],
-                        correct: 0,
-                        explanation: "The speaker is politely requesting a presentation via email."
-                    },
-                    {
-                        type: "missing-word",
-                        sentence: "Mein ___ ist sehr beschäftigt heute.",
-                        options: ["Kollege", "Kuchen", "Koffer", "Kino"],
-                        correct: 0,
-                        explanation: "'Kollege' means colleague."
-                    },
-                    {
-                        type: "tts",
-                        audioText: "Die Firma sucht neue Mitarbeiter für die Marketing-Abteilung.",
-                        topics: ["Job hunting", "Company news", "Office gossip", "Work complaints"],
-                        correct: 0,
-                        explanation: "The sentence is about job openings in marketing."
-                    },
-                    {
-                        type: "missing-word",
-                        sentence: "Ich muss einen ___ schreiben.",
-                        options: ["Bericht", "Ball", "Bett", "Boot"],
-                        correct: 0,
-                        explanation: "'Bericht' means report."
-                    }
-                ]
+            {
+                type: "tts",
+                audioText: "Heute ist es sonnig und warm. Perfekt für einen Spaziergang!",
+                topics: ["Weather", "Sports", "Work", "Technology"],
+                correct: 0,
+                explanation: "The sentence describes sunny and warm weather."
             },
-            health: {
-                name: "Health & Body",
-                icon: "fa-heartbeat",
-                exercises: [
-                    {
-                        type: "missing-word",
-                        sentence: "Mein ___ tut weh.",
-                        options: ["Kopf", "Korb", "Koch", "Kohl"],
-                        correct: 0,
-                        explanation: "'Kopf' means head."
-                    },
-                    {
-                        type: "tts",
-                        audioText: "Ich fühle mich nicht gut. Ich habe Fieber und Halsschmerzen.",
-                        topics: ["Describing symptoms", "Making plans", "Talking about food", "Discussing weather"],
-                        correct: 0,
-                        explanation: "The speaker is describing illness symptoms."
-                    },
-                    {
-                        type: "missing-word",
-                        sentence: "Nehmen Sie ___ Tabletten dreimal täglich.",
-                        options: ["diese", "dieser", "dieses", "diesen"],
-                        correct: 0,
-                        explanation: "'Diese' is the correct demonstrative pronoun for plural 'Tabletten'."
-                    },
-                    {
-                        type: "tts",
-                        audioText: "Sport ist gut für die Gesundheit. Ich gehe jeden Tag joggen.",
-                        topics: ["Exercise benefits", "Diet advice", "Medical procedures", "Sleep habits"],
-                        correct: 0,
-                        explanation: "The speaker talks about exercise benefits."
-                    },
-                    {
-                        type: "missing-word",
-                        sentence: "Ich gehe zum ___.",
-                        options: ["Arzt", "Auto", "Apfel", "Auge"],
-                        correct: 0,
-                        explanation: "'Arzt' means doctor."
-                    }
-                ]
+            {
+                type: "missing-word",
+                sentence: "Um 7 Uhr ___ ich auf.",
+                options: ["stehe", "steht", "stehst", "stehen"],
+                correct: 0,
+                explanation: "'Ich stehe auf' means 'I get up' (reflexive verb)."
             },
-            school: {
-                name: "School & Education",
-                icon: "fa-graduation-cap",
-                exercises: [
-                    {
-                        type: "missing-word",
-                        sentence: "Die ___ beginnt um 8 Uhr.",
-                        options: ["Schule", "Schuh", "Schlange", "Schüssel"],
-                        correct: 0,
-                        explanation: "'Schule' means school."
-                    },
-                    {
-                        type: "tts",
-                        audioText: "Für die Prüfung müssen wir Kapitel 1 bis 5 lernen.",
-                        topics: ["Exam preparation", "Homework complaints", "Teacher praise", "Classroom rules"],
-                        correct: 0,
-                        explanation: "The speaker is talking about exam preparation."
-                    },
-                    {
-                        type: "missing-word",
-                        sentence: "Ich habe eine gute ___ in Mathe bekommen.",
-                        options: ["Note", "Nase", "Nacht", "Nummer"],
-                        correct: 0,
-                        explanation: "'Note' means grade/mark."
-                    },
-                    {
-                        type: "tts",
-                        audioText: "In der Pause spielen wir Fußball auf dem Schulhof.",
-                        topics: ["Recess activities", "Classroom lessons", "Homework", "After-school clubs"],
-                        correct: 0,
-                        explanation: "The sentence describes recess activities."
-                    },
-                    {
-                        type: "missing-word",
-                        sentence: "Mein ___ hilft mir bei den Hausaufgaben.",
-                        options: ["Lehrer", "Löffel", "Lokal", "Lied"],
-                        correct: 0,
-                        explanation: "'Lehrer' means teacher."
-                    }
-                ]
+            {
+                type: "tts",
+                audioText: "Ich fahre mit dem Fahrrad zur Arbeit, weil es umweltfreundlich ist.",
+                topics: ["Transportation", "Cooking", "Music", "Animals"],
+                correct: 0,
+                explanation: "The speaker uses a bicycle (Fahrrad) to commute."
             },
-            cities: {
-                name: "Cities & Places",
-                icon: "fa-city",
-                exercises: [
-                    {
-                        type: "missing-word",
-                        sentence: "Berlin ist die ___ von Deutschland.",
-                        options: ["Hauptstadt", "Hauptbahnhof", "Hauptstraße", "Haupttor"],
-                        correct: 0,
-                        explanation: "'Hauptstadt' means capital city."
-                    },
-                    {
-                        type: "tts",
-                        audioText: "In München gibt es das berühmte Oktoberfest und viele schöne Parks.",
-                        topics: ["City attractions", "Country comparisons", "Rural life", "Transport systems"],
-                        correct: 0,
-                        explanation: "The sentence describes attractions in Munich."
-                    },
-                    {
-                        type: "missing-word",
-                        sentence: "Das ___ ist sehr alt und historisch.",
-                        options: ["Schloss", "Schuh", "Schlange", "Schüssel"],
-                        correct: 0,
-                        explanation: "'Schloss' means castle."
-                    },
-                    {
-                        type: "tts",
-                        audioText: "Die Altstadt von Heidelberg ist bekannt für ihre romantische Atmosphäre.",
-                        topics: ["Historic districts", "Modern architecture", "Industrial areas", "Suburban life"],
-                        correct: 0,
-                        explanation: "The sentence describes Heidelberg's historic old town."
-                    },
-                    {
-                        type: "missing-word",
-                        sentence: "Ich besuche das ___ am Wochenende.",
-                        options: ["Museum", "Mond", "Maus", "Mütze"],
-                        correct: 0,
-                        explanation: "'Museum' is the same in German."
-                    }
-                ]
+            {
+                type: "missing-word",
+                sentence: "Am Wochenende spiele ich oft ___ Fußball.",
+                options: ["/", "mit", "von", "zu"],
+                correct: 0,
+                explanation: "In German, you play football without a preposition: 'Fußball spielen'."
             }
+        ];
+        
+        // Topic-specific exercises (5 per topic)
+        const topicExercises = {
+            food: [
+                {
+                    type: "missing-word",
+                    sentence: "Ich hätte gern eine Flasche ___.",
+                    options: ["Wasser", "Haus", "Auto", "Stuhl"],
+                    correct: 0,
+                    explanation: "'Wasser' (water) is a common drink order."
+                },
+                {
+                    type: "tts",
+                    audioText: "Die Suppe schmeckt ausgezeichnet! Können wir bitte die Rechnung haben?",
+                    topics: ["Complaining", "Praising food", "Asking for directions", "Ordering clothes"],
+                    correct: 1,
+                    explanation: "The speaker is praising the soup and asking for the bill."
+                },
+                {
+                    type: "missing-word",
+                    sentence: "Was kostet das ___?",
+                    options: ["Menü", "Mond", "Maus", "Mütze"],
+                    correct: 0,
+                    explanation: "'Menü' means menu in a restaurant context."
+                },
+                {
+                    type: "tts",
+                    audioText: "Ich bin Vegetarier. Haben Sie vegetarische Gerichte?",
+                    topics: ["Dietary needs", "Allergies", "Cooking at home", "Fast food"],
+                    correct: 0,
+                    explanation: "The speaker is asking about vegetarian options."
+                },
+                {
+                    type: "missing-word",
+                    sentence: "Ich möchte gerne ___ bestellen.",
+                    options: ["ein Bier", "ein Buch", "ein Bett", "ein Boot"],
+                    correct: 0,
+                    explanation: "'Ein Bier' (a beer) is a common order in German-speaking countries."
+                }
+            ],
+            travel: [
+                {
+                    type: "missing-word",
+                    sentence: "Wo ist der nächste ___?",
+                    options: ["Bahnhof", "Banane", "Bär", "Buch"],
+                    correct: 0,
+                    explanation: "'Bahnhof' means train station."
+                },
+                {
+                    type: "tts",
+                    audioText: "Entschuldigung, wie komme ich zum Museum? Ist es weit von hier?",
+                    topics: ["Asking for directions", "Buying tickets", "Checking into a hotel", "Renting a car"],
+                    correct: 0,
+                    explanation: "The speaker is asking how to get to the museum."
+                },
+                {
+                    type: "missing-word",
+                    sentence: "Ich brauche ein ___ für drei Nächte.",
+                    options: ["Zimmer", "Zucker", "Zeitung", "Zug"],
+                    correct: 0,
+                    explanation: "'Zimmer' means room (in a hotel)."
+                },
+                {
+                    type: "tts",
+                    audioText: "Der Zug nach Köln fährt von Gleis 5 ab. Achtung, bitte beeilen Sie sich!",
+                    topics: ["Train announcements", "Flight information", "Bus schedules", "Taxi services"],
+                    correct: 0,
+                    explanation: "This is a train announcement about departure from platform 5."
+                },
+                {
+                    type: "missing-word",
+                    sentence: "Wie viel kostet eine Fahrkarte nach ___?",
+                    options: ["Hamburg", "Hund", "Haus", "Hand"],
+                    correct: 0,
+                    explanation: "'Hamburg' is a major German city."
+                }
+            ],
+            family: [
+                {
+                    type: "missing-word",
+                    sentence: "Das ist meine ___.",
+                    options: ["Schwester", "Schule", "Schuh", "Schlange"],
+                    correct: 0,
+                    explanation: "'Schwester' means sister."
+                },
+                {
+                    type: "tts",
+                    audioText: "Mein Vater arbeitet als Arzt und meine Mutter ist Lehrerin.",
+                    topics: ["Professions", "Hobbies", "Daily routine", "Family members"],
+                    correct: 3,
+                    explanation: "The speaker is talking about their parents (family members)."
+                },
+                {
+                    type: "missing-word",
+                    sentence: "Hast du ___?",
+                    options: ["Geschwister", "Geschenke", "Gitarre", "Garten"],
+                    correct: 0,
+                    explanation: "'Geschwister' means siblings."
+                },
+                {
+                    type: "tts",
+                    audioText: "Meine Großeltern wohnen in einem kleinen Dorf in Bayern.",
+                    topics: ["Family members", "Travel plans", "Housing", "Weather"],
+                    correct: 0,
+                    explanation: "The speaker is talking about their grandparents (family members)."
+                },
+                {
+                    type: "missing-word",
+                    sentence: "Wir feiern morgen ___ Geburtstag.",
+                    options: ["Omas", "Obst", "Ofen", "Ohr"],
+                    correct: 0,
+                    explanation: "'Omas Geburtstag' means grandmother's birthday."
+                }
+            ],
+            shopping: [
+                {
+                    type: "missing-word",
+                    sentence: "Wie viel kostet diese ___?",
+                    options: ["Jacke", "Jahr", "Junge", "Joghurt"],
+                    correct: 0,
+                    explanation: "'Jacke' means jacket (an item of clothing)."
+                },
+                {
+                    type: "tts",
+                    audioText: "Haben Sie diese Schuhe auch in Größe 42?",
+                    topics: ["Asking for size", "Returning items", "Asking for price", "Opening hours"],
+                    correct: 0,
+                    explanation: "The speaker is asking if shoes are available in size 42."
+                },
+                {
+                    type: "missing-word",
+                    sentence: "Ich möchte diese Hose ___.",
+                    options: ["umtauschen", "unterrichten", "überlegen", "üben"],
+                    correct: 0,
+                    explanation: "'Umtauschen' means to exchange (return an item)."
+                },
+                {
+                    type: "tts",
+                    audioText: "Die Kasse ist an der linken Seite des Geschäfts.",
+                    topics: ["Finding the cashier", "Asking for discounts", "Product availability", "Store layout"],
+                    correct: 0,
+                    explanation: "The speaker is being told where the cashier is located."
+                },
+                {
+                    type: "missing-word",
+                    sentence: "Gibt es hier einen ___?",
+                    options: ["Rabatt", "Regen", "Rucksack", "Restaurant"],
+                    correct: 0,
+                    explanation: "'Rabatt' means discount."
+                }
+            ],
+            hobbies: [
+                {
+                    type: "missing-word",
+                    sentence: "Ich spiele gern ___.",
+                    options: ["Klavier", "Käse", "Kiste", "Kugel"],
+                    correct: 0,
+                    explanation: "'Klavier' means piano."
+                },
+                {
+                    type: "tts",
+                    audioText: "Am Samstag gehe ich ins Kino, um den neuen Marvel-Film zu sehen.",
+                    topics: ["Going to the movies", "Reading books", "Playing sports", "Cooking"],
+                    correct: 0,
+                    explanation: "The speaker is going to the cinema to watch a movie."
+                },
+                {
+                    type: "missing-word",
+                    sentence: "Mein Hobby ist ___.",
+                    options: ["Fotografieren", "Fenster", "Fisch", "Feder"],
+                    correct: 0,
+                    explanation: "'Fotografieren' means photography."
+                },
+                {
+                    type: "tts",
+                    audioText: "Ich lese jeden Abend vor dem Schlafengehen ein Buch.",
+                    topics: ["Reading", "Writing", "Painting", "Dancing"],
+                    correct: 0,
+                    explanation: "The speaker reads a book every evening before bed."
+                },
+                {
+                    type: "missing-word",
+                    sentence: "Am Wochenende gehe ich oft ___.",
+                    options: ["wandern", "warten", "waschen", "wünschen"],
+                    correct: 0,
+                    explanation: "'Wandern' means hiking."
+                }
+            ]
         };
         
         // Shuffle array helper function
@@ -982,27 +827,25 @@
         }
         
         // App state
-        let currentTopic = null;
         let currentExercise = 0;
         let points = 0;
         let userAnswers = [];
         let speechSynthesis = window.speechSynthesis;
         let isDarkMode = localStorage.getItem('darkMode') === 'true';
-        let topicScores = JSON.parse(localStorage.getItem('deutschLernenScores')) || {};
+        let currentExercises = initialExercises; // Start with initial exercises
+        let isTopicMode = false; // Track if we're in topic mode
         
         // DOM elements
         const exerciseContainer = document.getElementById('exercise-container');
-        const progressContainer = document.getElementById('progress-container');
         const progressFill = document.getElementById('progress-fill');
         const progressText = document.getElementById('progress-text');
         const pointsDisplay = document.getElementById('points');
         const completionScreen = document.getElementById('completion-screen');
         const finalScore = document.getElementById('final-score');
+        const restartBtn = document.getElementById('restart-btn');
+        const continueBtn = document.getElementById('continue-btn');
         const topicSelectionScreen = document.getElementById('topic-selection-screen');
-        const topicOptionsContainer = document.getElementById('topic-options-container');
         const themeToggle = document.getElementById('theme-toggle');
-        const newTopicBtn = document.getElementById('new-topic-btn');
-        const restartTopicBtn = document.getElementById('restart-topic-btn');
         
         // Set initial theme
         applyTheme();
@@ -1051,58 +894,28 @@
         
         // Initialize the app
         function initApp() {
-            renderTopicSelection();
-            
-            // Event listeners
-            newTopicBtn.addEventListener('click', showTopicSelection);
-            restartTopicBtn.addEventListener('click', () => startTopicExercises(currentTopic));
-        }
-        
-        // Render topic selection screen
-        function renderTopicSelection() {
-            topicOptionsContainer.innerHTML = '';
-            
-            Object.keys(allTopics).forEach(topicKey => {
-                const topic = allTopics[topicKey];
-                const score = topicScores[topicKey] || 0;
-                
-                const topicOption = document.createElement('div');
-                topicOption.className = 'topic-option';
-                topicOption.dataset.topic = topicKey;
-                topicOption.innerHTML = `
-                    <i class="fas ${topic.icon}"></i>
-                    ${topic.name}
-                    ${score > 0 ? `<div class="score-badge">${Math.round(score)}</div>` : ''}
-                `;
-                
-                topicOption.addEventListener('click', () => startTopicExercises(topicKey));
-                topicOptionsContainer.appendChild(topicOption);
-            });
-        }
-        
-        // Start topic exercises
-        function startTopicExercises(topicKey) {
-            topicSelectionScreen.classList.add('hidden');
-            progressContainer.classList.remove('hidden');
-            exerciseContainer.classList.remove('hidden');
-            completionScreen.classList.add('hidden');
-            
-            currentTopic = topicKey;
-            currentExercise = 0;
-            points = 0;
-            const exercises = allTopics[topicKey].exercises;
-            userAnswers = new Array(exercises.length).fill(null);
-            
-            pointsDisplay.textContent = points;
             updateProgress();
             loadExercise(currentExercise);
+            
+            // Event listeners
+            restartBtn.addEventListener('click', restartApp);
+            continueBtn.addEventListener('click', showTopicSelection);
+            
+            // Topic selection event listeners
+            document.querySelectorAll('.topic-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    const topic = option.dataset.topic;
+                    startTopicExercises(topic);
+                });
+            });
         }
         
         // Load and display current exercise
         function loadExercise(index) {
-            const exercises = allTopics[currentTopic].exercises;
-            const exercise = exercises[index];
+            const exercise = currentExercises[index];
             exerciseContainer.innerHTML = '';
+            completionScreen.classList.add('hidden');
+            topicSelectionScreen.classList.add('hidden');
             
             // Randomize options for missing-word exercises
             if (exercise.type === 'missing-word') {
@@ -1171,7 +984,7 @@
                     }
                 }
                 
-                optionBtn.addEventListener('click', () => handleMissingWordAnswer(index, correctIndex, option));
+                optionBtn.addEventListener('click', () => handleMissingWordAnswer(index, correctIndex));
                 optionsContainer.appendChild(optionBtn);
             });
             
@@ -1188,11 +1001,8 @@
         }
         
         // Handle missing word answer
-        function handleMissingWordAnswer(selectedIndex, correctIndex, selectedWord) {
+        function handleMissingWordAnswer(selectedIndex, correctIndex) {
             userAnswers[currentExercise] = selectedIndex;
-            
-            // Speak the selected word
-            speakText(selectedWord);
             
             // Update points
             if (selectedIndex === correctIndex) {
@@ -1218,8 +1028,7 @@
             
             // Show feedback
             const feedback = document.getElementById('feedback');
-            const exercises = allTopics[currentTopic].exercises;
-            const exercise = exercises[currentExercise];
+            const exercise = currentExercises[currentExercise];
             if (selectedIndex === correctIndex) {
                 feedback.textContent = `Correct! ${exercise.explanation}`;
                 feedback.className = 'feedback correct';
@@ -1326,8 +1135,7 @@
             
             // Show feedback
             const feedback = document.getElementById('feedback');
-            const exercises = allTopics[currentTopic].exercises;
-            const exercise = exercises[currentExercise];
+            const exercise = currentExercises[currentExercise];
             if (selectedIndex === correctIndex) {
                 feedback.textContent = `Correct! ${exercise.explanation}`;
                 feedback.className = 'feedback correct';
@@ -1374,15 +1182,25 @@
             
             const nextBtn = document.createElement('button');
             nextBtn.className = 'btn btn-next';
-            nextBtn.textContent = currentExercise === allTopics[currentTopic].exercises.length - 1 ? 'Finish Topic' : 'Next';
+            // Change label based on mode
+            if (isTopicMode) {
+                nextBtn.textContent = currentExercise === currentExercises.length - 1 ? 'Finish Topic' : 'Next';
+            } else {
+                nextBtn.textContent = currentExercise === currentExercises.length - 1 ? 'Finish' : 'Next';
+            }
             nextBtn.disabled = userAnswers[currentExercise] === undefined || userAnswers[currentExercise] === null;
             nextBtn.addEventListener('click', () => {
-                if (currentExercise < allTopics[currentTopic].exercises.length - 1) {
+                if (currentExercise < currentExercises.length - 1) {
                     currentExercise++;
                     loadExercise(currentExercise);
                     updateProgress();
                 } else {
-                    finishTopic();
+                    // Reached the end
+                    if (isTopicMode) {
+                        showTopicCompletion();
+                    } else {
+                        showInitialCompletion();
+                    }
                 }
             });
             
@@ -1393,30 +1211,66 @@
         
         // Update progress bar and text
         function updateProgress() {
-            const totalExercises = allTopics[currentTopic].exercises.length;
-            const progress = ((currentExercise + 1) / totalExercises) * 100;
+            const progress = ((currentExercise + 1) / currentExercises.length) * 100;
             progressFill.style.width = `${progress}%`;
-            progressText.textContent = `${currentExercise + 1}/${totalExercises}`;
+            progressText.textContent = `${currentExercise + 1}/${currentExercises.length}`;
         }
         
-        // Finish topic and save score
-        function finishTopic() {
-            // Save score
-            topicScores[currentTopic] = points;
-            localStorage.setItem('deutschLernenScores', JSON.stringify(topicScores));
-            
-            // Show completion screen
+        // Show initial completion screen
+        function showInitialCompletion() {
             exerciseContainer.classList.add('hidden');
-            progressContainer.classList.add('hidden');
-            finalScore.textContent = `${points}/50`;
+            finalScore.textContent = points;
             completionScreen.classList.remove('hidden');
+        }
+        
+        // Show topic completion screen
+        function showTopicCompletion() {
+            exerciseContainer.classList.add('hidden');
+            completionScreen.innerHTML = `
+                <h2>Great Job! 🌟</h2>
+                <p>You've completed the topic exercises!</p>
+                <div class="final-score">Topic Score: <span id="topic-final-score">${points}</span> points</div>
+                <button class="new-topic-btn" id="new-topic-btn">Choose Another Topic</button>
+                <button class="full-restart-btn" id="full-restart-btn">Restart All</button>
+            `;
+            completionScreen.classList.remove('hidden');
+            
+            document.getElementById('new-topic-btn').addEventListener('click', showTopicSelection);
+            document.getElementById('full-restart-btn').addEventListener('click', restartApp);
         }
         
         // Show topic selection screen
         function showTopicSelection() {
             completionScreen.classList.add('hidden');
             topicSelectionScreen.classList.remove('hidden');
-            renderTopicSelection(); // Refresh scores
+        }
+        
+        // Start topic exercises
+        function startTopicExercises(topic) {
+            topicSelectionScreen.classList.add('hidden');
+            isTopicMode = true;
+            currentExercises = topicExercises[topic];
+            currentExercise = 0;
+            // Reset user answers for new topic
+            userAnswers = new Array(currentExercises.length).fill(null);
+            exerciseContainer.classList.remove('hidden');
+            updateProgress();
+            loadExercise(currentExercise);
+        }
+        
+        // Restart the app
+        function restartApp() {
+            currentExercise = 0;
+            points = 0;
+            isTopicMode = false;
+            currentExercises = initialExercises;
+            userAnswers = new Array(currentExercises.length).fill(null);
+            pointsDisplay.textContent = points;
+            exerciseContainer.classList.remove('hidden');
+            completionScreen.classList.add('hidden');
+            topicSelectionScreen.classList.add('hidden');
+            loadExercise(currentExercise);
+            updateProgress();
         }
         
         // Initialize the app when page loads
