@@ -1,4 +1,3 @@
-html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,19 +21,25 @@ html
             --radius: 20px;
             --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
+
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
         body {
             font-family: var(--font-family);
             background: var(--bg-color);
             color: var(--text-main);
             line-height: 1.6;
-            padding-bottom: 40px;
+            padding-bottom: 80px;
         }
+
         /* --- LAYOUT --- */
         .container { max-width: 800px; margin: 0 auto; padding: 0 16px; }
+        
         section { margin-bottom: 40px; opacity: 1; transition: opacity 0.5s ease; }
         section.faded { opacity: 0.5; pointer-events: none; }
+
         h2 { color: #4a5568; margin-bottom: 20px; border-left: 5px solid #764ba2; padding-left: 10px; }
+
         /* --- SCOREBOARD --- */
         .scoreboard {
             position: sticky;
@@ -46,6 +51,7 @@ html
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
             margin-bottom: 20px;
         }
+        
         .progress-container {
             height: 10px;
             background: #e2e8f0;
@@ -53,12 +59,14 @@ html
             overflow: hidden;
             width: 100%;
         }
+
         .progress-bar {
             height: 100%;
             background: var(--primary-gradient);
             width: 0%;
             transition: width 0.3s ease;
         }
+
         .score-text {
             display: flex;
             justify-content: space-between;
@@ -67,6 +75,7 @@ html
             color: #555;
             margin-top: 5px;
         }
+
         /* --- HEADER --- */
         header {
             background: var(--primary-gradient);
@@ -78,8 +87,10 @@ html
             margin-bottom: -30px; /* Overlap effect */
             box-shadow: var(--shadow);
         }
+
         header h1 { color: white; font-size: 2.2rem; margin-bottom: 5px; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
         header p { opacity: 0.9; font-size: 1rem; }
+
         /* --- CARDS --- */
         .card {
             background: var(--card-bg);
@@ -93,12 +104,14 @@ html
         .card-header { margin-bottom: 16px; border-bottom: 2px solid #f7fafc; padding-bottom: 10px; }
         .card-title { font-size: 1.2rem; color: #553c9a; font-weight: bold; display: flex; align-items: center; justify-content: space-between;}
         .card-subtitle { font-size: 0.85rem; color: var(--text-light); }
+
         .badge {
             display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: bold; color: white; text-transform: uppercase;
         }
         .bg-easy { background: #48bb78; }
         .bg-med { background: #ed8936; }
         .bg-hard { background: #f56565; }
+
         /* --- EXERCISE: MATCHING --- */
         .matching-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .match-item {
@@ -107,7 +120,10 @@ html
         }
         .match-item.selected { border-color: #764ba2; background: #ebf4ff; transform: scale(1.03); }
         .match-item.matched { border-color: var(--success); background: #f0fff4; opacity: 0.6; pointer-events: none; text-decoration: line-through; }
-        .match-item.wrong { border-color: var(--error); background: #fff5f5; opacity: 0.6; pointer-events: none; text-decoration: line-through; color: var(--error); }
+        .match-item.wrong { border-color: var(--error); background: #fff5f5; animation: shake 0.4s; }
+
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+
         /* --- EXERCISE: FILL IN BLANK --- */
         .word-bank { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; padding: 10px; background: #edf2f7; border-radius: 10px; justify-content: center; }
         .draggable-word {
@@ -116,6 +132,7 @@ html
         }
         .draggable-word:active { transform: translateY(2px); box-shadow: none; }
         .draggable-word.used { opacity: 0.3; pointer-events: none; text-decoration: line-through; background: #e2e8f0; }
+
         .sentence-row { display: flex; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 5px; font-size: 1rem; }
         .blank-slot {
             display: inline-block; min-width: 90px; border-bottom: 2px solid #764ba2; padding: 0 8px;
@@ -123,8 +140,6 @@ html
             border-radius: 4px 4px 0 0; min-height: 1.8rem; transition: background 0.3s;
         }
         .blank-slot.filled { background: #d6bcfa; border-bottom-color: var(--success); color: #2d3748; }
-        /* One Chance: Wrong State for Blanks */
-        .blank-slot.failed { background: #fed7d7; border-bottom-color: var(--error); color: #c53030; pointer-events: none; }
 
         /* --- EXERCISE: FLASHCARDS --- */
         .flashcard-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 15px; }
@@ -134,11 +149,13 @@ html
         .flashcard-front, .flashcard-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; border-radius: 12px; flex-direction: column; }
         .flashcard-front { background: white; font-size: 3rem; }
         .flashcard-back { background: var(--secondary-gradient); color: white; transform: rotateY(180deg); font-size: 1.1rem; font-weight: bold; padding: 5px; }
+
         /* --- EXERCISE: MCQ --- */
         .mcq-option { display: block; width: 100%; padding: 12px; margin-bottom: 8px; background: white; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; text-align: left; font-size: 1rem; transition: all 0.2s; }
         .mcq-option:hover { border-color: #764ba2; background: #f7fafc; }
         .mcq-option.correct { background-color: #c6f6d5; border-color: #48bb78; color: #22543d; }
         .mcq-option.wrong { background-color: #fed7d7; border-color: #f56565; color: #822727; }
+
         /* --- EXERCISE: FAMILY TREE --- */
         .tree-container { display: flex; flex-direction: column; align-items: center; margin-top: 20px; user-select: none; }
         .tree-level { display: flex; justify-content: center; gap: 30px; position: relative; margin-bottom: 35px; }
@@ -150,13 +167,11 @@ html
         }
         .tree-node.filled { background: var(--primary-gradient); color: white; border-color: white; box-shadow: 0 0 10px rgba(118, 75, 162, 0.5); }
         .tree-node:hover { transform: scale(1.1); }
-        /* One Chance: Failed State for Tree */
-        .tree-node.failed { background: #fed7d7; border-color: #e53e3e; color: #c53030; pointer-events: none; opacity: 0.8; }
-        
         .node-labels { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 20px; padding: 15px; background: #fff; border-radius: 12px; border: 1px dashed #cbd5e0; }
         .node-label { padding: 6px 12px; background: #edf2f7; border-radius: 15px; font-size: 0.85rem; cursor: pointer; border: 1px solid #cbd5e0; }
         .node-label.active { background: #805ad5; color: white; border-color: #805ad5; transform: translateY(-2px); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         .node-label.hidden { display: none; }
+
         /* --- FINISH MODAL / BUTTON --- */
         .finish-section {
             text-align: center; margin-top: 40px; padding: 30px; background: white; border-radius: var(--radius); box-shadow: var(--shadow);
@@ -167,8 +182,6 @@ html
         }
         .btn:hover { transform: translateY(-2px); }
         .btn-secondary { background: white; color: #805ad5; border: 2px solid #805ad5; margin-left: 10px; }
-        /* FOOTER */
-        footer { text-align: center; color: #a0aec0; font-size: 0.8rem; margin-top: 40px; padding-top: 20px; border-top: 1px solid #e2e8f0; }
 
         /* Mobile Adjustments */
         @media (max-width: 600px) {
@@ -179,12 +192,14 @@ html
     </style>
 </head>
 <body>
+
     <header>
         <div class="container">
             <h1>Deutsch Lernen</h1>
             <p>Level <span id="level-indicator">1</span> of 5</p>
         </div>
     </header>
+
     <!-- SCOREBOARD -->
     <div class="scoreboard">
         <div class="container">
@@ -197,28 +212,33 @@ html
             </div>
         </div>
     </div>
+
     <div class="container">
+        
         <!-- SECTION I: ANIMALS -->
         <h2>I. Tiere & Eigenschaften</h2>
+
         <!-- I.A Matching -->
         <section class="card" id="sec-matching">
             <div class="card-header">
                 <span class="badge bg-easy">Einfach</span>
                 <div class="card-title">A. Matching</div>
-                <div class="card-subtitle">Match German to English (One Chance!)</div>
+                <div class="card-subtitle">Match German to English</div>
             </div>
             <div class="matching-grid" id="matching-container"></div>
         </section>
+
         <!-- I.B Fill in Blank -->
         <section class="card" id="sec-fill">
             <div class="card-header">
                 <span class="badge bg-med">Mittel</span>
                 <div class="card-title">B. Fill in the Blank</div>
-                <div class="card-subtitle">Tap a word, then tap the gap (One Chance!)</div>
+                <div class="card-subtitle">Tap a word, then tap the gap</div>
             </div>
             <div class="word-bank" id="word-bank"></div>
             <div id="sentences-container"></div>
         </section>
+
         <!-- I.C Flashcards -->
         <section class="card" id="sec-flash">
             <div class="card-header">
@@ -228,6 +248,7 @@ html
             </div>
             <div class="flashcard-grid" id="flashcard-container"></div>
         </section>
+
         <!-- I.D Adjectives Matching -->
         <section class="card" id="sec-adj">
             <div class="card-header">
@@ -236,8 +257,10 @@ html
             </div>
             <div class="matching-grid" id="adj-container"></div>
         </section>
+
         <!-- SECTION II: FAMILY -->
         <h2>II. Familie & Pronomen</h2>
+
         <!-- II.A MCQ -->
         <section class="card" id="sec-mcq">
             <div class="card-header">
@@ -246,6 +269,7 @@ html
             </div>
             <div id="mcq-container"></div>
         </section>
+
         <!-- II.B Writing (Static) -->
         <section class="card" id="sec-write">
             <div class="card-header">
@@ -256,29 +280,29 @@ html
             <textarea id="writing-area" placeholder="e.g. Ich habe eine Schwester..."></textarea>
             <button class="btn" style="font-size: 0.9rem; padding: 8px 16px;" onclick="showToast('Saved! (In a real app, teacher would check this)')">Save Note</button>
         </section>
+
         <!-- II.C Family Tree -->
         <section class="card" id="sec-tree">
             <div class="card-header">
                 <span class="badge bg-hard">Schwer</span>
                 <div class="card-title">C. Family Tree</div>
-                <div class="card-subtitle">Drag labels to the tree (One Chance!)</div>
             </div>
             <div class="tree-container">
                 <div class="tree-level">
-                    <!-- BUG FIX: Changed data-ans to data-key to prevent overwriting on level reload -->
-                    <div class="tree-node" data-key="top1">?</div>
-                    <div class="tree-node" data-key="top2">?</div>
+                    <div class="tree-node" data-ans="top1">?</div>
+                    <div class="tree-node" data-ans="top2">?</div>
                 </div>
                 <div class="tree-level">
-                    <div class="tree-node" data-key="mid1">?</div>
-                    <div class="tree-node" data-key="mid2">?</div>
+                    <div class="tree-node" data-ans="mid1">?</div>
+                    <div class="tree-node" data-ans="mid2">?</div>
                 </div>
                 <div class="tree-level">
-                    <div class="tree-node" data-key="bot">?</div>
+                    <div class="tree-node" data-ans="bot">?</div>
                 </div>
             </div>
             <div class="node-labels" id="node-labels"></div>
         </section>
+
         <!-- FINISH & REFRESH -->
         <div class="finish-section">
             <h3>Finished the exercises?</h3>
@@ -286,12 +310,12 @@ html
             <br>
             <button class="btn" onclick="finishLevel()">Finish & Next Level</button>
         </div>
-    </div>
 
-    <footer>Deutsch Lernen Pro v1.2</footer>
+    </div>
 
     <!-- TOAST -->
     <div id="toast" style="visibility: hidden; min-width: 250px; background-color: #333; color: #fff; text-align: center; border-radius: 8px; padding: 16px; position: fixed; z-index: 200; left: 50%; bottom: 30px; transform: translateX(-50%); opacity: 0; transition: opacity 0.3s;">Message</div>
+
     <script>
         // --- 5 SETS OF DATA ---
         const quizSets = [
@@ -451,45 +475,60 @@ html
                 words: ["Hahn", "Gans", "Hase", "Frosch", "Wolf"]
             }
         ];
+
         // --- STATE ---
         let currentLevel = 0;
         let score = 0;
         let maxScore = 0;
+
         // --- CORE FUNCTIONS ---
+
         function initApp() {
             loadLevel(currentLevel);
         }
+
         function loadLevel(index) {
             // Reset State
             score = 0;
             maxScore = 0;
             document.getElementById('writing-area').value = ""; // Clear text area
+            
             // Update Header
             document.getElementById('level-indicator').textContent = index + 1;
+            
             // DOM Elements
             const data = quizSets[index];
+
             // 1. Render Matching (Animals)
             const matchPairs = data.animals.map(a => ({ id: a.en, text: a.de, side: 'left' }))
                 .concat(data.animals.map(a => ({ id: a.en, text: a.en, side: 'right' })));
             setupMatching('matching-container', matchPairs);
+
             // 2. Render Flashcards
             setupFlashcards(data.animals);
+
             // 3. Render Adjectives Matching
             const adjPairs = data.adjectives.map(a => ({ id: a.a, text: a.q, side: 'left' }))
                 .concat(data.adjectives.map(a => ({ id: a.a, text: a.a, side: 'right' })));
             setupMatching('adj-container', adjPairs);
+
             // 4. Render MCQ
             setupMCQ(data.family.mcq);
+
             // 5. Render Fill Blank
             setupFillBlank(data.fill, data.words);
+
             // 6. Render Family Tree
             setupFamilyTree(data.family.tree);
+
             updateScoreUI();
         }
+
         function updateScore(points) {
             score += points;
             updateScoreUI();
         }
+
         function updateScoreUI() {
             document.getElementById('score-val').textContent = score;
             document.getElementById('max-score-val').textContent = maxScore;
@@ -497,6 +536,7 @@ html
             document.getElementById('percentage-val').textContent = pct + "%";
             document.getElementById('progress-bar').style.width = pct + "%";
         }
+
         function showToast(msg) {
             const t = document.getElementById('toast');
             t.textContent = msg;
@@ -504,12 +544,15 @@ html
             t.style.visibility = 'visible';
             setTimeout(() => { t.style.opacity = 0; t.style.visibility = 'hidden'; }, 2500);
         }
+
         function finishLevel() {
             const pct = maxScore === 0 ? 0 : Math.round((score / maxScore) * 100);
             let msg = `Level ${currentLevel + 1} Complete! Score: ${pct}%`;
+            
             if (pct > 80) msg += " - Sehr gut!";
             else if (pct > 50) msg += " - Gut gemacht!";
             else msg += " - Weiter üben!";
+
             if(confirm(msg + "\n\nLoad next vocabulary set?")) {
                 currentLevel++;
                 if(currentLevel >= quizSets.length) {
@@ -525,27 +568,34 @@ html
                 }, 500);
             }
         }
+
         // --- EXERCISE LOGIC ---
-        // 1. MATCHING (Updated for One Chance)
+
+        // 1. MATCHING
         function setupMatching(containerId, items) {
             const container = document.getElementById(containerId);
             container.innerHTML = '';
-            maxScore += items.length / 2;
+            maxScore += items.length / 2; // Because pairs count as 1 unit
+
             let selected = null;
+
             // Shuffle items
             items.sort(() => Math.random() - 0.5);
+
             items.forEach(item => {
                 const el = document.createElement('div');
                 el.className = 'match-item';
                 el.textContent = item.text;
                 el.dataset.id = item.id;
                 el.onclick = () => {
-                    if(el.classList.contains('matched') || el.classList.contains('wrong')) return; // Already used
+                    if(el.classList.contains('matched')) return;
+
                     if(selected === el) {
                         el.classList.remove('selected');
                         selected = null;
                         return;
                     }
+
                     if(!selected) {
                         el.classList.add('selected');
                         selected = el;
@@ -558,26 +608,31 @@ html
                             selected = null;
                             updateScore(1);
                         } else {
-                            // ONE CHANCE LOGIC: Lock wrong answers immediately
                             el.classList.add('wrong');
                             selected.classList.add('wrong');
-                            selected.classList.remove('selected');
-                            selected = null;
-                            showToast("Falsch! Versuchen Sie es nicht erneut.");
+                            setTimeout(() => {
+                                el.classList.remove('wrong');
+                                if(selected) selected.classList.remove('wrong');
+                                selected = null;
+                                el.classList.remove('selected'); // Clear selection on fail
+                            }, 500);
                         }
                     }
                 };
                 container.appendChild(el);
             });
         }
-        // 2. FILL BLANK (Updated for One Chance)
+
+        // 2. FILL BLANK
         function setupFillBlank(sentences, wordList) {
             const container = document.getElementById('sentences-container');
             const bank = document.getElementById('word-bank');
             container.innerHTML = '';
             bank.innerHTML = '';
             maxScore += sentences.length;
+
             let selectedWord = null;
+
             // Words
             wordList.forEach(w => {
                 const el = document.createElement('div');
@@ -591,39 +646,47 @@ html
                 };
                 bank.appendChild(el);
             });
+
             // Sentences
             sentences.forEach((s, idx) => {
                 const row = document.createElement('div');
                 row.className = 'sentence-row';
                 row.innerHTML = `<span>${s.pre}</span> <div class="blank-slot" data-ans="${s.ans}" data-idx="${idx}"></div> <span>${s.post}</span>`;
+                
                 const slot = row.querySelector('.blank-slot');
                 slot.onclick = () => {
                     if(!selectedWord) { showToast("Select a word first!"); return; }
-                    if(slot.classList.contains('filled') || slot.classList.contains('failed')) return;
-                    
+                    if(slot.classList.contains('filled')) return;
+
                     slot.textContent = selectedWord.text;
-                    
+                    slot.classList.add('filled');
+
+                    // Check: allow partial match or specific set match
                     const cleanSel = selectedWord.text.toLowerCase().trim();
                     const cleanAns = s.ans.toLowerCase().trim();
                     
                     if(cleanSel === cleanAns || cleanAns.includes(cleanSel)) {
-                        slot.classList.add('filled');
+                        slot.style.backgroundColor = "#c6f6d5";
+                        slot.style.borderColor = "#2f855a";
                         selectedWord.el.classList.add('used');
                         selectedWord.el.style.borderColor = '#cbd5e0';
                         selectedWord = null;
                         updateScore(1);
                     } else {
-                        // ONE CHANCE LOGIC: Lock the slot as failed
-                        slot.classList.add('failed');
-                        selectedWord.el.classList.add('used'); // Consume word
-                        selectedWord.el.style.borderColor = '#cbd5e0';
-                        selectedWord = null;
-                        showToast("Falsch! This answer is locked.");
+                        slot.style.backgroundColor = "#fed7d7";
+                        showToast("Falsch! Try again.");
+                        setTimeout(() => {
+                            slot.textContent = "";
+                            slot.classList.remove('filled');
+                            slot.style.backgroundColor = "#f7fafc";
+                            slot.style.borderColor = "#805ad5";
+                        }, 800);
                     }
                 };
                 container.appendChild(row);
             });
         }
+
         // 3. FLASHCARDS
         function setupFlashcards(animals) {
             const container = document.getElementById('flashcard-container');
@@ -641,15 +704,18 @@ html
                 container.appendChild(card);
             });
         }
-        // 4. MCQ (Already one chance, but verified logic)
+
+        // 4. MCQ
         function setupMCQ(questions) {
             const container = document.getElementById('mcq-container');
             container.innerHTML = '';
             maxScore += questions.length;
+
             questions.forEach((q, idx) => {
                 const qDiv = document.createElement('div');
                 qDiv.style.marginBottom = "15px";
                 qDiv.innerHTML = `<p style="font-weight:bold; margin-bottom:5px;">${idx+1}. ${q.q}</p>`;
+                
                 q.opts.forEach(opt => {
                     const btn = document.createElement('button');
                     btn.className = 'mcq-option';
@@ -659,11 +725,13 @@ html
                         qDiv.classList.add('answered');
                         const allBtns = qDiv.querySelectorAll('.mcq-option');
                         allBtns.forEach(b => b.disabled = true);
+
                         if(opt === q.ans) {
                             this.classList.add('correct');
                             updateScore(1);
                         } else {
                             this.classList.add('wrong');
+                            // Highlight correct one
                             allBtns.forEach(b => { if(b.textContent === q.ans) b.classList.add('correct'); });
                         }
                     };
@@ -672,32 +740,25 @@ html
                 container.appendChild(qDiv);
             });
         }
-        // 5. FAMILY TREE (Updated for Bug Fix + One Chance)
+
+        // 5. FAMILY TREE
         function setupFamilyTree(treeData) {
             const labelsCont = document.getElementById('node-labels');
-            labelsCont.innerHTML = '';
+            labelsCont.innerHTML = ''; // Clear old labels
             const nodes = document.querySelectorAll('.tree-node');
             maxScore += nodes.length;
-            let activeLabel = null;
 
             // Reset nodes visuals
             nodes.forEach(node => {
                 node.textContent = "?";
                 node.classList.remove('filled');
-                node.classList.remove('failed'); // Remove failed state from previous level
-                
-                // BUG FIX: Use data-key to get the answer from data, set it to data-ans for checking
-                // This prevents overwriting the key on level reload
-                const key = node.dataset.key;
-                if (treeData[key]) {
-                    node.dataset.ans = treeData[key];
-                } else {
-                    node.dataset.ans = "Unknown"; 
-                    console.error("Missing key in treeData:", key);
-                }
+                // FIXED BUG: Used 'node' instead of 'n' here
+                node.dataset.ans = treeData[node.dataset.ans] || "Unknown"; 
             });
 
             const labels = Object.values(treeData);
+            let activeLabel = null;
+
             labels.forEach(lbl => {
                 const span = document.createElement('div');
                 span.className = 'node-label';
@@ -713,8 +774,8 @@ html
             nodes.forEach(node => {
                 node.onclick = () => {
                     if(!activeLabel) { showToast("Tap a label below first!"); return; }
-                    if(node.classList.contains('filled') || node.classList.contains('failed')) return;
-                    
+                    if(node.classList.contains('filled')) return;
+
                     if(activeLabel.textContent.trim() === node.dataset.ans.trim()) {
                         node.textContent = activeLabel.textContent;
                         node.classList.add('filled');
@@ -722,18 +783,17 @@ html
                         activeLabel = null;
                         updateScore(1);
                     } else {
-                        // ONE CHANCE LOGIC: Lock node as failed
-                        node.classList.add('failed');
-                        activeLabel.classList.remove('active'); // Return label to pool
-                        activeLabel = null;
-                        showToast("Falsch! Position is now locked.");
+                        showToast("Not quite right.");
+                        node.style.borderColor = "red";
+                        setTimeout(() => node.style.borderColor = "#805ad5", 500);
                     }
                 };
             });
         }
+
         // Start
         window.onload = initApp;
+
     </script>
 </body>
 </html>
-```
