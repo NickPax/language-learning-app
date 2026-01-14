@@ -17,32 +17,20 @@
             --primary: #4361ee;
             --secondary: #3f37c9;
             --success: #4cc9f0;
-            --light-bg: #f8f9fa;
-            --dark-bg: #121826;
-            --card-light: #ffffff;
-            --card-dark: #1e293b;
-            --text-light: #212529;
-            --text-dark: #f1f5f9;
-            --shadow-light: rgba(0, 0, 0, 0.1);
-            --shadow-dark: rgba(0, 0, 0, 0.3);
-            --border-light: #dee2e6;
-            --border-dark: #334155;
-            --option-bg-light: white;
-            --option-bg-dark: #334155;
-            --correct: #4ade80;
-            --incorrect: #f87171;
-            --feedback-correct-light: #d1fae5;
-            --feedback-correct-dark: #064e3b;
-            --feedback-incorrect-light: #fee2e2;
-            --feedback-incorrect-dark: #7f1d1d;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --danger: #f72585;
+            --warning: #f8961e;
+            --info: #4895ef;
+            --card-bg: #ffffff;
+            --shadow: rgba(0, 0, 0, 0.1);
         }
         
         body {
-            background: var(--bg);
-            color: var(--text);
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
             min-height: 100vh;
             padding: 20px;
-            transition: background-color 0.3s, color 0.3s;
+            color: var(--dark);
         }
         
         .container {
@@ -54,14 +42,6 @@
             text-align: center;
             padding: 20px 0;
             margin-bottom: 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo-container {
-            text-align: center;
-            flex: 1;
         }
         
         h1 {
@@ -78,31 +58,12 @@
             margin: 0 auto;
         }
         
-        .theme-toggle {
-            background: var(--card);
-            border: 1px solid var(--border);
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 2px 6px var(--shadow);
-            transition: all 0.3s;
-        }
-        
-        .theme-toggle:hover {
-            transform: rotate(20deg);
-        }
-        
         .progress-container {
-            background: var(--card);
+            background: var(--card-bg);
             border-radius: 12px;
             padding: 20px;
             box-shadow: 0 4px 12px var(--shadow);
             margin-bottom: 30px;
-            border: 1px solid var(--border);
         }
         
         .progress-header {
@@ -115,10 +76,9 @@
         
         .progress-bar {
             height: 12px;
-            background: var(--option-bg);
+            background: #e9ecef;
             border-radius: 6px;
             overflow: hidden;
-            border: 1px solid var(--border);
         }
         
         .progress-fill {
@@ -141,7 +101,7 @@
         }
         
         .exercise-container {
-            background: var(--card);
+            background: var(--card-bg);
             border-radius: 12px;
             padding: 30px;
             box-shadow: 0 4px 12px var(--shadow);
@@ -149,7 +109,6 @@
             min-height: 300px;
             display: flex;
             flex-direction: column;
-            border: 1px solid var(--border);
         }
         
         .exercise-title {
@@ -177,7 +136,7 @@
             line-height: 1.6;
             margin-bottom: 25px;
             padding: 15px;
-            background: var(--bg-sentence);
+            background: #f1f5ff;
             border-radius: 8px;
             border-left: 4px solid var(--primary);
         }
@@ -191,14 +150,13 @@
         
         .option-btn {
             padding: 12px 15px;
-            border: 2px solid var(--border);
+            border: 2px solid #dee2e6;
             border-radius: 8px;
-            background: var(--option-bg);
+            background: white;
             font-size: 1.1rem;
             cursor: pointer;
             transition: all 0.2s;
             font-weight: 600;
-            color: var(--text);
         }
         
         .option-btn:hover:not(:disabled) {
@@ -208,7 +166,7 @@
         }
         
         .option-btn:disabled {
-            opacity: 0.8;
+            opacity: 0.7;
             cursor: not-allowed;
         }
         
@@ -219,14 +177,14 @@
         }
         
         .option-btn.correct {
-            background: var(--correct);
-            border-color: var(--correct);
+            background: #4ade80;
+            border-color: #4ade80;
             color: white;
         }
         
         .option-btn.incorrect {
-            background: var(--incorrect);
-            border-color: var(--incorrect);
+            background: #f87171;
+            border-color: #f87171;
             color: white;
         }
         
@@ -277,14 +235,13 @@
         
         .topic-card {
             padding: 20px;
-            border: 2px solid var(--border);
+            border: 2px solid #dee2e6;
             border-radius: 10px;
-            background: var(--option-bg);
+            background: white;
             cursor: pointer;
             transition: all 0.2s;
             text-align: center;
             font-weight: 600;
-            color: var(--text);
         }
         
         .topic-card:hover:not(.selected):not(.locked) {
@@ -300,7 +257,7 @@
         }
         
         .topic-card.locked {
-            opacity: 0.8;
+            opacity: 0.7;
             cursor: not-allowed;
         }
         
@@ -314,14 +271,14 @@
         }
         
         .feedback.correct {
-            background: var(--feedback-correct);
-            color: var(--feedback-correct-text);
+            background: #d1fae5;
+            color: #065f46;
             display: block;
         }
         
         .feedback.incorrect {
-            background: var(--feedback-incorrect);
-            color: var(--feedback-incorrect-text);
+            background: #fee2e2;
+            color: #b91c1c;
             display: block;
         }
         
@@ -342,13 +299,12 @@
         }
         
         .btn-prev {
-            background: var(--border);
-            color: var(--text);
+            background: #e9ecef;
+            color: var(--dark);
         }
         
         .btn-prev:hover {
-            background: var(--primary);
-            color: white;
+            background: #dee2e6;
         }
         
         .btn-next {
@@ -421,24 +377,14 @@
             .options-container, .topics-container {
                 grid-template-columns: 1fr;
             }
-            
-            header {
-                flex-direction: column;
-                gap: 15px;
-            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <div class="logo-container">
-                <h1><i class="fas fa-language"></i> DeutschLernen</h1>
-                <p class="subtitle">Learn German through interactive exercises. Perfect for beginners and intermediate learners!</p>
-            </div>
-            <div class="theme-toggle" id="theme-toggle">
-                <i class="fas fa-moon"></i>
-            </div>
+            <h1><i class="fas fa-language"></i> DeutschLernen</h1>
+            <p class="subtitle">Learn German through interactive exercises. Perfect for beginners and intermediate learners!</p>
         </header>
         
         <div class="progress-container">
@@ -512,7 +458,6 @@
         let points = 0;
         let userAnswers = new Array(exercises.length).fill(null);
         let speechSynthesis = window.speechSynthesis;
-        let isDarkMode = localStorage.getItem('darkMode') === 'true';
         
         // DOM elements
         const exerciseContainer = document.getElementById('exercise-container');
@@ -522,52 +467,6 @@
         const completionScreen = document.getElementById('completion-screen');
         const finalScore = document.getElementById('final-score');
         const restartBtn = document.getElementById('restart-btn');
-        const themeToggle = document.getElementById('theme-toggle');
-        
-        // Set initial theme
-        applyTheme();
-        
-        // Toggle dark mode
-        themeToggle.addEventListener('click', () => {
-            isDarkMode = !isDarkMode;
-            localStorage.setItem('darkMode', isDarkMode);
-            applyTheme();
-            
-            // Update icon
-            const icon = themeToggle.querySelector('i');
-            icon.className = isDarkMode ? 'fas fa-sun' : 'fas fa-moon';
-        });
-        
-        function applyTheme() {
-            const root = document.documentElement;
-            if (isDarkMode) {
-                root.style.setProperty('--bg', 'var(--dark-bg)');
-                root.style.setProperty('--text', 'var(--text-dark)');
-                root.style.setProperty('--card', 'var(--card-dark)');
-                root.style.setProperty('--border', 'var(--border-dark)');
-                root.style.setProperty('--option-bg', 'var(--option-bg-dark)');
-                root.style.setProperty('--bg-sentence', 'rgba(30, 41, 59, 0.7)');
-                root.style.setProperty('--shadow', 'var(--shadow-dark)');
-                root.style.setProperty('--feedback-correct', 'var(--feedback-correct-dark)');
-                root.style.setProperty('--feedback-correct-text', 'white');
-                root.style.setProperty('--feedback-incorrect', 'var(--feedback-incorrect-dark)');
-                root.style.setProperty('--feedback-incorrect-text', 'white');
-                root.style.setProperty('--warning', '#fbbf24');
-            } else {
-                root.style.setProperty('--bg', 'var(--light-bg)');
-                root.style.setProperty('--text', 'var(--text-light)');
-                root.style.setProperty('--card', 'var(--card-light)');
-                root.style.setProperty('--border', 'var(--border-light)');
-                root.style.setProperty('--option-bg', 'var(--option-bg-light)');
-                root.style.setProperty('--bg-sentence', '#f1f5ff');
-                root.style.setProperty('--shadow', 'var(--shadow-light)');
-                root.style.setProperty('--feedback-correct', 'var(--feedback-correct-light)');
-                root.style.setProperty('--feedback-correct-text', 'var(--text-light)');
-                root.style.setProperty('--feedback-incorrect', 'var(--feedback-incorrect-light)');
-                root.style.setProperty('--feedback-incorrect-text', 'var(--text-light)');
-                root.style.setProperty('--warning', '#f8961e');
-            }
-        }
         
         // Initialize the app
         function initApp() {
@@ -666,7 +565,7 @@
                     if (index === exercise.correct) {
                         btn.classList.add('correct');
                     } else {
-                        btn.classList.add('incorrect');
+                        btn.classlist.add('incorrect');
                     }
                 } else if (index === exercise.correct) {
                     btn.classList.add('correct');
