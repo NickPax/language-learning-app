@@ -444,7 +444,7 @@
         <div class="progress-container">
             <div class="progress-header">
                 <span>Progress</span>
-                <span id="progress-text">0/10</span>
+                <span id="progress-text">0/5</span>
             </div>
             <div class="progress-bar">
                 <div class="progress-fill" id="progress-fill"></div>
@@ -461,16 +461,15 @@
         
         <div class="completion-screen hidden" id="completion-screen">
             <h2>Congratulations! 🎉</h2>
-            <p>You've completed all 10 exercises!</p>
+            <p>You've completed all exercises!</p>
             <div class="final-score">Final Score: <span id="final-score">0</span> points</div>
             <button class="restart-btn" id="restart-btn">Restart Learning</button>
         </div>
     </div>
 
     <script>
-        // All 10 exercises (5 original + 5 new)
+        // Exercise data
         const exercises = [
-            // Original set
             {
                 type: "missing-word",
                 sentence: "Ich ___ einen Apfel essen.",
@@ -505,43 +504,6 @@
                 options: ["Kannst", "Können", "Kann", "Könnt"],
                 correct: 0,
                 explanation: "'Kannst' is the correct conjugation for 'you' (informal singular)."
-            },
-            
-            // NEW LEVELS (6–10)
-            {
-                type: "missing-word",
-                sentence: "Ich esse gern ___ zum Frühstück.",
-                options: ["Brot", "Buch", "Bus", "Ball"],
-                correct: 0,
-                explanation: "'Brot' (bread) is a common breakfast food in Germany."
-            },
-            {
-                type: "tts",
-                audioText: "Heute ist es sonnig und warm. Perfekt für einen Spaziergang!",
-                topics: ["Weather", "Sports", "Work", "Technology"],
-                correct: 0,
-                explanation: "The sentence describes sunny and warm weather."
-            },
-            {
-                type: "missing-word",
-                sentence: "Um 7 Uhr ___ ich auf.",
-                options: ["stehe", "steht", "stehst", "stehen"],
-                correct: 0,
-                explanation: "'Ich stehe auf' means 'I get up' (reflexive verb)."
-            },
-            {
-                type: "tts",
-                audioText: "Ich fahre mit dem Fahrrad zur Arbeit, weil es umweltfreundlich ist.",
-                topics: ["Transportation", "Cooking", "Music", "Animals"],
-                correct: 0,
-                explanation: "The speaker uses a bicycle (Fahrrad) to commute."
-            },
-            {
-                type: "missing-word",
-                sentence: "Am Wochenende spiele ich oft ___ Fußball.",
-                options: ["/", "mit", "von", "zu"],
-                correct: 0,
-                explanation: "In German, you play football without a preposition: 'Fußball spielen'."
             }
         ];
         
