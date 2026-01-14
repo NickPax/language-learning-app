@@ -3,755 +3,772 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deutsch Lernen Pro - Dark Mode</title>
+    <title>DeutschLernen - German Language Learning</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* --- CSS VARIABLES & RESET (SEMI-DARK MODE) --- */
-        :root {
-            /* Palette: Slate & Violet */
-            --primary-gradient: linear-gradient(135deg, #9f7aea 0%, #667eea 100%);
-            --secondary-gradient: linear-gradient(135deg, #4fd1c5 0%, #63b3ed 100%);
-            --success-color: #48bb78;
-            --error-color: #f56565;
-            /* Dark Mode Colors */
-            --bg-body: #1a202c;       /* Dark slate */
-            --bg-card: #2d3748;       /* Lighter slate */
-            --bg-input: #4a5568;      /* Input background */
-            --text-main: #f7fafc;     /* Almost white */
-            --text-muted: #a0aec0;    /* Grayish */
-            --border-color: #4a5568;
-            --font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            --radius: 16px;
-            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
-            --transition: all 0.3s ease;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --success: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --danger: #f72585;
+            --warning: #f8961e;
+            --info: #4895ef;
+            --card-bg: #ffffff;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+        
         body {
-            font-family: var(--font-family);
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            line-height: 1.6;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
             min-height: 100vh;
+            padding: 20px;
+            color: var(--dark);
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .subtitle {
+            color: var(--secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .progress-container {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px var(--shadow);
+            margin-bottom: 30px;
+        }
+        
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--secondary);
+        }
+        
+        .progress-bar {
+            height: 12px;
+            background: #e9ecef;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--success));
+            border-radius: 6px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .points-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--warning);
+        }
+        
+        .exercise-container {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 12px var(--shadow);
+            margin-bottom: 30px;
+            min-height: 300px;
             display: flex;
             flex-direction: column;
         }
-        /* --- LAYOUT UTILITIES --- */
-        .container { max-width: 800px; margin: 0 auto; padding: 0 20px; width: 100%; flex: 1; display: flex; flex-direction: column; justify-content: center; }
-        .hidden { display: none !important; }
-        .fade-in { animation: fadeIn 0.4s ease-in-out; }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        
+        .exercise-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        /* --- HEADER & PROGRESS --- */
-        header { text-align: center; margin-bottom: 20px; padding-top: 20px; }
-        h1 { font-size: 2rem; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 5px; }
-        .subtitle { color: var(--text-muted); font-size: 0.9rem; }
-        .progress-wrapper {
-            background: var(--bg-card);
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 30px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border-color);
+        
+        .exercise-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
-        .progress-header { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-muted); }
-        .progress-track { width: 100%; height: 8px; background: var(--bg-input); border-radius: 4px; overflow: hidden; }
-        .progress-fill { height: 100%; background: var(--primary-gradient); width: 0%; transition: width 0.5s ease; }
-        /* --- CARDS & SECTIONS --- */
-        .card {
-            background: var(--bg-card);
-            border-radius: var(--radius);
-            padding: 25px;
-            box-shadow: var(--shadow);
+        
+        .missing-word-exercise {
+            text-align: center;
+        }
+        
+        .sentence {
+            font-size: 1.4rem;
+            line-height: 1.6;
             margin-bottom: 25px;
-            border: 1px solid var(--border-color);
-            position: relative;
+            padding: 15px;
+            background: #f1f5ff;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
         }
-        .card-header { margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
-        .card-title { font-size: 1.4rem; color: white; font-weight: 600; }
-        .card-subtitle { color: var(--text-muted); font-size: 0.95rem; margin-top: 5px; }
-        .instruction-badge {
-            display: inline-block; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: bold; color: var(--bg-body); background: var(--secondary-gradient); margin-bottom: 10px; text-transform: uppercase;
+        
+        .options-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 12px;
+            margin-top: 20px;
         }
-        /* --- BUTTONS --- */
-        .btn {
-            background: var(--primary-gradient); color: white; border: none; padding: 14px 32px; border-radius: 30px; font-size: 1.1rem; font-weight: 600; cursor: pointer;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4); transition: var(--transition); width: 100%; display: block; margin-top: 10px;
+        
+        .option-btn {
+            padding: 12px 15px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            background: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
         }
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6); }
-        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-        .btn-outline { background: transparent; border: 2px solid var(--border-color); color: var(--text-muted); box-shadow: none; }
-        .btn-outline:hover { border-color: var(--text-main); color: var(--text-main); }
-        /* --- EXERCISE: MATCHING --- */
-        .match-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .match-item {
-            background: var(--bg-input); border: 2px solid transparent; border-radius: 10px; padding: 15px;
-            text-align: center; cursor: pointer; transition: var(--transition); user-select: none; font-size: 1rem; color: var(--text-main);
+        
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px var(--shadow);
         }
-        .match-item:hover { background: #4a5568; }
-        .match-item.selected { border-color: #9f7aea; background: #553c9a; }
-        .match-item.matched { border-color: var(--success-color); background: rgba(72, 187, 120, 0.2); opacity: 0.6; pointer-events: none; text-decoration: line-through; }
-        .match-item.wrong { border-color: var(--error-color); background: rgba(245, 101, 101, 0.2); opacity: 0.6; pointer-events: none; }
-        /* --- EXERCISE: FILL IN BLANK --- */
-        .word-bank { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; justify-content: center; min-height: 40px; }
-        .draggable-word {
-            background: var(--bg-input); border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 20px; cursor: pointer;
-            box-shadow: 0 2px 0 #2d3748; font-size: 0.95rem; transition: var(--transition); color: white;
+        
+        .option-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
         }
-        .draggable-word.used { opacity: 0.3; pointer-events: none; text-decoration: line-through; background: #2d3748; }
-        .sentence-row { display: flex; align-items: center; justify-content: center; margin-bottom: 20px; flex-wrap: wrap; gap: 8px; font-size: 1.1rem; }
-        .blank-slot {
-            display: inline-block; min-width: 100px; border-bottom: 2px solid #9f7aea; padding: 0 10px;
-            color: #9f7aea; font-weight: bold; text-align: center; cursor: pointer; background: rgba(255,255,255,0.05);
-            border-radius: 4px 4px 0 0; min-height: 2rem; transition: background 0.2s;
+        
+        .option-btn.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
         }
-        .blank-slot.filled { background: rgba(159, 122, 234, 0.2); border-bottom-color: var(--success-color); color: var(--text-main); }
-        .blank-slot.failed { background: rgba(245, 101, 101, 0.2); border-bottom-color: var(--error-color); color: #feb2b2; pointer-events: none; }
-        /* --- EXERCISE: FLASHCARDS --- */
-        .flashcard-grid { display: flex; justify-content: center; perspective: 1000px; }
-        .flashcard {
-            background-color: transparent; width: 260px; height: 350px; cursor: pointer; position: relative;
+        
+        .option-btn.correct {
+            background: #4ade80;
+            border-color: #4ade80;
+            color: white;
         }
-        .flashcard-inner {
-            position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d;
-            border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        
+        .option-btn.incorrect {
+            background: #f87171;
+            border-color: #f87171;
+            color: white;
         }
-        .flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
-        .flashcard-front, .flashcard-back {
-            position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden;
-            display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 20px;
+        
+        .tts-exercise {
+            text-align: center;
         }
-        .flashcard-front { background: var(--bg-input); border: 2px solid var(--border-color); color: white; }
-        .flashcard-front .emoji { font-size: 5rem; margin-bottom: 10px; }
-        .flashcard-front .hint { font-size: 0.9rem; color: var(--text-muted); margin-top: 15px; font-style: italic; }
-        .flashcard-back { background: var(--primary-gradient); color: white; transform: rotateY(180deg); padding: 20px; }
-        .flashcard-back .german { font-size: 2rem; font-weight: bold; margin-bottom: 5px; }
-        .flashcard-back .english { font-size: 1.2rem; opacity: 0.9; }
-        /* --- EXERCISE: LISTENING (NEW) --- */
-        .listening-container { text-align: center; padding: 20px 0; }
+        
+        .audio-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 25px 0;
+        }
+        
         .play-btn {
-            width: 80px; height: 80px; border-radius: 50%; background: var(--secondary-gradient); border: none;
-            display: flex; align-items: center; justify-content: center; margin: 0 auto 30px;
-            cursor: pointer; box-shadow: 0 0 20px rgba(79, 209, 197, 0.4); transition: var(--transition);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px var(--shadow);
+            transition: all 0.2s;
         }
-        .play-btn svg { width: 32px; height: 32px; fill: white; margin-left: 4px; }
-        .play-btn:active { transform: scale(0.95); }
-        .listening-options { display: flex; flex-direction: column; gap: 12px; }
-        .listen-opt {
-            padding: 15px; background: var(--bg-input); border-radius: 10px; cursor: pointer; border: 2px solid transparent;
-            transition: var(--transition); font-size: 1.1rem;
+        
+        .play-btn:hover {
+            background: var(--secondary);
+            transform: scale(1.05);
         }
-        .listen-opt:hover { background: #4a5568; }
-        .listen-opt.correct { background: rgba(72, 187, 120, 0.2); border-color: var(--success-color); }
-        .listen-opt.wrong { background: rgba(245, 101, 101, 0.2); border-color: var(--error-color); }
-        /* --- EXERCISE: SENTENCE BUILDER (NEW) --- */
-        .scramble-area { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; min-height: 60px; margin-bottom: 30px; padding: 10px; background: rgba(0,0,0,0.2); border-radius: 10px; border-bottom: 2px solid var(--border-color); }
-        .scramble-word {
-            background: var(--secondary-gradient); color: var(--bg-body); padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: bold;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3); transition: var(--transition);
+        
+        .play-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
         }
-        .scramble-word:hover { transform: translateY(-2px); }
-        .scramble-word.used { opacity: 0; pointer-events: none; position: absolute; } /* Hidden but keeps layout logic simple */
-        /* --- FOOTER --- */
-        footer { text-align: center; color: var(--text-muted); font-size: 0.8rem; margin-top: 20px; padding-bottom: 20px; }
-        /* --- START SCREEN --- */
-        #start-screen { text-align: center; padding: 40px 20px; }
-        .level-select { display: flex; justify-content: center; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
-        .level-pill { padding: 8px 16px; background: var(--bg-input); border-radius: 20px; cursor: pointer; border: 1px solid var(--border-color); transition: var(--transition); }
-        .level-pill.active { background: var(--primary-gradient); color: white; border-color: transparent; }
-        /* Mobile Adjustments */
+        
+        .topics-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .topic-card {
+            padding: 20px;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .topic-card:hover:not(.selected):not(.locked) {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px var(--shadow);
+        }
+        
+        .topic-card.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .topic-card.locked {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+        
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+        
+        .feedback.correct {
+            background: #d1fae5;
+            color: #065f46;
+            display: block;
+        }
+        
+        .feedback.incorrect {
+            background: #fee2e2;
+            color: #b91c1c;
+            display: block;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-prev {
+            background: #e9ecef;
+            color: var(--dark);
+        }
+        
+        .btn-prev:hover {
+            background: #dee2e6;
+        }
+        
+        .btn-next {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-next:hover {
+            background: var(--secondary);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .completion-screen {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        .completion-screen h2 {
+            font-size: 2.2rem;
+            color: var(--success);
+            margin-bottom: 20px;
+        }
+        
+        .final-score {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--warning);
+            margin: 20px 0;
+        }
+        
+        .restart-btn {
+            background: var(--success);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.2s;
+        }
+        
+        .restart-btn:hover {
+            background: #3ab7e4;
+            transform: scale(1.05);
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
         @media (max-width: 600px) {
-            h1 { font-size: 1.6rem; }
-            .match-grid { grid-template-columns: 1fr; }
-            .flashcard { width: 100%; height: 300px; }
+            .exercise-container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .sentence {
+                font-size: 1.2rem;
+            }
+            
+            .options-container, .topics-container {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- MAIN CONTAINER -->
     <div class="container">
-        <!-- HEADER (Always Visible except results) -->
-        <header id="app-header">
-            <h1>Deutsch Lernen</h1>
-            <div class="subtitle" id="header-subtitle">Master German Step-by-Step</div>
+        <header>
+            <h1><i class="fas fa-language"></i> DeutschLernen</h1>
+            <p class="subtitle">Learn German through interactive exercises. Perfect for beginners and intermediate learners!</p>
         </header>
-        <!-- PROGRESS BAR -->
-        <div id="progress-wrapper" class="progress-wrapper hidden">
+        
+        <div class="progress-container">
             <div class="progress-header">
-                <span id="exercise-title">Exercise</span>
-                <span id="score-display">Score: 0</span>
+                <span>Progress</span>
+                <span id="progress-text">0/5</span>
             </div>
-            <div class="progress-track">
-                <div class="progress-fill" id="progress-bar"></div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            <div class="points-display">
+                <i class="fas fa-star"></i>
+                <span id="points">0</span> Points
             </div>
         </div>
-        <!-- 1. START SCREEN -->
-        <div id="start-screen" class="fade-in">
-            <h2>Ready to Learn?</h2>
-            <p style="color: var(--text-muted); margin-top: 10px;">Select a starting level or just jump in!</p>
-            <div class="level-select" id="level-selector">
-                <!-- Generated by JS -->
-            </div>
-            <button class="btn" onclick="app.startGame()">Start Game</button>
+        
+        <div class="exercise-container" id="exercise-container">
+            <!-- Exercises will be loaded here -->
         </div>
-        <!-- 2. GAME AREA (Dynamic Exercises) -->
-        <div id="game-screen" class="hidden fade-in">
-            <!-- Content Injected Here -->
-            <div id="exercise-container"></div>
-            <button id="next-btn" class="btn hidden" onclick="app.nextExercise()">Next Exercise ➜</button>
-        </div>
-        <!-- 3. RESULTS SCREEN -->
-        <div id="result-screen" class="hidden fade-in text-center">
-            <div class="card">
-                <h2 style="margin-bottom: 10px;">Level Complete!</h2>
-                <div style="font-size: 3rem; margin: 20px 0;" id="final-emoji">🏆</div>
-                <p id="final-msg" style="font-size: 1.2rem; margin-bottom: 20px;">Great Job!</p>
-                <p style="color: var(--text-muted); margin-bottom: 30px;">Final Score: <span id="final-score" style="color: white; font-weight: bold;">0</span></p>
-                <button class="btn" onclick="app.restartLevel()">Play Again</button>
-                <button class="btn btn-outline" onclick="app.nextLevel()" style="margin-top: 15px;">Next Level</button>
-            </div>
+        
+        <div class="completion-screen hidden" id="completion-screen">
+            <h2>Congratulations! 🎉</h2>
+            <p>You've completed all exercises!</p>
+            <div class="final-score">Final Score: <span id="final-score">0</span> points</div>
+            <button class="restart-btn" id="restart-btn">Restart Learning</button>
         </div>
     </div>
-    <footer>Deutsch Lernen Pro v2.0 (Dark Mode)</footer>
+
     <script>
-        // --- DATASET (5 LEVELS) ---
-        const quizData = [
-            { // Level 1
-                animals: [ {de: "Der Hund", en: "Dog", emoji: "🐶"}, {de: "Die Katze", en: "Cat", emoji: "🐱"}, {de: "Der Fisch", en: "Fish", emoji: "🐟"}, {de: "Der Vogel", en: "Bird", emoji: "🐦"}, {de: "Die Maus", en: "Mouse", emoji: "🐭"} ],
-                sentences: [
-                    { text: "Ich habe einen Hund.", parts: ["Ich", "habe", "einen", "Hund", "."] },
-                    { text: "Die Katze schläft.", parts: ["Die", "Katze", "schläft", "."] }
-                ],
-                mcqData: [ {q: "Der Vogel", a: "Bird", opts: ["Dog", "Cat", "Bird"]}, {q: "Die Maus", a: "Mouse", opts: ["Fish", "Mouse", "Bird"]} ]
+        // Exercise data
+        const exercises = [
+            {
+                type: "missing-word",
+                sentence: "Ich ___ einen Apfel essen.",
+                options: ["möchte", "willst", "wollen", "möchtest"],
+                correct: 0,
+                explanation: "The correct phrase is 'Ich möchte' (I would like)."
             },
-            { // Level 2
-                animals: [ {de: "Das Pferd", en: "Horse", emoji: "🐴"}, {de: "Die Kuh", en: "Cow", emoji: "🐮"}, {de: "Das Schwein", en: "Pig", emoji: "🐷"}, {de: "Das Schaf", en: "Sheep", emoji: "🐑"}, {de: "Der Hahn", en: "Rooster", emoji: "🐓"} ],
-                sentences: [
-                    { text: "Das Pferd ist schnell.", parts: ["Das", "Pferd", "ist", "schnell", "."] },
-                    { text: "Ich mag die Kuh.", parts: ["Ich", "mag", "die", "Kuh", "."] }
-                ],
-                mcqData: [ {q: "Das Schwein", a: "Pig", opts: ["Cow", "Sheep", "Pig"]}, {q: "Der Hahn", a: "Rooster", opts: ["Horse", "Rooster", "Sheep"]} ]
+            {
+                type: "missing-word",
+                sentence: "Wir ___ nach Berlin fahren.",
+                options: ["werden", "wird", "wirst", "werde"],
+                correct: 0,
+                explanation: "'Wir werden' is the correct future tense form for 'we'."
             },
-            { // Level 3
-                animals: [ {de: "Der Löwe", en: "Lion", emoji: "🦁"}, {de: "Der Tiger", en: "Tiger", emoji: "🐯"}, {de: "Der Elefant", en: "Elephant", emoji: "🐘"}, {de: "Der Affe", en: "Monkey", emoji: "🐒"}, {de: "Die Giraffe", en: "Giraffe", emoji: "🦒"} ],
-                sentences: [
-                    { text: "Der Löwe brüllt laut.", parts: ["Der", "Löwe", "brüllt", "laut", "."] },
-                    { text: "Die Giraffe hat einen langen Hals.", parts: ["Die", "Giraffe", "hat", "einen", "langen", "Hals", "."] }
-                ],
-                mcqData: [ {q: "Der Elefant", a: "Elephant", opts: ["Lion", "Elephant", "Tiger"]}, {q: "Die Giraffe", a: "Giraffe", opts: ["Monkey", "Tiger", "Giraffe"]} ]
+            {
+                type: "tts",
+                audioText: "Guten Tag! Wie geht es Ihnen? Ich heiße Anna und komme aus München.",
+                topics: ["Greetings", "Shopping", "Travel", "Food"],
+                correct: 0,
+                explanation: "This is a greeting conversation introducing oneself."
             },
-            { // Level 4
-                animals: [ {de: "Die Biene", en: "Bee", emoji: "🐝"}, {de: "Die Ameise", en: "Ant", emoji: "🐜"}, {de: "Der Schmetterling", en: "Butterfly", emoji: "🦋"}, {de: "Die Schnecke", en: "Snail", emoji: "🐌"}, {de: "Der Frosch", en: "Frog", emoji: "🐸"} ],
-                sentences: [
-                    { text: "Die Biene ist klein.", parts: ["Die", "Biene", "ist", "klein", "."] },
-                    { text: "Der Frosch ist grün.", parts: ["Der", "Frosch", "ist", "grün", "."] }
-                ],
-                mcqData: [ {q: "Der Schmetterling", a: "Butterfly", opts: ["Bee", "Ant", "Butterfly"]}, {q: "Die Schnecke", a: "Snail", opts: ["Frog", "Snail", "Bee"]} ]
+            {
+                type: "tts",
+                audioText: "Entschuldigung, wo ist der Bahnhof? Ich muss den Zug nach Hamburg nehmen.",
+                topics: ["Directions", "Shopping", "Weather", "Family"],
+                correct: 0,
+                explanation: "The speaker is asking for directions to the train station."
             },
-            { // Level 5
-                animals: [ {de: "Der Wolf", en: "Wolf", emoji: "🐺"}, {de: "Der Bär", en: "Bear", emoji: "🐻"}, {de: "Der Fuchs", en: "Fox", emoji: "🦊"}, {de: "Das Eichhörnchen", en: "Squirrel", emoji: "🐿️"}, {de: "Die Eule", en: "Owl", emoji: "🦉"} ],
-                sentences: [
-                    { text: "Der Wolf ist wild.", parts: ["Der", "Wolf", "ist", "wild", "."] },
-                    { text: "Der Bär ist groß.", parts: ["Der", "Bär", "ist", "groß", "."] }
-                ],
-                mcqData: [ {q: "Der Fuchs", a: "Fox", opts: ["Wolf", "Fox", "Bear"]}, {q: "Die Eule", a: "Owl", opts: ["Squirrel", "Owl", "Wolf"]} ]
+            {
+                type: "missing-word",
+                sentence: "___ du Deutsch sprechen?",
+                options: ["Kannst", "Können", "Kann", "Könnt"],
+                correct: 0,
+                explanation: "'Kannst' is the correct conjugation for 'you' (informal singular)."
             }
         ];
-        // --- APP CONTROLLER ---
-        const app = {
-            level: 0,
-            score: 0,
-            exerciseIndex: 0,
-            exercises: [
-                { id: 'match', name: 'Matching Pairs' },
-                { id: 'fill', name: 'Fill in the Blank' },
-                { id: 'flash', name: 'Flashcards' },
-                { id: 'listen', name: 'Listening Comprehension' },
-                { id: 'build', name: 'Sentence Builder' }
-            ],
-            init: () => {
-                // Render Level Selector
-                const selector = document.getElementById('level-selector');
-                quizData.forEach((_, idx) => {
-                    const pill = document.createElement('div');
-                    pill.className = `level-pill ${idx === 0 ? 'active' : ''}`;
-                    pill.textContent = `Lvl ${idx + 1}`;
-                    pill.onclick = () => {
-                        document.querySelectorAll('.level-pill').forEach(p => p.classList.remove('active'));
-                        pill.classList.add('active');
-                        app.level = idx;
-                    };
-                    selector.appendChild(pill);
-                });
-            },
-            startGame: () => {
-                app.score = 0;
-                app.exerciseIndex = 0;
-                document.getElementById('start-screen').classList.add('hidden');
-                document.getElementById('result-screen').classList.add('hidden');
-                document.getElementById('game-screen').classList.remove('hidden');
-                document.getElementById('progress-wrapper').classList.remove('hidden');
-                app.loadExercise();
-            },
-            loadExercise: () => {
-                const ex = app.exercises[app.exerciseIndex];
-                const container = document.getElementById('exercise-container');
-                const titleEl = document.getElementById('exercise-title');
-                const nextBtn = document.getElementById('next-btn');
-                // Update UI State
-                container.innerHTML = '';
-                nextBtn.classList.add('hidden');
-                titleEl.textContent = `${app.exerciseIndex + 1}. ${ex.name}`;
-                document.getElementById('score-display').textContent = `Score: ${app.score}`;
-                // Progress Bar
-                const pct = (app.exerciseIndex / app.exercises.length) * 100;
-                document.getElementById('progress-bar').style.width = `${pct}%`;
-                // Render Specific Exercise
-                if(ex.id === 'match') renderMatching(container);
-                else if(ex.id === 'fill') renderFillBlank(container);
-                else if(ex.id === 'flash') renderFlashcards(container);
-                else if(ex.id === 'listen') renderListening(container);
-                else if(ex.id === 'build') renderSentenceBuilder(container);
-            },
-            addScore: (points) => {
-                app.score += points;
-                document.getElementById('score-display').textContent = `Score: ${app.score}`;
-            },
-            completeExercise: () => {
-                document.getElementById('next-btn').classList.remove('hidden');
-                // Smooth scroll to bottom to show next button
-                setTimeout(() => window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'}), 100);
-            },
-            nextExercise: () => {
-                app.exerciseIndex++;
-                if(app.exerciseIndex < app.exercises.length) {
-                    app.loadExercise();
-                    window.scrollTo(0,0);
-                } else {
-                    app.showResults();
-                }
-            },
-            showResults: () => {
-                document.getElementById('game-screen').classList.add('hidden');
-                document.getElementById('progress-wrapper').classList.add('hidden');
-                document.getElementById('result-screen').classList.remove('hidden');
-                document.getElementById('final-score').textContent = `${app.score} / 5`;
-                const pct = (app.score / 5) * 100;
-                const msgEl = document.getElementById('final-msg');
-                const emojiEl = document.getElementById('final-emoji');
-                if(pct === 100) { msgEl.textContent = "Perfekt! You are a master!"; emojiEl.textContent = "👑"; }
-                else if(pct >= 80) { msgEl.textContent = "Sehr gut! Excellent work!"; emojiEl.textContent = "🌟"; }
-                else if(pct >= 60) { msgEl.textContent = "Gut! Keep practicing!"; emojiEl.textContent = "👍"; }
-                else { msgEl.textContent = "Don't give up! Try again."; emojiEl.textContent = "📚"; }
-            },
-            restartLevel: () => {
-                app.startGame();
-            },
-            nextLevel: () => {
-                if(app.level < quizData.length - 1) {
-                    app.level++;
-                    app.startGame();
-                } else {
-                    alert("You have completed all levels! Starting over.");
-                    app.level = 0;
-                    app.startGame();
-                }
-            }
-        };
-        // --- TTS HELPER ---
-        function speak(text) {
-            window.speechSynthesis.cancel();
-            const u = new SpeechSynthesisUtterance(text);
-            u.lang = 'de-DE';
-            u.rate = 0.9;
-            window.speechSynthesis.speak(u);
-        }
-        // --- EXERCISE RENDERERS ---
-        // 1. MATCHING
-        function renderMatching(container) {
-            const data = quizData[app.level].animals;
-            // Create pairs
-            let items = [];
-            data.forEach(d => {
-                items.push({ id: d.de, text: d.de, type: 'de' });
-                items.push({ id: d.de, text: d.en, type: 'en' });
-            });
-            // Shuffle
-            items.sort(() => Math.random() - 0.5);
-            let selected = null;
-            let matches = 0;
-            const totalMatchesNeeded = data.length; // 5 matches for 5 animals
-            const grid = document.createElement('div');
-            grid.className = 'match-grid';
+        
+        // App state
+        let currentExercise = 0;
+        let points = 0;
+        let userAnswers = new Array(exercises.length).fill(null);
+        let speechSynthesis = window.speechSynthesis;
+        
+        // DOM elements
+        const exerciseContainer = document.getElementById('exercise-container');
+        const progressFill = document.getElementById('progress-fill');
+        const progressText = document.getElementById('progress-text');
+        const pointsDisplay = document.getElementById('points');
+        const completionScreen = document.getElementById('completion-screen');
+        const finalScore = document.getElementById('final-score');
+        const restartBtn = document.getElementById('restart-btn');
+        
+        // Initialize the app
+        function initApp() {
+            updateProgress();
+            loadExercise(currentExercise);
             
-            // Create elements with proper closure
-            items.forEach(item => {
-                const el = document.createElement('div');
-                el.className = 'match-item';
-                el.textContent = item.text;
-                // Store the actual matching ID and type as data attributes
-                el.dataset.matchId = item.id; // This is the German word for both sides
-                el.dataset.type = item.type;
+            // Event listener for restart button
+            restartBtn.addEventListener('click', restartApp);
+        }
+        
+        // Load and display current exercise
+        function loadExercise(index) {
+            const exercise = exercises[index];
+            exerciseContainer.innerHTML = '';
+            completionScreen.classList.add('hidden');
+            
+            if (exercise.type === 'missing-word') {
+                renderMissingWordExercise(exercise);
+            } else if (exercise.type === 'tts') {
+                renderTTsExercise(exercise);
+            }
+        }
+        
+        // Render missing word exercise
+        function renderMissingWordExercise(exercise) {
+            const title = document.createElement('h2');
+            title.className = 'exercise-title';
+            title.innerHTML = '<i class="fas fa-puzzle-piece"></i> Fill in the Blank';
+            exerciseContainer.appendChild(title);
+            
+            const content = document.createElement('div');
+            content.className = 'exercise-content missing-word-exercise';
+            
+            const sentence = document.createElement('div');
+            sentence.className = 'sentence';
+            sentence.textContent = exercise.sentence;
+            content.appendChild(sentence);
+            
+            const optionsContainer = document.createElement('div');
+            optionsContainer.className = 'options-container';
+            
+            exercise.options.forEach((option, index) => {
+                const optionBtn = document.createElement('button');
+                optionBtn.className = 'option-btn';
+                optionBtn.textContent = option;
+                optionBtn.dataset.index = index;
                 
-                el.onclick = function() {
-                    if(this.classList.contains('matched') || this.classList.contains('wrong')) return;
-                    
-                    if (!selected) {
-                        this.classList.add('selected');
-                        selected = this;
-                    } else {
-                        if (selected === this) {
-                            this.classList.remove('selected');
-                            selected = null;
-                            return;
-                        }
-                        
-                        // Check if they match: same matchId but different types
-                        const isMatch = selected.dataset.matchId === this.dataset.matchId && 
-                                       selected.dataset.type !== this.dataset.type;
-                        
-                        if (isMatch) {
-                            this.classList.add('matched');
-                            selected.classList.add('matched');
-                            selected.classList.remove('selected');
-                            // Speak the German word
-                            const germanText = this.dataset.type === 'de' ? this.textContent : selected.textContent;
-                            speak(germanText);
-                            matches++;
-                            app.addScore(1);
-                            
-                            // Check if all matches are completed
-                            if(matches >= totalMatchesNeeded) {
-                                app.completeExercise();
-                            }
+                // Restore previous answer if exists
+                if (userAnswers[currentExercise] !== null) {
+                    optionBtn.disabled = true;
+                    if (index === userAnswers[currentExercise]) {
+                        optionBtn.classList.add('selected');
+                        if (index === exercise.correct) {
+                            optionBtn.classList.add('correct');
                         } else {
-                            // Wrong match
-                            this.classList.add('wrong');
-                            selected.classList.add('wrong');
-                            selected.classList.remove('selected');
-                            // Reset wrong after brief moment
-                            setTimeout(() => {
-                                this.classList.remove('wrong');
-                                if(selected) selected.classList.remove('wrong');
-                            }, 500);
+                            optionBtn.classList.add('incorrect');
                         }
-                        selected = null;
+                    } else if (index === exercise.correct) {
+                        optionBtn.classList.add('correct');
                     }
-                };
+                }
                 
-                grid.appendChild(el);
+                optionBtn.addEventListener('click', () => handleMissingWordAnswer(index));
+                optionsContainer.appendChild(optionBtn);
             });
             
-            const card = createCard("Match the German word to the English translation.", grid);
-            container.appendChild(card);
+            content.appendChild(optionsContainer);
+            
+            // Feedback element
+            const feedback = document.createElement('div');
+            feedback.className = 'feedback';
+            feedback.id = 'feedback';
+            content.appendChild(feedback);
+            
+            exerciseContainer.appendChild(content);
+            addNavigation();
         }
-        // 2. FILL IN BLANK
-        function renderFillBlank(container) {
-            const data = quizData[app.level].animals;
-            // Randomly select one animal for the exercise
-            const randomAnimal = data[Math.floor(Math.random() * data.length)];
+        
+        // Handle missing word answer
+        function handleMissingWordAnswer(selectedIndex) {
+            const exercise = exercises[currentExercise];
+            userAnswers[currentExercise] = selectedIndex;
             
-            // Sentence: Das ist [Tier]
-            const sentenceDiv = document.createElement('div');
-            sentenceDiv.style.marginTop = "20px";
-            const row = document.createElement('div');
-            row.className = 'sentence-row';
-            row.innerHTML = `<span>Das ist</span> <div class="blank-slot" id="blank-1"></div>`;
-            sentenceDiv.appendChild(row);
-            
-            // Word Bank
-            const bank = document.createElement('div');
-            bank.className = 'word-bank';
-            
-            // Correct answer
-            const correctNoun = randomAnimal.de;
-            
-            // Add 2 distractors from other animals in the same level
-            const distractors = [];
-            const otherAnimals = data.filter(a => a.de !== correctNoun);
-            // Ensure we have at least 2 other animals
-            while (distractors.length < 2 && otherAnimals.length > 0) {
-                const randomIdx = Math.floor(Math.random() * otherAnimals.length);
-                distractors.push(otherAnimals.splice(randomIdx, 1)[0].de);
+            // Update points
+            if (selectedIndex === exercise.correct) {
+                points += 10;
+                pointsDisplay.textContent = points;
             }
             
-            // If we don't have enough distractors, use some from the beginning of the list
-            while (distractors.length < 2) {
-                const idx = (distractors.length + 1) % data.length;
-                if (data[idx].de !== correctNoun) {
-                    distractors.push(data[idx].de);
+            // Update UI
+            const buttons = document.querySelectorAll('.option-btn');
+            buttons.forEach((btn, index) => {
+                btn.disabled = true;
+                if (index === selectedIndex) {
+                    btn.classList.add('selected');
+                    if (index === exercise.correct) {
+                        btn.classList.add('correct');
+                    } else {
+                        btn.classlist.add('incorrect');
+                    }
+                } else if (index === exercise.correct) {
+                    btn.classList.add('correct');
                 }
-            }
-            
-            const options = [correctNoun, ...distractors.slice(0, 2)];
-            options.sort(() => Math.random() - 0.5);
-            
-            let selectedWord = null;
-            options.forEach(w => {
-                const wEl = document.createElement('div');
-                wEl.className = 'draggable-word';
-                wEl.textContent = w;
-                wEl.onclick = () => {
-                    if(wEl.classList.contains('used')) return;
-                    if(selectedWord) selectedWord.style.borderColor = "transparent";
-                    selectedWord = wEl;
-                    wEl.style.borderColor = "#9f7aea";
-                    speak(w);
-                };
-                bank.appendChild(wEl);
             });
             
-            const slot = row.querySelector('.blank-slot');
-            slot.onclick = () => {
-                if(!selectedWord) return;
-                slot.textContent = selectedWord.textContent;
-                if(selectedWord.textContent === correctNoun) {
-                    slot.classList.add('filled');
-                    selectedWord.classList.add('used');
-                    app.addScore(1);
-                    app.completeExercise();
-                } else {
-                    slot.classList.add('failed');
-                    selectedWord.classList.add('used');
-                    // Allow retry after a short delay
-                    setTimeout(() => {
-                        slot.classList.remove('failed');
-                        slot.textContent = "";
-                        selectedWord.classList.remove('used');
-                        selectedWord.style.borderColor = "transparent";
-                        selectedWord = null;
-                    }, 1500);
-                }
-            };
-            
-            const card = createCard("Select the correct German word for the sentence.", [bank, sentenceDiv]);
-            container.appendChild(card);
-        }
-        // 3. FLASHCARDS
-        function renderFlashcards(container) {
-            const data = quizData[app.level].animals;
-            let index = 0;
-            let hasFlipped = false; // Track if user has flipped the current card
-            
-            const cardWrap = document.createElement('div');
-            cardWrap.className = 'flashcard-grid';
-            const cardInner = document.createElement('div');
-            cardInner.className = 'flashcard';
-            cardInner.innerHTML = `
-                <div class="flashcard-inner">
-                    <div class="flashcard-front">
-                        <div class="emoji">${data[0].emoji}</div>
-                        <div class="hint">Tap card to flip</div>
-                    </div>
-                    <div class="flashcard-back">
-                        <div class="german">${data[0].de}</div>
-                        <div class="english">${data[0].en}</div>
-                    </div>
-                </div>
-            `;
-            
-            // Instruction overlay
-            const instruct = document.createElement('p');
-            instruct.className = 'instruction-badge';
-            instruct.style.width = "100%";
-            instruct.style.textAlign = "center";
-            instruct.textContent = "🗣️ Speak the word aloud first! Then click.";
-            cardWrap.appendChild(cardInner);
-            
-            cardInner.onclick = () => {
-                if (!cardInner.classList.contains('flipped')) {
-                    cardInner.classList.add('flipped');
-                    speak(data[index].de);
-                    hasFlipped = true;
-                }
-            };
-            
-            // Next Card Button
-            const nextCardBtn = document.createElement('button');
-            nextCardBtn.className = 'btn btn-outline';
-            nextCardBtn.textContent = "Next Card";
-            nextCardBtn.style.marginTop = "20px";
-            nextCardBtn.onclick = () => {
-                if (!hasFlipped) {
-                    // User must flip the card before proceeding
-                    return;
-                }
-                
-                index++;
-                if(index < data.length) {
-                    cardInner.classList.remove('flipped'); // reset flip
-                    hasFlipped = false;
-                    // update content
-                    cardInner.querySelector('.emoji').textContent = data[index].emoji;
-                    cardInner.querySelector('.german').textContent = data[index].de;
-                    cardInner.querySelector('.english').textContent = data[index].en;
-                } else {
-                    // Only award score when all cards have been viewed
-                    app.addScore(1);
-                    nextCardBtn.classList.add('hidden');
-                    app.completeExercise();
-                }
-            };
-            
-            const content = [instruct, cardWrap, nextCardBtn];
-            container.appendChild(createCard("Practice pronunciation.", content));
-        }
-        // 4. LISTENING COMPREHENSION (NEW)
-        function renderListening(container) {
-            const data = quizData[app.level].mcqData;
-            let currentItem = 0;
-            let answered = false; // Prevent multiple answers
-            
-            const area = document.createElement('div');
-            area.className = 'listening-container';
-            
-            // Play Button
-            const playBtn = document.createElement('div');
-            playBtn.className = 'play-btn';
-            playBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>`;
-            playBtn.onclick = () => speak(data[currentItem].q);
-            
-            // Options
-            const optContainer = document.createElement('div');
-            optContainer.className = 'listening-options';
-            
-            const renderOptions = () => {
-                optContainer.innerHTML = '';
-                data[currentItem].opts.forEach(opt => {
-                    const btn = document.createElement('div');
-                    btn.className = 'listen-opt';
-                    btn.textContent = opt;
-                    btn.onclick = () => {
-                        if (answered) return; // Lockout after first answer
-                        
-                        answered = true;
-                        if(opt === data[currentItem].a) {
-                            btn.classList.add('correct');
-                            app.addScore(1);
-                            setTimeout(() => {
-                                currentItem++;
-                                if(currentItem < data.length) {
-                                    answered = false;
-                                    renderOptions();
-                                } else {
-                                    app.completeExercise();
-                                }
-                            }, 1000);
-                        } else {
-                            btn.classList.add('wrong');
-                            // Highlight correct answer
-                            Array.from(optContainer.children).forEach(child => {
-                                if (child.textContent === data[currentItem].a) {
-                                    child.classList.add('correct');
-                                }
-                            });
-                            setTimeout(() => {
-                                currentItem++;
-                                if(currentItem < data.length) {
-                                    answered = false;
-                                    renderOptions();
-                                } else {
-                                    app.completeExercise();
-                                }
-                            }, 1500);
-                        }
-                    };
-                    optContainer.appendChild(btn);
-                });
-            };
-            
-            renderOptions();
-            area.append(playBtn, optContainer);
-            container.appendChild(createCard("Listen to the German word and choose the English meaning.", area));
-        }
-        // 5. SENTENCE BUILDER (NEW)
-        function renderSentenceBuilder(container) {
-            const data = quizData[app.level].sentences[0];
-            let currentStep = 0;
-            const area = document.createElement('div');
-            
-            // Sentence Display (Where user clicks)
-            const dropZone = document.createElement('div');
-            dropZone.className = 'scramble-area';
-            
-            // Word Bank
-            const wordBank = document.createElement('div');
-            wordBank.style.display = 'flex';
-            wordBank.style.justifyContent = 'center';
-            wordBank.style.gap = '10px';
-            wordBank.style.marginTop = '20px';
-            
-            let shuffled = [...data.parts].sort(() => Math.random() - 0.5);
-            let userSentence = [];
-            
-            const renderWords = () => {
-                wordBank.innerHTML = '';
-                shuffled.forEach((word, idx) => {
-                    const w = document.createElement('div');
-                    w.className = 'scramble-word';
-                    w.textContent = word;
-                    w.onclick = () => {
-                        // Move to drop zone
-                        userSentence.push({text: word, id: idx});
-                        dropZone.appendChild(w);
-                        w.onclick = () => {
-                            // Move back to bank
-                            w.remove();
-                            userSentence = userSentence.filter(s => s.id !== idx);
-                            renderWords(); // Re-render bank
-                        };
-                    };
-                    wordBank.appendChild(w);
-                });
-            };
-            
-            renderWords();
-            
-            // Check Button
-            const checkBtn = document.createElement('button');
-            checkBtn.className = 'btn';
-            checkBtn.textContent = "Check Sentence";
-            checkBtn.style.marginTop = '20px';
-            checkBtn.onclick = () => {
-                const constructed = userSentence.map(u => u.text).join(" ");
-                // Normalize both strings for comparison (remove extra spaces, handle punctuation)
-                const normalize = (str) => str.trim().replace(/\s+/g, ' ');
-                const userNorm = normalize(constructed);
-                const targetNorm = normalize(data.text);
-                
-                if(userNorm === targetNorm) {
-                    dropZone.style.borderColor = 'var(--success-color)';
-                    dropZone.style.background = 'rgba(72, 187, 120, 0.2)';
-                    checkBtn.textContent = "Correct! 🎉";
-                    checkBtn.disabled = true;
-                    app.addScore(1);
-                    setTimeout(() => app.completeExercise(), 1000);
-                } else {
-                    dropZone.style.borderColor = 'var(--error-color)';
-                    setTimeout(() => dropZone.style.borderColor = 'var(--border-color)', 500);
-                }
-            };
-            
-            area.append(dropZone, wordBank, checkBtn);
-            container.appendChild(createCard("Unscramble the words to build the sentence.", area));
-        }
-        // --- HELPER: CARD WRAPPER ---
-        function createCard(titleText, contentElements) {
-            const card = document.createElement('div');
-            card.className = 'card';
-            const header = document.createElement('div');
-            header.className = 'card-header';
-            header.innerHTML = `<div class="card-title">${titleText}</div>`;
-            card.appendChild(header);
-            if(Array.isArray(contentElements)) {
-                contentElements.forEach(el => card.appendChild(el));
+            // Show feedback
+            const feedback = document.getElementById('feedback');
+            if (selectedIndex === exercise.correct) {
+                feedback.textContent = `Correct! ${exercise.explanation}`;
+                feedback.className = 'feedback correct';
             } else {
-                card.appendChild(contentElements);
+                feedback.textContent = `Incorrect. ${exercise.explanation}`;
+                feedback.className = 'feedback incorrect';
             }
-            return card;
+            
+            // Enable next button
+            document.querySelector('.btn-next').disabled = false;
         }
-        // --- INIT ---
-        window.onload = app.init;
+        
+        // Render TTS exercise
+        function renderTTsExercise(exercise) {
+            const title = document.createElement('h2');
+            title.className = 'exercise-title';
+            title.innerHTML = '<i class="fas fa-headphones"></i> Listen & Identify Topic';
+            exerciseContainer.appendChild(title);
+            
+            const content = document.createElement('div');
+            content.className = 'exercise-content tts-exercise';
+            
+            const instruction = document.createElement('p');
+            instruction.textContent = 'Listen to the German sentence and select the correct topic:';
+            instruction.style.marginBottom = '20px';
+            instruction.style.fontSize = '1.1rem';
+            content.appendChild(instruction);
+            
+            // Audio controls
+            const audioControls = document.createElement('div');
+            audioControls.className = 'audio-controls';
+            
+            const playBtn = document.createElement('button');
+            playBtn.className = 'play-btn';
+            playBtn.innerHTML = '<i class="fas fa-play"></i>';
+            playBtn.title = 'Play audio';
+            
+            playBtn.addEventListener('click', () => {
+                speakText(exercise.audioText);
+                playBtn.disabled = true;
+                setTimeout(() => {
+                    playBtn.disabled = false;
+                }, 5000);
+            });
+            
+            audioControls.appendChild(playBtn);
+            content.appendChild(audioControls);
+            
+            // Topics
+            const topicsContainer = document.createElement('div');
+            topicsContainer.className = 'topics-container';
+            
+            exercise.topics.forEach((topic, index) => {
+                const topicCard = document.createElement('div');
+                topicCard.className = 'topic-card';
+                topicCard.textContent = topic;
+                topicCard.dataset.index = index;
+                
+                // Restore previous answer if exists
+                if (userAnswers[currentExercise] !== null) {
+                    topicCard.classList.add('locked');
+                    if (index === userAnswers[currentExercise]) {
+                        topicCard.classList.add('selected');
+                    }
+                }
+                
+                topicCard.addEventListener('click', () => handleTTSAnswer(index));
+                topicsContainer.appendChild(topicCard);
+            });
+            
+            content.appendChild(topicsContainer);
+            
+            // Feedback element
+            const feedback = document.createElement('div');
+            feedback.className = 'feedback';
+            feedback.id = 'feedback';
+            content.appendChild(feedback);
+            
+            exerciseContainer.appendChild(content);
+            addNavigation();
+        }
+        
+        // Handle TTS answer
+        function handleTTSAnswer(selectedIndex) {
+            const exercise = exercises[currentExercise];
+            userAnswers[currentExercise] = selectedIndex;
+            
+            // Update points
+            if (selectedIndex === exercise.correct) {
+                points += 10;
+                pointsDisplay.textContent = points;
+            }
+            
+            // Update UI
+            const cards = document.querySelectorAll('.topic-card');
+            cards.forEach((card, index) => {
+                card.classList.add('locked');
+                if (index === selectedIndex) {
+                    card.classList.add('selected');
+                }
+            });
+            
+            // Show feedback
+            const feedback = document.getElementById('feedback');
+            if (selectedIndex === exercise.correct) {
+                feedback.textContent = `Correct! ${exercise.explanation}`;
+                feedback.className = 'feedback correct';
+            } else {
+                feedback.textContent = `Incorrect. ${exercise.explanation}`;
+                feedback.className = 'feedback incorrect';
+            }
+            
+            // Enable next button
+            document.querySelector('.btn-next').disabled = false;
+        }
+        
+        // Text-to-speech function
+        function speakText(text) {
+            // Cancel any ongoing speech
+            speechSynthesis.cancel();
+            
+            // Create utterance
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'de-DE';
+            utterance.rate = 0.9;
+            utterance.pitch = 1;
+            
+            // Speak
+            speechSynthesis.speak(utterance);
+        }
+        
+        // Add navigation buttons
+        function addNavigation() {
+            const nav = document.createElement('div');
+            nav.className = 'navigation';
+            
+            const prevBtn = document.createElement('button');
+            prevBtn.className = 'btn btn-prev';
+            prevBtn.textContent = 'Previous';
+            prevBtn.disabled = currentExercise === 0;
+            prevBtn.addEventListener('click', () => {
+                if (currentExercise > 0) {
+                    currentExercise--;
+                    loadExercise(currentExercise);
+                    updateProgress();
+                }
+            });
+            
+            const nextBtn = document.createElement('button');
+            nextBtn.className = 'btn btn-next';
+            nextBtn.textContent = currentExercise === exercises.length - 1 ? 'Finish' : 'Next';
+            nextBtn.disabled = userAnswers[currentExercise] === null;
+            nextBtn.addEventListener('click', () => {
+                if (currentExercise < exercises.length - 1) {
+                    currentExercise++;
+                    loadExercise(currentExercise);
+                    updateProgress();
+                } else {
+                    showCompletionScreen();
+                }
+            });
+            
+            nav.appendChild(prevBtn);
+            nav.appendChild(nextBtn);
+            exerciseContainer.appendChild(nav);
+        }
+        
+        // Update progress bar and text
+        function updateProgress() {
+            const progress = ((currentExercise + 1) / exercises.length) * 100;
+            progressFill.style.width = `${progress}%`;
+            progressText.textContent = `${currentExercise + 1}/${exercises.length}`;
+        }
+        
+        // Show completion screen
+        function showCompletionScreen() {
+            exerciseContainer.classList.add('hidden');
+            completionScreen.classList.remove('hidden');
+            finalScore.textContent = points;
+        }
+        
+        // Restart the app
+        function restartApp() {
+            currentExercise = 0;
+            points = 0;
+            userAnswers = new Array(exercises.length).fill(null);
+            pointsDisplay.textContent = points;
+            exerciseContainer.classList.remove('hidden');
+            completionScreen.classList.add('hidden');
+            loadExercise(currentExercise);
+            updateProgress();
+        }
+        
+        // Initialize the app when page loads
+        window.addEventListener('load', initApp);
     </script>
 </body>
 </html>
