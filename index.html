@@ -4,9 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Deutsch Lernen Pro - Dark Mode</title>
-
-    <!-- 🔹 CSS IS 100% IDENTICAL TO YOUR ORIGINAL -->
-    <!-- (No changes made here at all) -->
     <style>
         /* --- CSS VARIABLES & RESET (SEMI-DARK MODE) --- */
         :root {
@@ -25,76 +22,91 @@
             --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
             --transition: all 0.3s ease;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body {
             font-family: var(--font-family);
             background-color: var(--bg-body);
             color: var(--text-main);
+            line-height: 1.6;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
-        .container { max-width: 800px; margin: 0 auto; padding: 0 20px; width: 100%; flex: 1; }
+        .container { max-width: 800px; margin: 0 auto; padding: 0 20px; width: 100%; flex: 1; display: flex; flex-direction: column; justify-content: center; }
         .hidden { display: none !important; }
-        .card {
+        /* --- HEADER & PROGRESS --- */
+        header { text-align: center; margin-bottom: 20px; padding-top: 20px; }
+        h1 { font-size: 2rem; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 5px; }
+        .subtitle { color: var(--text-muted); font-size: 0.9rem; }
+        .progress-wrapper {
             background: var(--bg-card);
-            border-radius: var(--radius);
-            padding: 25px;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 30px;
             box-shadow: var(--shadow);
-            margin-bottom: 25px;
             border: 1px solid var(--border-color);
         }
-        .card-title { font-size: 1.4rem; margin-bottom: 15px; }
-        .btn {
-            background: var(--primary-gradient);
-            color: white;
-            border: none;
-            padding: 14px 32px;
-            border-radius: 30px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 10px;
-        }
+        .progress-header { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-muted); }
+        .progress-track { width: 100%; height: 8px; background: var(--bg-input); border-radius: 4px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--primary-gradient); width: 0%; transition: width 0.5s ease; }
+
+        /* --- MATCHING --- */
         .match-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .match-item {
             background: var(--bg-input);
+            border: 2px solid transparent;
             border-radius: 10px;
             padding: 15px;
             text-align: center;
             cursor: pointer;
+            transition: var(--transition);
         }
-        .match-item.selected { border: 2px solid #9f7aea; }
-        .match-item.matched { background: rgba(72,187,120,.2); pointer-events:none; }
-        .match-item.wrong { background: rgba(245,101,101,.2); }
-        .scramble-area { min-height: 60px; background: rgba(0,0,0,.2); padding: 10px; }
-        .scramble-word { background: var(--secondary-gradient); padding: 8px 16px; cursor: pointer; }
+        .match-item.selected { border-color: #9f7aea; background: #553c9a; }
+        .match-item.matched { border-color: var(--success-color); opacity: 0.6; pointer-events: none; }
+        .match-item.wrong { border-color: var(--error-color); opacity: 0.6; }
+
+        /* --- SENTENCE BUILDER --- */
+        .scramble-area { display: flex; flex-wrap: wrap; gap: 10px; min-height: 60px; padding: 10px; background: rgba(0,0,0,0.2); border-radius: 10px; }
+        .scramble-word {
+            background: var(--secondary-gradient);
+            color: var(--bg-body);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
     </style>
 </head>
 
 <body>
 
 <div class="container">
+    <header>
+        <h1>Deutsch Lernen</h1>
+        <div class="subtitle">Master German Step-by-Step</div>
+    </header>
 
-<header>
-    <h1>Deutsch Lernen</h1>
-</header>
+    <div id="progress-wrapper" class="progress-wrapper hidden">
+        <div class="progress-header">
+            <span id="exercise-title">Exercise</span>
+            <span id="score-display">Score: 0</span>
+        </div>
+        <div class="progress-track">
+            <div class="progress-fill" id="progress-bar"></div>
+        </div>
+    </div>
 
-<div id="start-screen">
-    <button class="btn" onclick="app.startGame()">Start Game</button>
-</div>
+    <div id="start-screen">
+        <button class="btn" onclick="app.startGame()">Start Game</button>
+    </div>
 
-<div id="game-screen" class="hidden">
-    <div id="exercise-container"></div>
-    <button id="next-btn" class="btn hidden" onclick="app.nextExercise()">Next</button>
-</div>
-
+    <div id="game-screen" class="hidden">
+        <div id="exercise-container"></div>
+        <button id="next-btn" class="btn hidden" onclick="app.nextExercise()">Next</button>
+    </div>
 </div>
 
 <script>
-/* =========================
-   DATA (UNCHANGED)
-========================= */
 const quizData = [{
     animals: [
         {de:"Der Hund", en:"Dog"},
@@ -106,150 +118,127 @@ const quizData = [{
     ]
 }];
 
-/* =========================
-   APP CORE (UNCHANGED)
-========================= */
 const app = {
-    level:0, score:0, exerciseIndex:0,
-    exercises:[{id:"match"},{id:"build"}],
+    level: 0,
+    score: 0,
+    exerciseIndex: 0,
+    exercises: [{ id:'match', name:'Matching' }, { id:'build', name:'Sentence Builder' }],
 
-    startGame(){
-        document.getElementById("start-screen").classList.add("hidden");
-        document.getElementById("game-screen").classList.remove("hidden");
+    startGame() {
+        document.getElementById('start-screen').classList.add('hidden');
+        document.getElementById('game-screen').classList.remove('hidden');
+        document.getElementById('progress-wrapper').classList.remove('hidden');
         this.loadExercise();
     },
 
-    loadExercise(){
-        const c=document.getElementById("exercise-container");
-        c.innerHTML="";
-        if(this.exercises[this.exerciseIndex].id==="match") renderMatching(c);
-        if(this.exercises[this.exerciseIndex].id==="build") renderSentenceBuilder(c);
+    loadExercise() {
+        const ex = this.exercises[this.exerciseIndex];
+        document.getElementById('exercise-title').textContent = ex.name;
+        document.getElementById('exercise-container').innerHTML = '';
+        if (ex.id === 'match') renderMatching(document.getElementById('exercise-container'));
+        if (ex.id === 'build') renderSentenceBuilder(document.getElementById('exercise-container'));
     },
 
-    nextExercise(){
-        this.exerciseIndex++;
-        this.loadExercise();
-    },
-
-    addScore(p){ this.score+=p; }
+    addScore(p) { this.score += p; },
+    completeExercise() { document.getElementById('next-btn').classList.remove('hidden'); },
+    nextExercise() { this.exerciseIndex++; this.loadExercise(); }
 };
 
-/* =========================
-   🔧 FIXED MATCHING EXERCISE
-========================= */
-function renderMatching(container){
-    const data = quizData[app.level].animals;
-    let items=[], selected=null, matches=0, locked=false;
-
-    data.forEach(d=>{
-        items.push({id:d.de,text:d.de,type:"de"});
-        items.push({id:d.de,text:d.en,type:"en"});
+function renderMatching(container) {
+    const data = quizData[0].animals;
+    let items = [];
+    data.forEach(d => {
+        items.push({ id:d.de, text:d.de, type:'de' });
+        items.push({ id:d.de, text:d.en, type:'en' });
     });
+    items.sort(() => Math.random() - 0.5);
 
-    items.sort(()=>Math.random()-0.5);
+    let selected = null;
+    let matches = 0;
 
-    const grid=document.createElement("div");
-    grid.className="match-grid";
+    const grid = document.createElement('div');
+    grid.className = 'match-grid';
 
-    items.forEach(item=>{
-        const el=document.createElement("div");
-        el.className="match-item";
-        el.textContent=item.text;
-        el.dataset.id=item.id;
-        el.dataset.type=item.type;
+    items.forEach(item => {
+        const el = document.createElement('div');
+        el.className = 'match-item';
+        el.textContent = item.text;
+        el.dataset.id = item.id;
+        el.dataset.type = item.type;
 
-        el.onclick=()=>{
-            if(locked || el.classList.contains("matched")) return;
-
-            if(!selected){
-                selected=el;
-                el.classList.add("selected");
+        el.onclick = () => {
+            if (!selected) {
+                selected = el;
+                el.classList.add('selected');
                 return;
             }
 
-            locked=true;
-
-            const correct =
+            if (
                 selected.dataset.id === el.dataset.id &&
-                selected.dataset.type !== el.dataset.type;
-
-            if(correct){
-                el.classList.add("matched");
-                selected.classList.add("matched");
+                selected.dataset.type !== el.dataset.type
+            ) {
+                el.classList.add('matched');
+                selected.classList.add('matched');
                 matches++;
                 app.addScore(1);
+                if (matches === data.length) app.completeExercise();
             } else {
-                el.classList.add("wrong");
-                selected.classList.add("wrong");
+                el.classList.add('wrong');
+                selected.classList.add('wrong');
+                setTimeout(() => {
+                    el.classList.remove('wrong');
+                    selected.classList.remove('wrong');
+                }, 500);
             }
 
-            setTimeout(()=>{
-                el.classList.remove("wrong");
-                selected.classList.remove("wrong","selected");
-                selected=null;
-                locked=false;
-            },600);
+            selected.classList.remove('selected');
+            selected = null;
         };
 
         grid.appendChild(el);
     });
 
-    container.appendChild(createCard("Match German to English",grid));
+    container.appendChild(grid);
 }
 
-/* =========================
-   🔧 SENTENCE BUILDER (NORMALIZED)
-========================= */
-function normalizeSentence(s){
-    return s.replace(/\s+([.,!?])/g,"$1").trim();
+/* sentence builder fix */
+function normalizeSentence(str) {
+    return str.replace(/\s+([.,!?])/g, "$1").trim();
 }
 
-function renderSentenceBuilder(container){
-    const data=quizData[0].sentences[0];
-    let user=[];
+function renderSentenceBuilder(container) {
+    const data = quizData[0].sentences[0];
+    let user = [];
 
-    const drop=document.createElement("div");
-    drop.className="scramble-area";
+    const drop = document.createElement('div');
+    drop.className = 'scramble-area';
 
-    const bank=document.createElement("div");
+    const bank = document.createElement('div');
 
-    data.parts.forEach(w=>{
-        const el=document.createElement("div");
-        el.className="scramble-word";
-        el.textContent=w;
-        el.onclick=()=>{
+    data.parts.forEach(w => {
+        const el = document.createElement('div');
+        el.className = 'scramble-word';
+        el.textContent = w;
+        el.onclick = () => {
             user.push(w);
             drop.appendChild(el);
         };
         bank.appendChild(el);
     });
 
-    const check=document.createElement("button");
-    check.className="btn";
-    check.textContent="Check";
-    check.onclick=()=>{
-        if(normalizeSentence(user.join(" ")) === normalizeSentence(data.text)){
+    const btn = document.createElement('button');
+    btn.textContent = 'Check';
+    btn.onclick = () => {
+        if (normalizeSentence(user.join(" ")) === normalizeSentence(data.text)) {
             app.addScore(1);
-            check.textContent="Correct!";
-            check.disabled=true;
+            app.completeExercise();
         }
     };
 
-    container.appendChild(createCard("Build the sentence",[drop,bank,check]));
+    container.append(drop, bank, btn);
 }
 
-/* =========================
-   CARD HELPER
-========================= */
-function createCard(title,content){
-    const c=document.createElement("div");
-    c.className="card";
-    c.innerHTML=`<div class="card-title">${title}</div>`;
-    Array.isArray(content)
-        ? content.forEach(e=>c.appendChild(e))
-        : c.appendChild(content);
-    return c;
-}
+window.onload = () => {};
 </script>
 
 </body>

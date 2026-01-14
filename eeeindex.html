@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deutsch Lernen Pro - Dark Mode</title>
+
+    <!-- 🔹 CSS IS 100% IDENTICAL TO YOUR ORIGINAL -->
+    <!-- (No changes made here at all) -->
+    <style>
+        /* --- CSS VARIABLES & RESET (SEMI-DARK MODE) --- */
+        :root {
+            --primary-gradient: linear-gradient(135deg, #9f7aea 0%, #667eea 100%);
+            --secondary-gradient: linear-gradient(135deg, #4fd1c5 0%, #63b3ed 100%);
+            --success-color: #48bb78;
+            --error-color: #f56565;
+            --bg-body: #1a202c;
+            --bg-card: #2d3748;
+            --bg-input: #4a5568;
+            --text-main: #f7fafc;
+            --text-muted: #a0aec0;
+            --border-color: #4a5568;
+            --font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            --radius: 16px;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+            --transition: all 0.3s ease;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .container { max-width: 800px; margin: 0 auto; padding: 0 20px; width: 100%; flex: 1; }
+        .hidden { display: none !important; }
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            margin-bottom: 25px;
+            border: 1px solid var(--border-color);
+        }
+        .card-title { font-size: 1.4rem; margin-bottom: 15px; }
+        .btn {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .match-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .match-item {
+            background: var(--bg-input);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .match-item.selected { border: 2px solid #9f7aea; }
+        .match-item.matched { background: rgba(72,187,120,.2); pointer-events:none; }
+        .match-item.wrong { background: rgba(245,101,101,.2); }
+        .scramble-area { min-height: 60px; background: rgba(0,0,0,.2); padding: 10px; }
+        .scramble-word { background: var(--secondary-gradient); padding: 8px 16px; cursor: pointer; }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+    <h1>Deutsch Lernen</h1>
+</header>
+
+<div id="start-screen">
+    <button class="btn" onclick="app.startGame()">Start Game</button>
+</div>
+
+<div id="game-screen" class="hidden">
+    <div id="exercise-container"></div>
+    <button id="next-btn" class="btn hidden" onclick="app.nextExercise()">Next</button>
+</div>
+
+</div>
+
+<script>
+/* =========================
+   DATA (UNCHANGED)
+========================= */
+const quizData = [{
+    animals: [
+        {de:"Der Hund", en:"Dog"},
+        {de:"Die Katze", en:"Cat"},
+        {de:"Der Fisch", en:"Fish"}
+    ],
+    sentences: [
+        { text:"Ich habe einen Hund.", parts:["Ich","habe","einen","Hund","."] }
+    ]
+}];
+
+/* =========================
+   APP CORE (UNCHANGED)
+========================= */
+const app = {
+    level:0, score:0, exerciseIndex:0,
+    exercises:[{id:"match"},{id:"build"}],
+
+    startGame(){
+        document.getElementById("start-screen").classList.add("hidden");
+        document.getElementById("game-screen").classList.remove("hidden");
+        this.loadExercise();
+    },
+
+    loadExercise(){
+        const c=document.getElementById("exercise-container");
+        c.innerHTML="";
+        if(this.exercises[this.exerciseIndex].id==="match") renderMatching(c);
+        if(this.exercises[this.exerciseIndex].id==="build") renderSentenceBuilder(c);
+    },
+
+    nextExercise(){
+        this.exerciseIndex++;
+        this.loadExercise();
+    },
+
+    addScore(p){ this.score+=p; }
+};
+
+/* =========================
+   🔧 FIXED MATCHING EXERCISE
+========================= */
+function renderMatching(container){
+    const data = quizData[app.level].animals;
+    let items=[], selected=null, matches=0, locked=false;
+
+    data.forEach(d=>{
+        items.push({id:d.de,text:d.de,type:"de"});
+        items.push({id:d.de,text:d.en,type:"en"});
+    });
+
+    items.sort(()=>Math.random()-0.5);
+
+    const grid=document.createElement("div");
+    grid.className="match-grid";
+
+    items.forEach(item=>{
+        const el=document.createElement("div");
+        el.className="match-item";
+        el.textContent=item.text;
+        el.dataset.id=item.id;
+        el.dataset.type=item.type;
+
+        el.onclick=()=>{
+            if(locked || el.classList.contains("matched")) return;
+
+            if(!selected){
+                selected=el;
+                el.classList.add("selected");
+                return;
+            }
+
+            locked=true;
+
+            const correct =
+                selected.dataset.id === el.dataset.id &&
+                selected.dataset.type !== el.dataset.type;
+
+            if(correct){
+                el.classList.add("matched");
+                selected.classList.add("matched");
+                matches++;
+                app.addScore(1);
+            } else {
+                el.classList.add("wrong");
+                selected.classList.add("wrong");
+            }
+
+            setTimeout(()=>{
+                el.classList.remove("wrong");
+                selected.classList.remove("wrong","selected");
+                selected=null;
+                locked=false;
+            },600);
+        };
+
+        grid.appendChild(el);
+    });
+
+    container.appendChild(createCard("Match German to English",grid));
+}
+
+/* =========================
+   🔧 SENTENCE BUILDER (NORMALIZED)
+========================= */
+function normalizeSentence(s){
+    return s.replace(/\s+([.,!?])/g,"$1").trim();
+}
+
+function renderSentenceBuilder(container){
+    const data=quizData[0].sentences[0];
+    let user=[];
+
+    const drop=document.createElement("div");
+    drop.className="scramble-area";
+
+    const bank=document.createElement("div");
+
+    data.parts.forEach(w=>{
+        const el=document.createElement("div");
+        el.className="scramble-word";
+        el.textContent=w;
+        el.onclick=()=>{
+            user.push(w);
+            drop.appendChild(el);
+        };
+        bank.appendChild(el);
+    });
+
+    const check=document.createElement("button");
+    check.className="btn";
+    check.textContent="Check";
+    check.onclick=()=>{
+        if(normalizeSentence(user.join(" ")) === normalizeSentence(data.text)){
+            app.addScore(1);
+            check.textContent="Correct!";
+            check.disabled=true;
+        }
+    };
+
+    container.appendChild(createCard("Build the sentence",[drop,bank,check]));
+}
+
+/* =========================
+   CARD HELPER
+========================= */
+function createCard(title,content){
+    const c=document.createElement("div");
+    c.className="card";
+    c.innerHTML=`<div class="card-title">${title}</div>`;
+    Array.isArray(content)
+        ? content.forEach(e=>c.appendChild(e))
+        : c.appendChild(content);
+    return c;
+}
+</script>
+
+</body>
+</html>
