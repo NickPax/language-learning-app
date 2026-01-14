@@ -374,7 +374,7 @@
             let items = [];
             data.forEach(d => {
                 items.push({ id: d.de, text: d.de, type: 'de' });
-                items.push({ id: d.de, text: d.en, type: 'en' });
+                items.push({ id: d.en, text: d.en, type: 'en' });
             });
             // Shuffle
             items.sort(() => Math.random() - 0.5);
@@ -383,50 +383,50 @@
             const grid = document.createElement('div');
             grid.className = 'match-grid';
             
-            // Create elements with proper closure
+            // Store references to elements for easier access
+            const elements = [];
+            
             items.forEach(item => {
                 const el = document.createElement('div');
                 el.className = 'match-item';
                 el.textContent = item.text;
-                // Store the actual matching ID and type as data attributes
-                el.dataset.matchId = item.id; // This is the German word for both sides
+                el.dataset.id = item.id;
                 el.dataset.type = item.type;
                 
-                el.onclick = function() {
-                    if(this.classList.contains('matched') || this.classList.contains('wrong')) return;
+                el.onclick = () => {
+                    if(el.classList.contains('matched') || el.classList.contains('wrong')) return;
                     
                     if (!selected) {
-                        this.classList.add('selected');
-                        selected = this;
+                        el.classList.add('selected');
+                        selected = el;
                     } else {
-                        if (selected === this) {
-                            this.classList.remove('selected');
+                        if (selected === el) {
+                            el.classList.remove('selected');
                             selected = null;
                             return;
                         }
                         
-                        // Check if they match: same matchId but different types
-                        const isMatch = selected.dataset.matchId === this.dataset.matchId && 
-                                       selected.dataset.type !== this.dataset.type;
+                        // Check if they match: same base ID but different types
+                        // For German items, id is the German word (e.g., "Der Hund")
+                        // For English items, id is also the German word (e.g., "Der Hund")
+                        const isMatch = selected.dataset.id === el.dataset.id && selected.dataset.type !== el.dataset.type;
                         
                         if (isMatch) {
-                            this.classList.add('matched');
+                            el.classList.add('matched');
                             selected.classList.add('matched');
                             selected.classList.remove('selected');
-                            // Speak the German word
-                            const germanText = this.dataset.type === 'de' ? this.textContent : selected.textContent;
-                            speak(germanText);
+                            speak(item.type === 'de' ? item.text : selected.textContent);
                             matches++;
                             app.addScore(1);
                             if(matches === data.length) app.completeExercise();
                         } else {
                             // Wrong match
-                            this.classList.add('wrong');
+                            el.classList.add('wrong');
                             selected.classList.add('wrong');
                             selected.classList.remove('selected');
                             // Reset wrong after brief moment
                             setTimeout(() => {
-                                this.classList.remove('wrong');
+                                el.classList.remove('wrong');
                                 selected.classList.remove('wrong');
                             }, 500);
                         }
@@ -435,6 +435,7 @@
                 };
                 
                 grid.appendChild(el);
+                elements.push(el);
             });
             
             const card = createCard("Match the German word to the English translation.", grid);
@@ -635,6 +636,7 @@
                         } else {
                             btn.classList.add('wrong');
                             // Highlight correct answer
+                            const correctBtn = optContainer.querySelector(`.listen-opt`);
                             Array.from(optContainer.children).forEach(child => {
                                 if (child.textContent === data[currentItem].a) {
                                     child.classList.add('correct');
