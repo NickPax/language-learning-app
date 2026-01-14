@@ -380,7 +380,6 @@
             items.sort(() => Math.random() - 0.5);
             let selected = null;
             let matches = 0;
-            const totalMatchesNeeded = data.length; // 5 matches for 5 animals
             const grid = document.createElement('div');
             grid.className = 'match-grid';
             
@@ -419,11 +418,7 @@
                             speak(germanText);
                             matches++;
                             app.addScore(1);
-                            
-                            // Check if all matches are completed
-                            if(matches >= totalMatchesNeeded) {
-                                app.completeExercise();
-                            }
+                            if(matches === data.length) app.completeExercise();
                         } else {
                             // Wrong match
                             this.classList.add('wrong');
@@ -432,7 +427,7 @@
                             // Reset wrong after brief moment
                             setTimeout(() => {
                                 this.classList.remove('wrong');
-                                if(selected) selected.classList.remove('wrong');
+                                selected.classList.remove('wrong');
                             }, 500);
                         }
                         selected = null;
