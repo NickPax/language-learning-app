@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deutsch Lernen Pro - Dark Mode</title>
+    <style>
+        /* --- CSS VARIABLES & RESET (SEMI-DARK MODE) --- */
+        :root {
+            --primary-gradient: linear-gradient(135deg, #9f7aea 0%, #667eea 100%);
+            --secondary-gradient: linear-gradient(135deg, #4fd1c5 0%, #63b3ed 100%);
+            --success-color: #48bb78;
+            --error-color: #f56565;
+            --bg-body: #1a202c;
+            --bg-card: #2d3748;
+            --bg-input: #4a5568;
+            --text-main: #f7fafc;
+            --text-muted: #a0aec0;
+            --border-color: #4a5568;
+            --font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            --radius: 16px;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+            --transition: all 0.3s ease;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .container { max-width: 800px; margin: 0 auto; padding: 0 20px; width: 100%; flex: 1; display: flex; flex-direction: column; justify-content: center; }
+        .hidden { display: none !important; }
+        /* --- HEADER & PROGRESS --- */
+        header { text-align: center; margin-bottom: 20px; padding-top: 20px; }
+        h1 { font-size: 2rem; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 5px; }
+        .subtitle { color: var(--text-muted); font-size: 0.9rem; }
+        .progress-wrapper {
+            background: var(--bg-card);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+        .progress-header { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-muted); }
+        .progress-track { width: 100%; height: 8px; background: var(--bg-input); border-radius: 4px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--primary-gradient); width: 0%; transition: width 0.5s ease; }
+
+        /* --- MATCHING --- */
+        .match-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .match-item {
+            background: var(--bg-input);
+            border: 2px solid transparent;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .match-item.selected { border-color: #9f7aea; background: #553c9a; }
+        .match-item.matched { border-color: var(--success-color); opacity: 0.6; pointer-events: none; }
+        .match-item.wrong { border-color: var(--error-color); opacity: 0.6; }
+
+        /* --- SENTENCE BUILDER --- */
+        .scramble-area { display: flex; flex-wrap: wrap; gap: 10px; min-height: 60px; padding: 10px; background: rgba(0,0,0,0.2); border-radius: 10px; }
+        .scramble-word {
+            background: var(--secondary-gradient);
+            color: var(--bg-body);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <header>
+        <h1>Deutsch Lernen</h1>
+        <div class="subtitle">Master German Step-by-Step</div>
+    </header>
+
+    <div id="progress-wrapper" class="progress-wrapper hidden">
+        <div class="progress-header">
+            <span id="exercise-title">Exercise</span>
+            <span id="score-display">Score: 0</span>
+        </div>
+        <div class="progress-track">
+            <div class="progress-fill" id="progress-bar"></div>
+        </div>
+    </div>
+
+    <div id="start-screen">
+        <button class="btn" onclick="app.startGame()">Start Game</button>
+    </div>
+
+    <div id="game-screen" class="hidden">
+        <div id="exercise-container"></div>
+        <button id="next-btn" class="btn hidden" onclick="app.nextExercise()">Next</button>
+    </div>
+</div>
+
+<script>
+const quizData = [{
+    animals: [
+        {de:"Der Hund", en:"Dog"},
+        {de:"Die Katze", en:"Cat"},
+        {de:"Der Fisch", en:"Fish"}
+    ],
+    sentences: [
+        { text:"Ich habe einen Hund.", parts:["Ich","habe","einen","Hund","."] }
+    ]
+}];
+
+const app = {
+    level: 0,
+    score: 0,
+    exerciseIndex: 0,
+    exercises: [{ id:'match', name:'Matching' }, { id:'build', name:'Sentence Builder' }],
+
+    startGame() {
+        document.getElementById('start-screen').classList.add('hidden');
+        document.getElementById('game-screen').classList.remove('hidden');
+        document.getElementById('progress-wrapper').classList.remove('hidden');
+        this.loadExercise();
+    },
+
+    loadExercise() {
+        const ex = this.exercises[this.exerciseIndex];
+        document.getElementById('exercise-title').textContent = ex.name;
+        document.getElementById('exercise-container').innerHTML = '';
+        if (ex.id === 'match') renderMatching(document.getElementById('exercise-container'));
+        if (ex.id === 'build') renderSentenceBuilder(document.getElementById('exercise-container'));
+    },
+
+    addScore(p) { this.score += p; },
+    completeExercise() { document.getElementById('next-btn').classList.remove('hidden'); },
+    nextExercise() { this.exerciseIndex++; this.loadExercise(); }
+};
+
+function renderMatching(container) {
+    const data = quizData[0].animals;
+    let items = [];
+    data.forEach(d => {
+        items.push({ id:d.de, text:d.de, type:'de' });
+        items.push({ id:d.de, text:d.en, type:'en' });
+    });
+    items.sort(() => Math.random() - 0.5);
+
+    let selected = null;
+    let matches = 0;
+
+    const grid = document.createElement('div');
+    grid.className = 'match-grid';
+
+    items.forEach(item => {
+        const el = document.createElement('div');
+        el.className = 'match-item';
+        el.textContent = item.text;
+        el.dataset.id = item.id;
+        el.dataset.type = item.type;
+
+        el.onclick = () => {
+            if (!selected) {
+                selected = el;
+                el.classList.add('selected');
+                return;
+            }
+
+            if (
+                selected.dataset.id === el.dataset.id &&
+                selected.dataset.type !== el.dataset.type
+            ) {
+                el.classList.add('matched');
+                selected.classList.add('matched');
+                matches++;
+                app.addScore(1);
+                if (matches === data.length) app.completeExercise();
+            } else {
+                el.classList.add('wrong');
+                selected.classList.add('wrong');
+                setTimeout(() => {
+                    el.classList.remove('wrong');
+                    selected.classList.remove('wrong');
+                }, 500);
+            }
+
+            selected.classList.remove('selected');
+            selected = null;
+        };
+
+        grid.appendChild(el);
+    });
+
+    container.appendChild(grid);
+}
+
+/* sentence builder fix */
+function normalizeSentence(str) {
+    return str.replace(/\s+([.,!?])/g, "$1").trim();
+}
+
+function renderSentenceBuilder(container) {
+    const data = quizData[0].sentences[0];
+    let user = [];
+
+    const drop = document.createElement('div');
+    drop.className = 'scramble-area';
+
+    const bank = document.createElement('div');
+
+    data.parts.forEach(w => {
+        const el = document.createElement('div');
+        el.className = 'scramble-word';
+        el.textContent = w;
+        el.onclick = () => {
+            user.push(w);
+            drop.appendChild(el);
+        };
+        bank.appendChild(el);
+    });
+
+    const btn = document.createElement('button');
+    btn.textContent = 'Check';
+    btn.onclick = () => {
+        if (normalizeSentence(user.join(" ")) === normalizeSentence(data.text)) {
+            app.addScore(1);
+            app.completeExercise();
+        }
+    };
+
+    container.append(drop, bank, btn);
+}
+
+window.onload = () => {};
+</script>
+
+</body>
+</html>
