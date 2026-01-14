@@ -3,449 +3,190 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deutsch Lernen - Interactive App</title>
+    <title>Deutsch Lernen Pro</title>
     <style>
         /* --- CSS VARIABLES & RESET --- */
         :root {
             --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --secondary-gradient: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            --secondary-gradient: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
+            --success-gradient: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
             --accent-color: #ff0080;
-            --bg-color: #f3f4f6;
+            --bg-color: #f8f9fa;
             --card-bg: #ffffff;
-            --text-main: #1f2937;
-            --text-light: #6b7280;
-            --success: #10b981;
-            --error: #ef4444;
+            --text-main: #2d3748;
+            --text-light: #718096;
+            --success: #38a169;
+            --error: #e53e3e;
             --font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            --radius: 16px;
-            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            --radius: 20px;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
         body {
             font-family: var(--font-family);
             background: var(--bg-color);
             color: var(--text-main);
             line-height: 1.6;
-            padding-bottom: 50px;
+            padding-bottom: 80px;
         }
 
-        /* --- LAYOUT UTILITIES --- */
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 0 20px;
+        /* --- LAYOUT --- */
+        .container { max-width: 800px; margin: 0 auto; padding: 0 16px; }
+        
+        section { margin-bottom: 40px; opacity: 1; transition: opacity 0.5s ease; }
+        section.faded { opacity: 0.5; pointer-events: none; }
+
+        h2 { color: #4a5568; margin-bottom: 20px; border-left: 5px solid #764ba2; padding-left: 10px; }
+
+        /* --- SCOREBOARD --- */
+        .scoreboard {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 10px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        
+        .progress-container {
+            height: 10px;
+            background: #e2e8f0;
+            border-radius: 5px;
+            overflow: hidden;
+            width: 100%;
         }
 
-        section {
-            margin-bottom: 40px;
+        .progress-bar {
+            height: 100%;
+            background: var(--primary-gradient);
+            width: 0%;
+            transition: width 0.3s ease;
         }
 
-        h1, h2, h3 {
-            color: #4b5563;
+        .score-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #555;
+            margin-top: 5px;
         }
 
-        /* --- HEADER & HERO --- */
+        /* --- HEADER --- */
         header {
             background: var(--primary-gradient);
             color: white;
-            padding: 40px 0;
+            padding: 40px 0 60px;
             text-align: center;
-            border-bottom-left-radius: 30px;
-            border-bottom-right-radius: 30px;
-            margin-bottom: 30px;
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
+            margin-bottom: -30px; /* Overlap effect */
             box-shadow: var(--shadow);
         }
 
-        header h1 {
-            color: white;
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-
-        header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
+        header h1 { color: white; font-size: 2.2rem; margin-bottom: 5px; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        header p { opacity: 0.9; font-size: 1rem; }
 
         /* --- CARDS --- */
         .card {
             background: var(--card-bg);
             border-radius: var(--radius);
-            padding: 25px;
+            padding: 24px;
             box-shadow: var(--shadow);
-            margin-bottom: 25px;
+            margin-bottom: 24px;
+            border: 1px solid #edf2f7;
             transition: transform 0.2s;
         }
-
-        .card:hover {
-            transform: translateY(-2px);
-        }
-
-        .card-header {
-            margin-bottom: 20px;
-            border-bottom: 2px solid #f3f4f6;
-            padding-bottom: 10px;
-        }
-
-        .card-title {
-            font-size: 1.25rem;
-            color: #764ba2;
-            font-weight: bold;
-        }
-
-        .card-subtitle {
-            font-size: 0.9rem;
-            color: var(--text-light);
-            margin-top: 5px;
-        }
+        .card-header { margin-bottom: 16px; border-bottom: 2px solid #f7fafc; padding-bottom: 10px; }
+        .card-title { font-size: 1.2rem; color: #553c9a; font-weight: bold; display: flex; align-items: center; justify-content: space-between;}
+        .card-subtitle { font-size: 0.85rem; color: var(--text-light); }
 
         .badge {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: bold;
-            color: white;
-            margin-right: 8px;
+            display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: bold; color: white; text-transform: uppercase;
         }
-        .bg-easy { background-color: #10b981; }
-        .bg-med { background-color: #f59e0b; }
-        .bg-hard { background-color: #ef4444; }
+        .bg-easy { background: #48bb78; }
+        .bg-med { background: #ed8936; }
+        .bg-hard { background: #f56565; }
 
         /* --- EXERCISE: MATCHING --- */
-        .matching-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
+        .matching-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .match-item {
-            background: #f9fafb;
-            border: 2px solid #e5e7eb;
-            border-radius: 8px;
-            padding: 15px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s;
-            user-select: none;
-            position: relative;
+            background: #f8f9fa; border: 2px solid #e2e8f0; border-radius: 10px; padding: 12px;
+            text-align: center; cursor: pointer; transition: all 0.2s; user-select: none; font-weight: 500;
         }
+        .match-item.selected { border-color: #764ba2; background: #ebf4ff; transform: scale(1.03); }
+        .match-item.matched { border-color: var(--success); background: #f0fff4; opacity: 0.6; pointer-events: none; text-decoration: line-through; }
+        .match-item.wrong { border-color: var(--error); background: #fff5f5; animation: shake 0.4s; }
 
-        .match-item.selected {
-            border-color: #764ba2;
-            background: #ede9fe;
-            transform: scale(1.02);
-        }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
 
-        .match-item.matched {
-            border-color: var(--success);
-            background: #d1fae5;
-            opacity: 0.7;
-            pointer-events: none;
-        }
-
-        .match-item.wrong {
-            border-color: var(--error);
-            background: #fee2e2;
-            animation: shake 0.4s;
-        }
-
-        @keyframes shake {
-            0% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            50% { transform: translateX(5px); }
-            75% { transform: translateX(-5px); }
-            100% { transform: translateX(0); }
-        }
-
-        /* --- EXERCISE: FILL IN THE BLANK --- */
-        .word-bank {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 20px;
-            padding: 10px;
-            background: #f3f4f6;
-            border-radius: 8px;
-            justify-content: center;
-        }
-
+        /* --- EXERCISE: FILL IN BLANK --- */
+        .word-bank { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; padding: 10px; background: #edf2f7; border-radius: 10px; justify-content: center; }
         .draggable-word {
-            background: white;
-            border: 1px solid #d1d5db;
-            padding: 8px 15px;
-            border-radius: 20px;
-            cursor: pointer;
-            box-shadow: 0 2px 0 #e5e7eb;
-            font-weight: 500;
+            background: white; border: 1px solid #cbd5e0; padding: 6px 12px; border-radius: 15px; cursor: pointer;
+            box-shadow: 0 2px 0 #a0aec0; font-size: 0.9rem; transition: all 0.2s;
         }
         .draggable-word:active { transform: translateY(2px); box-shadow: none; }
-        .draggable-word.used { opacity: 0.3; pointer-events: none; text-decoration: line-through; }
+        .draggable-word.used { opacity: 0.3; pointer-events: none; text-decoration: line-through; background: #e2e8f0; }
 
-        .sentence-row {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-            gap: 5px;
-        }
-
+        .sentence-row { display: flex; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 5px; font-size: 1rem; }
         .blank-slot {
-            display: inline-block;
-            min-width: 100px;
-            border-bottom: 2px solid #764ba2;
-            padding: 0 10px;
-            color: #764ba2;
-            font-weight: bold;
-            text-align: center;
-            cursor: pointer;
-            background: #f3f4f6;
-            border-radius: 4px 4px 0 0;
-            min-height: 2rem;
+            display: inline-block; min-width: 90px; border-bottom: 2px solid #764ba2; padding: 0 8px;
+            color: #764ba2; font-weight: bold; text-align: center; cursor: pointer; background: #f7fafc;
+            border-radius: 4px 4px 0 0; min-height: 1.8rem; transition: background 0.3s;
         }
-        .blank-slot.filled {
-            background: #ede9fe;
-            border-bottom-color: #10b981;
-            color: var(--text-main);
-        }
+        .blank-slot.filled { background: #d6bcfa; border-bottom-color: var(--success); color: #2d3748; }
 
-        /* --- EXERCISE: PICTURE ID (Flashcards) --- */
-        .flashcard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 15px;
-        }
+        /* --- EXERCISE: FLASHCARDS --- */
+        .flashcard-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 15px; }
+        .flashcard { background-color: transparent; height: 150px; perspective: 1000px; cursor: pointer; }
+        .flashcard-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; border-radius: 12px; box-shadow: var(--shadow); }
+        .flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
+        .flashcard-front, .flashcard-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; border-radius: 12px; flex-direction: column; }
+        .flashcard-front { background: white; font-size: 3rem; }
+        .flashcard-back { background: var(--secondary-gradient); color: white; transform: rotateY(180deg); font-size: 1.1rem; font-weight: bold; padding: 5px; }
 
-        .flashcard {
-            background-color: transparent;
-            height: 160px;
-            perspective: 1000px;
-            cursor: pointer;
-        }
-
-        .flashcard-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            text-align: center;
-            transition: transform 0.6s;
-            transform-style: preserve-3d;
-            border-radius: 12px;
-            box-shadow: var(--shadow);
-        }
-
-        .flashcard.flipped .flashcard-inner {
-            transform: rotateY(180deg);
-        }
-
-        .flashcard-front, .flashcard-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 12px;
-            flex-direction: column;
-        }
-
-        .flashcard-front {
-            background: white;
-            color: black;
-            font-size: 3rem; /* Emoji size */
-        }
-
-        .flashcard-back {
-            background: var(--primary-gradient);
-            color: white;
-            transform: rotateY(180deg);
-            font-size: 1.2rem;
-            font-weight: bold;
-            padding: 10px;
-        }
-
-        /* --- EXERCISE: MULTIPLE CHOICE --- */
-        .mcq-option {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 10px;
-            background: white;
-            border: 2px solid #e5e7eb;
-            border-radius: 8px;
-            cursor: pointer;
-            text-align: left;
-            font-size: 1rem;
-            transition: all 0.2s;
-        }
-
-        .mcq-option:hover {
-            border-color: #764ba2;
-            background: #f9fafb;
-        }
-
-        .mcq-option.correct {
-            background-color: #d1fae5;
-            border-color: var(--success);
-            color: #065f46;
-        }
-
-        .mcq-option.wrong {
-            background-color: #fee2e2;
-            border-color: var(--error);
-            color: #991b1b;
-        }
+        /* --- EXERCISE: MCQ --- */
+        .mcq-option { display: block; width: 100%; padding: 12px; margin-bottom: 8px; background: white; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; text-align: left; font-size: 1rem; transition: all 0.2s; }
+        .mcq-option:hover { border-color: #764ba2; background: #f7fafc; }
+        .mcq-option.correct { background-color: #c6f6d5; border-color: #48bb78; color: #22543d; }
+        .mcq-option.wrong { background-color: #fed7d7; border-color: #f56565; color: #822727; }
 
         /* --- EXERCISE: FAMILY TREE --- */
-        .tree-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 20px;
-            user-select: none;
-        }
-
-        .tree-level {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            position: relative;
-            margin-bottom: 40px;
-        }
-
-        /* Connecting Lines */
-        .tree-level::before {
-            content: '';
-            position: absolute;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 2px;
-            height: 20px;
-            background: #9ca3af;
-        }
-        
+        .tree-container { display: flex; flex-direction: column; align-items: center; margin-top: 20px; user-select: none; }
+        .tree-level { display: flex; justify-content: center; gap: 30px; position: relative; margin-bottom: 35px; }
+        .tree-level::before { content: ''; position: absolute; top: -20px; left: 50%; transform: translateX(-50%); width: 2px; height: 20px; background: #cbd5e0; }
         .tree-level:last-child::before { display: none; }
-
         .tree-node {
-            width: 80px;
-            height: 80px;
-            background: white;
-            border: 3px solid #764ba2;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            font-size: 0.85rem;
-            font-weight: bold;
-            cursor: pointer;
-            position: relative;
-            transition: all 0.2s;
-            padding: 5px;
-            z-index: 2;
+            width: 70px; height: 70px; background: white; border: 3px solid #805ad5; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            text-align: center; font-size: 0.75rem; font-weight: bold; cursor: pointer; position: relative; transition: all 0.2s; padding: 5px; z-index: 2;
         }
-
-        .tree-node.filled {
-            background: var(--primary-gradient);
-            color: white;
-            border-color: white;
-        }
-
+        .tree-node.filled { background: var(--primary-gradient); color: white; border-color: white; box-shadow: 0 0 10px rgba(118, 75, 162, 0.5); }
         .tree-node:hover { transform: scale(1.1); }
-        
-        .node-labels {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
-            padding: 15px;
-            background: #fff;
-            border-radius: 12px;
-            border: 1px dashed #9ca3af;
-        }
+        .node-labels { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 20px; padding: 15px; background: #fff; border-radius: 12px; border: 1px dashed #cbd5e0; }
+        .node-label { padding: 6px 12px; background: #edf2f7; border-radius: 15px; font-size: 0.85rem; cursor: pointer; border: 1px solid #cbd5e0; }
+        .node-label.active { background: #805ad5; color: white; border-color: #805ad5; transform: translateY(-2px); }
+        .node-label.hidden { display: none; }
 
-        .node-label {
-            padding: 8px 12px;
-            background: #f3f4f6;
-            border-radius: 15px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            border: 1px solid #d1d5db;
+        /* --- FINISH MODAL / BUTTON --- */
+        .finish-section {
+            text-align: center; margin-top: 40px; padding: 30px; background: white; border-radius: var(--radius); box-shadow: var(--shadow);
         }
-        .node-label.active {
-            background: #764ba2;
-            color: white;
-            border-color: #764ba2;
-        }
-        .node-label.hidden {
-            display: none;
-        }
-
-        /* --- EXERCISE: TEXT INPUT --- */
-        textarea {
-            width: 100%;
-            height: 100px;
-            padding: 10px;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            font-family: inherit;
-            margin-bottom: 10px;
-            resize: vertical;
-        }
-        
         .btn {
-            background: var(--primary-gradient);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-size: 1rem;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            background: var(--primary-gradient); color: white; border: none; padding: 12px 30px; border-radius: 30px; font-size: 1.1rem; cursor: pointer;
+            box-shadow: 0 4px 15px rgba(118, 75, 162, 0.4); transition: transform 0.2s;
         }
-        .btn:hover { opacity: 0.9; }
-
-        /* --- TOAST NOTIFICATION --- */
-        #toast {
-            visibility: hidden;
-            min-width: 250px;
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            border-radius: 8px;
-            padding: 16px;
-            position: fixed;
-            z-index: 100;
-            left: 50%;
-            bottom: 30px;
-            transform: translateX(-50%);
-            font-size: 1rem;
-            opacity: 0;
-            transition: opacity 0.3s, bottom 0.3s;
-        }
-
-        #toast.show {
-            visibility: visible;
-            opacity: 1;
-            bottom: 50px;
-        }
+        .btn:hover { transform: translateY(-2px); }
+        .btn-secondary { background: white; color: #805ad5; border: 2px solid #805ad5; margin-left: 10px; }
 
         /* Mobile Adjustments */
         @media (max-width: 600px) {
             .matching-grid { grid-template-columns: 1fr; }
-            .tree-level { gap: 20px; }
+            .tree-level { gap: 15px; }
             header h1 { font-size: 1.8rem; }
         }
     </style>
@@ -455,377 +196,491 @@
     <header>
         <div class="container">
             <h1>Deutsch Lernen</h1>
-            <p>Interactive Practice for German Students</p>
+            <p>Level <span id="level-indicator">1</span> of 5</p>
         </div>
     </header>
 
-    <div class="container">
+    <!-- SCOREBOARD -->
+    <div class="scoreboard">
+        <div class="container">
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            <div class="score-text">
+                <span>Score: <span id="score-val">0</span> / <span id="max-score-val">0</span></span>
+                <span id="percentage-val">0%</span>
+            </div>
+        </div>
+    </div>
 
+    <div class="container">
+        
         <!-- SECTION I: ANIMALS -->
-        <h2>I. Home Pets & Animals (Haustiere & Tiere)</h2>
+        <h2>I. Tiere & Eigenschaften</h2>
 
         <!-- I.A Matching -->
-        <section class="card" id="ex-1a">
+        <section class="card" id="sec-matching">
             <div class="card-header">
                 <span class="badge bg-easy">Einfach</span>
-                <div class="card-title">A. Matching (Zuordnen)</div>
-                <div class="card-subtitle">Click a German word, then click the matching English letter.</div>
+                <div class="card-title">A. Matching</div>
+                <div class="card-subtitle">Match German to English</div>
             </div>
-            <div class="matching-grid" id="matching-game">
-                <!-- JS will populate -->
-            </div>
+            <div class="matching-grid" id="matching-container"></div>
         </section>
 
-        <!-- I.B Fill in the Blank -->
-        <section class="card" id="ex-1b">
+        <!-- I.B Fill in Blank -->
+        <section class="card" id="sec-fill">
             <div class="card-header">
                 <span class="badge bg-med">Mittel</span>
-                <div class="card-title">B. Fill in the Blank (Lückentext)</div>
-                <div class="card-subtitle">Tap a word from the box, then tap the blank space.</div>
+                <div class="card-title">B. Fill in the Blank</div>
+                <div class="card-subtitle">Tap a word, then tap the gap</div>
             </div>
-            <div class="word-bank" id="word-bank">
-                <!-- JS Populated -->
-            </div>
-            <div id="sentences-container">
-                <!-- JS Populated -->
-            </div>
+            <div class="word-bank" id="word-bank"></div>
+            <div id="sentences-container"></div>
         </section>
 
-        <!-- I.C Picture ID -->
-        <section class="card" id="ex-1c">
+        <!-- I.C Flashcards -->
+        <section class="card" id="sec-flash">
             <div class="card-header">
                 <span class="badge bg-med">Mittel</span>
-                <div class="card-title">C. "Was ist das?" (Flashcards)</div>
-                <div class="card-subtitle">Tap the card to flip and see the German word. Practice aloud!</div>
+                <div class="card-title">C. Flashcards</div>
+                <div class="card-subtitle">Tap to flip & practice</div>
             </div>
-            <div class="flashcard-grid" id="flashcard-container">
-                <!-- JS Populated -->
-            </div>
+            <div class="flashcard-grid" id="flashcard-container"></div>
         </section>
 
         <!-- I.D Adjectives Matching -->
-        <section class="card" id="ex-1d">
+        <section class="card" id="sec-adj">
             <div class="card-header">
                 <span class="badge bg-hard">Schwer</span>
-                <div class="card-title">D. Animal Adjectives (Eigenschaften)</div>
-                <div class="card-subtitle">Match the adjective to the correct animal.</div>
+                <div class="card-title">D. Adjectives Matching</div>
             </div>
-            <div class="matching-grid" id="adj-matching-game">
-                <!-- JS Populated -->
-            </div>
+            <div class="matching-grid" id="adj-container"></div>
         </section>
 
         <!-- SECTION II: FAMILY -->
-        <h2>II. Family Members (Familienmitglieder)</h2>
+        <h2>II. Familie & Pronomen</h2>
 
-        <!-- II.A Multiple Choice -->
-        <section class="card" id="ex-2a">
+        <!-- II.A MCQ -->
+        <section class="card" id="sec-mcq">
             <div class="card-header">
                 <span class="badge bg-easy">Einfach</span>
                 <div class="card-title">A. Multiple Choice</div>
-                <div class="card-subtitle">Choose the correct German word.</div>
             </div>
-            <div id="mcq-container">
-                <!-- JS Populated -->
-            </div>
+            <div id="mcq-container"></div>
         </section>
 
-        <!-- II.B Describe -->
-        <section class="card" id="ex-2b">
+        <!-- II.B Writing (Static) -->
+        <section class="card" id="sec-write">
             <div class="card-header">
                 <span class="badge bg-med">Mittel</span>
-                <div class="card-title">B. Describe Your Family</div>
-                <div class="card-subtitle">Write a few sentences using "Ich habe..." (I have).</div>
+                <div class="card-title">B. Free Writing</div>
+                <div class="card-subtitle">Write a sentence about your family.</div>
             </div>
-            <p style="margin-bottom: 10px;"><strong>Vocabulary:</strong> die Mutter, der Vater, der Bruder, die Schwester, das Kind, die Oma, der Opa, jung, alt, nett.</p>
-            <textarea placeholder="z.B. Ich habe eine Schwester. Sie ist jung."></textarea>
-            <div style="display: flex; gap: 10px;">
-                <button class="btn" onclick="showToast('Great job practicing writing! (In a real app, a teacher would review this)')">Submit</button>
-                <button class="btn" style="background: #9ca3af;" onclick="showSampleAnswer()">Show Example</button>
-            </div>
-            <p id="sample-answer" style="margin-top: 10px; color: #764ba2; font-style: italic; display: none;"></p>
+            <textarea id="writing-area" placeholder="e.g. Ich habe eine Schwester..."></textarea>
+            <button class="btn" style="font-size: 0.9rem; padding: 8px 16px;" onclick="showToast('Saved! (In a real app, teacher would check this)')">Save Note</button>
         </section>
 
         <!-- II.C Family Tree -->
-        <section class="card" id="ex-2c">
+        <section class="card" id="sec-tree">
             <div class="card-header">
                 <span class="badge bg-hard">Schwer</span>
-                <div class="card-title">C. Family Tree Labels</div>
-                <div class="card-subtitle">Tap a label below, then tap the correct circle in the tree.</div>
+                <div class="card-title">C. Family Tree</div>
             </div>
             <div class="tree-container">
                 <div class="tree-level">
-                    <div class="tree-node" data-target="die Oma">?</div>
-                    <div class="tree-node" data-target="der Opa">?</div>
+                    <div class="tree-node" data-ans="top1">?</div>
+                    <div class="tree-node" data-ans="top2">?</div>
                 </div>
                 <div class="tree-level">
-                    <div class="tree-node" data-target="die Mutter">?</div>
-                    <div class="tree-node" data-target="der Vater">?</div>
+                    <div class="tree-node" data-ans="mid1">?</div>
+                    <div class="tree-node" data-ans="mid2">?</div>
                 </div>
                 <div class="tree-level">
-                    <div class="tree-node" data-target="das Kind">?</div>
+                    <div class="tree-node" data-ans="bot">?</div>
                 </div>
             </div>
-            <div class="node-labels" id="node-labels">
-                <!-- JS Populated -->
-            </div>
+            <div class="node-labels" id="node-labels"></div>
         </section>
 
-        <!-- II.D Possessive Pronouns -->
-        <section class="card" id="ex-2d">
-            <div class="card-header">
-                <span class="badge bg-hard">Schwer</span>
-                <div class="card-title">D. Possessive Pronouns</div>
-                <div class="card-subtitle">Complete the sentences using the dropdowns.</div>
-            </div>
-            <div id="possessive-container">
-                <!-- JS Populated -->
-            </div>
-            <button class="btn" style="margin-top: 15px;" onclick="checkPossessives()">Check Answers</button>
-        </section>
+        <!-- FINISH & REFRESH -->
+        <div class="finish-section">
+            <h3>Finished the exercises?</h3>
+            <p>Check your score and load the next vocabulary set!</p>
+            <br>
+            <button class="btn" onclick="finishLevel()">Finish & Next Level</button>
+        </div>
 
     </div>
 
-    <!-- TOAST NOTIFICATION -->
-    <div id="toast">Message here</div>
+    <!-- TOAST -->
+    <div id="toast" style="visibility: hidden; min-width: 250px; background-color: #333; color: #fff; text-align: center; border-radius: 8px; padding: 16px; position: fixed; z-index: 200; left: 50%; bottom: 30px; transform: translateX(-50%); opacity: 0; transition: opacity 0.3s;">Message</div>
 
     <script>
-        // --- DATA SETS ---
-
-        // I.A Matching
-        const matchingData = [
-            { id: 'm1', german: 'Der Hund', pair: 'a' },
-            { id: 'm2', german: 'Die Katze', pair: 'b' },
-            { id: 'm3', german: 'Der Fisch', pair: 'e' },
-            { id: 'm4', german: 'Der Hamster', pair: 'c' },
-            { id: 'm5', german: 'Der Vogel', pair: 'd' }
+        // --- 5 SETS OF DATA ---
+        const quizSets = [
+            {
+                // SET 1: Original
+                animals: [
+                    { de: "Der Hund", en: "Dog", emoji: "🐶" },
+                    { de: "Die Katze", en: "Cat", emoji: "🐱" },
+                    { de: "Der Fisch", en: "Fish", emoji: "🐟" },
+                    { de: "Der Hamster", en: "Hamster", emoji: "🐹" },
+                    { de: "Der Vogel", en: "Bird", emoji: "🐦" }
+                ],
+                adjectives: [
+                    { q: "schnell", a: "das Pferd" },
+                    { q: "fleißig", a: "der Vogel" },
+                    { q: "klein", a: "der Hamster" },
+                    { q: "laut", a: "der Hund" },
+                    { q: "flauschig", a: "das Schaf" }
+                ],
+                family: {
+                    mcq: [
+                        { q: "Mother", opts: ["der Vater", "die Mutter", "der Bruder"], ans: "die Mutter" },
+                        { q: "Father", opts: ["die Schwester", "der Vater", "das Kind"], ans: "der Vater" },
+                        { q: "Brother", opts: ["der Vater", "der Bruder", "die Mutter"], ans: "der Bruder" }
+                    ],
+                    tree: { top1: "die Oma", top2: "der Opa", mid1: "die Mutter", mid2: "der Vater", bot: "das Kind" }
+                },
+                fill: [
+                    { pre: "Ich habe", post: "Sie ist braun.", ans: "die Katze" },
+                    { pre: "", post: "bellt laut.", ans: "Der Hund" },
+                    { pre: "Das ist ein", post: ".", ans: "Fisch" } // Simplified logic
+                ],
+                words: ["die Katze", "Der Hund", "Fisch", "Vogel", "Tier"]
+            },
+            {
+                // SET 2: Farm & Extended Family
+                animals: [
+                    { de: "Das Pferd", en: "Horse", emoji: "🐴" },
+                    { de: "Die Kuh", en: "Cow", emoji: "🐮" },
+                    { de: "Das Schwein", en: "Pig", emoji: "🐷" },
+                    { de: "Das Schaf", en: "Sheep", emoji: "🐑" },
+                    { de: "Die Ente", en: "Duck", emoji: "🦆" }
+                ],
+                adjectives: [
+                    { q: "groß", a: "das Pferd" },
+                    { q: "langsam", a: "die Kuh" },
+                    { q: "schmutzig", a: "das Schwein" },
+                    { q: "weich", a: "das Schaf" },
+                    { q: "nass", a: "die Ente" }
+                ],
+                family: {
+                    mcq: [
+                        { q: "Grandmother", opts: ["die Tante", "die Oma", "die Mutter"], ans: "die Oma" },
+                        { q: "Grandfather", opts: ["der Opa", "der Onkel", "der Vater"], ans: "der Opa" },
+                        { q: "Aunt", opts: ["die Tante", "die Cousine", "die Oma"], ans: "die Tante" }
+                    ],
+                    tree: { top1: "Urgroßmutter", top2: "Urgroßvater", mid1: "Tante", mid2: "Onkel", bot: "Cousin" }
+                },
+                fill: [
+                    { pre: "Das ist", post: ". Es ist groß.", ans: "Pferd" },
+                    { pre: "", post: "macht Muuuuh.", ans: "Kuh" },
+                    { pre: "Ich sehe eine", post: ".", ans: "Ente" }
+                ],
+                words: ["Pferd", "Kuh", "Schwein", "Ente", "Huhn"]
+            },
+            {
+                // SET 3: Wild Animals
+                animals: [
+                    { de: "Der Löwe", en: "Lion", emoji: "🦁" },
+                    { de: "Der Tiger", en: "Tiger", emoji: "🐯" },
+                    { de: "Der Elefant", en: "Elephant", emoji: "🐘" },
+                    { de: "Der Affe", en: "Monkey", emoji: "🐒" },
+                    { de: "Die Giraffe", en: "Giraffe", emoji: "🦒" }
+                ],
+                adjectives: [
+                    { q: "stark", a: "der Löwe" },
+                    { q: "gestreift", a: "der Tiger" },
+                    { q: "schwer", a: "der Elefant" },
+                    { q: "clever", a: "der Affe" },
+                    { q: "hoch", a: "die Giraffe" }
+                ],
+                family: {
+                    mcq: [
+                        { q: "Uncle", opts: ["der Cousin", "der Onkel", "der Bruder"], ans: "der Onkel" },
+                        { q: "Cousin (m)", opts: ["der Cousin", "der Neffe", "der Sohn"], ans: "der Cousin" },
+                        { q: "Niece", opts: ["die Nichte", "die Tochter", "die Cousine"], ans: "die Nichte" }
+                    ],
+                    tree: { top1: "Tante", top2: "Onkel", mid1: "Mutter", mid2: "Vater", bot: "Ich" }
+                },
+                fill: [
+                    { pre: "Der", post: "brüllt.", ans: "Löwe" },
+                    { pre: "", post: "hat einen langen Rüssel.", ans: "Elefant" },
+                    { pre: "Die", post: "hat einen langen Hals.", ans: "Giraffe" }
+                ],
+                words: ["Löwe", "Tiger", "Elefant", "Affe", "Giraffe"]
+            },
+            {
+                // SET 4: Small Creatures & Relatives
+                animals: [
+                    { de: "Die Maus", en: "Mouse", emoji: "🐭" },
+                    { de: "Die Biene", en: "Bee", emoji: "🐝" },
+                    { de: "Die Ameise", en: "Ant", emoji: "🐜" },
+                    { de: "Der Schmetterling", en: "Butterfly", emoji: "🦋" },
+                    { de: "Die Schnecke", en: "Snail", emoji: "🐌" }
+                ],
+                adjectives: [
+                    { q: "klein", a: "die Maus" },
+                    { q: "beschäftigt", a: "die Biene" },
+                    { q: "schwach", a: "die Ameise" },
+                    { q: "bunt", a: "der Schmetterling" },
+                    { q: "langsam", a: "die Schnecke" }
+                ],
+                family: {
+                    mcq: [
+                        { q: "Son", opts: ["die Tochter", "der Bruder", "der Sohn"], ans: "der Sohn" },
+                        { q: "Daughter", opts: ["die Schwester", "die Tochter", "die Nichte"], ans: "die Tochter" },
+                        { q: "Parents", opts: ["die Eltern", "die Kinder", "die Geschwister"], ans: "die Eltern" }
+                    ],
+                    tree: { top1: "Großmutter", top2: "Großvater", mid1: "Tochter", mid2: "Sohn", bot: "Enkel" }
+                },
+                fill: [
+                    { pre: "Die", post: "ist sehr klein.", ans: "Maus" },
+                    { pre: "", post: "fliegt zu Blumen.", ans: "Biene" },
+                    { pre: "Die", post: "kriecht langsam.", ans: "Schnecke" }
+                ],
+                words: ["Maus", "Biene", "Ameise", "Schmetterling", "Schnecke"]
+            },
+            {
+                // SET 5: Mixed Review
+                animals: [
+                    { de: "Der Hahn", en: "Rooster", emoji: "🐓" },
+                    { de: "Die Gans", en: "Goose", emoji: "🦢" },
+                    { de: "Der Hase", en: "Rabbit", emoji: "🐇" },
+                    { de: "Der Frosch", en: "Frog", emoji: "🐸" },
+                    { de: "Der Wolf", en: "Wolf", emoji: "🐺" }
+                ],
+                adjectives: [
+                    { q: "hungrig", a: "der Wolf" },
+                    { q: "grün", a: "der Frosch" },
+                    { q: "schnell", a: "der Hase" },
+                    { q: "laut", a: "der Hahn" },
+                    { q: "weiß", a: "die Gans" }
+                ],
+                family: {
+                    mcq: [
+                        { q: "Siblings", opts: ["die Eltern", "die Geschwister", "die Kinder"], ans: "die Geschwister" },
+                        { q: "Husband", opts: ["der Mann", "der Vater", "der Freund"], ans: "der Mann" },
+                        { q: "Wife", opts: ["die Mutter", "die Frau", "die Schwester"], ans: "die Frau" }
+                    ],
+                    tree: { top1: "Frau", top2: "Mann", mid1: "Schwester", mid2: "Bruder", bot: "Baby" }
+                },
+                fill: [
+                    { pre: "Der", post: "kräht am Morgen.", ans: "Hahn" },
+                    { pre: "", post: "quakt.", ans: "Frosch" },
+                    { pre: "Der", post: "isst Karotten.", ans: "Hase" }
+                ],
+                words: ["Hahn", "Gans", "Hase", "Frosch", "Wolf"]
+            }
         ];
-        const matchingAnswers = [
-            { id: 'a', text: 'a) Cat' },
-            { id: 'b', text: 'b) Bird' },
-            { id: 'c', text: 'c) Hamster' },
-            { id: 'd', text: 'd) Dog' },
-            { id: 'e', text: 'e) Fish' }
-        ];
 
-        // I.B Fill in Blank
-        const fillWords = ["Der Vogel", "die Katze", "der Hund", "der Fisch", "das Tier"];
-        const sentences = [
-            { id: 1, text: "Ich habe", after: "Es ist braun und klein.", answer: "die Katze" },
-            { id: 2, text: "", after: "fliegt im Garten.", answer: "Der Vogel" },
-            { id: 3, text: "Mein Bruder hat", after: "Er schwimmt im Aquarium.", answer: "der Fisch" },
-            { id: 4, text: "", after: "bellt laut.", answer: "der Hund" },
-            { id: 5, text: "Das ist ein", after: ".", answer: "Tier" } // "das Tier" is the box option, but grammar requires lowercase in middle usually. Simplified logic: exact match or smart match.
-        ];
+        // --- STATE ---
+        let currentLevel = 0;
+        let score = 0;
+        let maxScore = 0;
 
-        // I.C Flashcards (Using Emojis as Pictures)
-        const flashcards = [
-            { emoji: '🐴', word: 'Das Pferd' },
-            { emoji: '🐮', word: 'Die Kuh' },
-            { emoji: '🐰', word: 'Das Kaninchen' },
-            { emoji: '🐷', word: 'Das Schwein' },
-            { emoji: '🦆', word: 'Die Ente' },
-            { emoji: '🦢', word: 'Die Gans' },
-            { emoji: '🐑', word: 'Das Schaf' },
-            { emoji: '🐐', word: 'Die Ziege' }
-        ];
+        // --- CORE FUNCTIONS ---
 
-        // I.D Adjectives
-        const adjData = [
-            { id: 'ad1', german: 'schnell', pair: 'x' },
-            { id: 'ad2', german: 'fleißig', pair: 'y' },
-            { id: 'ad3', german: 'klein', pair: 'z' },
-            { id: 'ad4', german: 'laut', pair: 'w' },
-            { id: 'ad5', german: 'flauschig', pair: 'v' }
-        ];
-        const adjAnswers = [
-            { id: 'x', text: 'a) der Vogel' }, // Wait, prompt said: schnell -> Horse. Prompt mapping: 1-a, 2-b, 3-c, 4-d, 5-e.
-            // Let's follow prompt strictly:
-            // 1. schnell -> d) das Pferd
-            // 2. fleißig -> b) der Vogel (Wait, bird? usually ant/bee, but ok)
-            // 3. klein -> e) der Hamster
-            // 4. laut -> a) der Hund
-            // 5. flauschig -> c) das Schaf
-        ];
-        
-        // Re-mapping Adjectives based on prompt text to ensure correct logic
-        const adjQuestions = [
-            { id: 'q1', text: 'schnell', matchId: 'pferd' },
-            { id: 'q2', text: 'fleißig', matchId: 'vogel' },
-            { id: 'q3', text: 'klein', matchId: 'hamster' },
-            { id: 'q4', text: 'laut', matchId: 'hund' },
-            { id: 'q5', text: 'flauschig', matchId: 'schaf' }
-        ];
-        const adjOptions = [
-            { id: 'hund', text: 'a) der Hund' },
-            { id: 'vogel', text: 'b) der Vogel' },
-            { id: 'schaf', text: 'c) das Schaf' },
-            { id: 'pferd', text: 'd) das Pferd' },
-            { id: 'hamster', text: 'e) der Hamster' }
-        ];
+        function initApp() {
+            loadLevel(currentLevel);
+        }
 
-        // II.A Multiple Choice
-        const mcqData = [
-            { q: "Mother", options: ["der Vater", "die Mutter", "der Bruder"], correct: 1 },
-            { q: "Father", options: ["die Schwester", "der Vater", "das Kind"], correct: 1 },
-            { q: "Brother", options: ["der Vater", "der Bruder", "die Mutter"], correct: 1 },
-            { q: "Sister", options: ["die Schwester", "der Sohn", "der Vater"], correct: 0 },
-            { q: "Child", options: ["das Kind", "die Mutter", "der Bruder"], correct: 0 }
-        ];
+        function loadLevel(index) {
+            // Reset State
+            score = 0;
+            maxScore = 0;
+            document.getElementById('writing-area').value = ""; // Clear text area
+            
+            // Update Header
+            document.getElementById('level-indicator').textContent = index + 1;
+            
+            // DOM Elements
+            const data = quizSets[index];
 
-        // II.C Family Tree Labels
-        const familyLabels = ["die Mutter", "der Vater", "das Kind", "die Oma", "der Opa"];
+            // 1. Render Matching (Animals)
+            const matchPairs = data.animals.map(a => ({ id: a.en, text: a.de, side: 'left' }))
+                .concat(data.animals.map(a => ({ id: a.en, text: a.en, side: 'right' })));
+            setupMatching('matching-container', matchPairs);
 
-        // II.D Possessive Pronouns
-        const possessiveData = [
-            { pre: "", answer: "meine", post: "Schwester ist sehr nett." },
-            { pre: "Das ist ", answer: "mein", post: "Bruder." },
-            { pre: "", answer: "meine", post: "Mutter ist Ärztin." }, // Assuming "Meine" based on context, though prompt list had "ihr" for their mother. Wait, prompt: "____ Mutter ist Ärztin". Context implies "My" or "Her/His". Given "My sister", "My brother", usually "My mother".
-            // Re-reading prompt D:
-            // 1. ____ Schwester... (My) -> meine
-            // 2. Das ist ____ Bruder. (My) -> mein
-            // 3. ____ Mutter ist Ärztin. (My) -> meine
-            // 4. ____ Vater ist Lehrer. (Your - formal or informal? Prompt says "Your". List has 'dein'.) -> dein
-            // 5. ____ Kinder spielen... (Their) -> ihr
-        ];
-        
-        const possOptions = ["mein", "meine", "dein", "deine", "ihr", "ihre", "unser", "euer"];
+            // 2. Render Flashcards
+            setupFlashcards(data.animals);
 
-        // --- INITIALIZATION & LOGIC ---
+            // 3. Render Adjectives Matching
+            const adjPairs = data.adjectives.map(a => ({ id: a.a, text: a.q, side: 'left' }))
+                .concat(data.adjectives.map(a => ({ id: a.a, text: a.a, side: 'right' })));
+            setupMatching('adj-container', adjPairs);
 
-        // 1. MATCHING LOGIC (Generic)
-        function initMatching(containerId, questions, answers, isSection2) {
-            const container = document.getElementById(containerId);
-            let selectedLeft = null;
-            let matchesFound = 0;
-            const totalMatches = questions.length;
+            // 4. Render MCQ
+            setupMCQ(data.family.mcq);
 
-            // Render
-            const qFragment = document.createDocumentFragment();
-            questions.forEach(q => {
-                const el = document.createElement('div');
-                el.className = 'match-item';
-                el.textContent = q.text || q.german;
-                el.dataset.id = q.id;
-                el.dataset.matchId = q.matchId || q.pair;
-                el.dataset.side = 'left';
-                el.onclick = () => handleMatch(el);
-                qFragment.appendChild(el);
-            });
+            // 5. Render Fill Blank
+            setupFillBlank(data.fill, data.words);
 
-            const aFragment = document.createDocumentFragment();
-            answers.forEach(a => {
-                const el = document.createElement('div');
-                el.className = 'match-item';
-                el.textContent = a.text;
-                el.dataset.id = a.id;
-                el.dataset.matchId = a.id; // The ID matches the 'pair' string
-                el.dataset.side = 'right';
-                el.onclick = () => handleMatch(el);
-                aFragment.appendChild(el);
-            });
+            // 6. Render Family Tree
+            setupFamilyTree(data.family.tree);
 
-            container.appendChild(qFragment);
-            container.appendChild(aFragment);
+            updateScoreUI();
+        }
 
-            function handleMatch(el) {
-                if (el.classList.contains('matched')) return;
+        function updateScore(points) {
+            score += points;
+            updateScoreUI();
+        }
 
-                if (el.classList.contains('selected')) {
-                    el.classList.remove('selected');
-                    if (el.dataset.side === 'left') selectedLeft = null;
-                    return;
+        function updateScoreUI() {
+            document.getElementById('score-val').textContent = score;
+            document.getElementById('max-score-val').textContent = maxScore;
+            const pct = maxScore === 0 ? 0 : Math.round((score / maxScore) * 100);
+            document.getElementById('percentage-val').textContent = pct + "%";
+            document.getElementById('progress-bar').style.width = pct + "%";
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.style.opacity = 1;
+            t.style.visibility = 'visible';
+            setTimeout(() => { t.style.opacity = 0; t.style.visibility = 'hidden'; }, 2500);
+        }
+
+        function finishLevel() {
+            const pct = maxScore === 0 ? 0 : Math.round((score / maxScore) * 100);
+            let msg = `Level ${currentLevel + 1} Complete! Score: ${pct}%`;
+            
+            if (pct > 80) msg += " - Sehr gut!";
+            else if (pct > 50) msg += " - Gut gemacht!";
+            else msg += " - Weiter üben!";
+
+            if(confirm(msg + "\n\nLoad next vocabulary set?")) {
+                currentLevel++;
+                if(currentLevel >= quizSets.length) {
+                    alert("Congratulations! You have completed all 5 levels. Restarting...");
+                    currentLevel = 0;
                 }
-
-                // Play simple tap sound effect (optional/simulated)
-                
-                if (el.dataset.side === 'left') {
-                    if (selectedLeft) selectedLeft.classList.remove('selected');
-                    el.classList.add('selected');
-                    selectedLeft = el;
-                } else {
-                    // Right side clicked
-                    if (!selectedLeft) {
-                        showToast("Please select a German word first.");
-                        return;
-                    }
-
-                    // Check match
-                    if (selectedLeft.dataset.matchId === el.dataset.matchId) {
-                        // Correct
-                        selectedLeft.classList.remove('selected');
-                        selectedLeft.classList.add('matched');
-                        el.classList.add('matched');
-                        matchesFound++;
-                        if(matchesFound === totalMatches) showToast("Great job! All matched.");
-                    } else {
-                        // Wrong
-                        el.classList.add('wrong');
-                        selectedLeft.classList.add('wrong');
-                        setTimeout(() => {
-                            el.classList.remove('wrong');
-                            if(selectedLeft) selectedLeft.classList.remove('wrong');
-                        }, 500);
-                    }
-                }
+                // Visual transition
+                document.querySelectorAll('.card').forEach(c => c.style.opacity = '0.5');
+                setTimeout(() => {
+                    loadLevel(currentLevel);
+                    document.querySelectorAll('.card').forEach(c => c.style.opacity = '1');
+                    window.scrollTo({top: 0, behavior: 'smooth'});
+                }, 500);
             }
         }
 
-        // 2. FILL IN THE BLANK LOGIC
-        let selectedWord = null;
+        // --- EXERCISE LOGIC ---
 
-        function initFillBlank() {
-            const bank = document.getElementById('word-bank');
-            const container = document.getElementById('sentences-container');
+        // 1. MATCHING
+        function setupMatching(containerId, items) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            maxScore += items.length / 2; // Because pairs count as 1 unit
 
-            // Render Bank
-            fillWords.forEach(word => {
-                const w = document.createElement('div');
-                w.className = 'draggable-word';
-                w.textContent = word;
-                w.onclick = () => {
-                    if (w.classList.contains('used')) return;
-                    document.querySelectorAll('.draggable-word').forEach(x => x.style.borderColor = '#d1d5db');
-                    w.style.borderColor = '#764ba2';
-                    selectedWord = { text: word, el: w };
+            let selected = null;
+
+            // Shuffle items
+            items.sort(() => Math.random() - 0.5);
+
+            items.forEach(item => {
+                const el = document.createElement('div');
+                el.className = 'match-item';
+                el.textContent = item.text;
+                el.dataset.id = item.id;
+                el.onclick = () => {
+                    if(el.classList.contains('matched')) return;
+
+                    if(selected === el) {
+                        el.classList.remove('selected');
+                        selected = null;
+                        return;
+                    }
+
+                    if(!selected) {
+                        el.classList.add('selected');
+                        selected = el;
+                    } else {
+                        // Check match
+                        if(selected.dataset.id === el.dataset.id) {
+                            el.classList.add('matched');
+                            selected.classList.add('matched');
+                            selected.classList.remove('selected');
+                            selected = null;
+                            updateScore(1);
+                        } else {
+                            el.classList.add('wrong');
+                            selected.classList.add('wrong');
+                            setTimeout(() => {
+                                el.classList.remove('wrong');
+                                if(selected) selected.classList.remove('wrong');
+                                selected = null;
+                                el.classList.remove('selected'); // Clear selection on fail
+                            }, 500);
+                        }
+                    }
                 };
-                bank.appendChild(w);
+                container.appendChild(el);
+            });
+        }
+
+        // 2. FILL BLANK
+        function setupFillBlank(sentences, wordList) {
+            const container = document.getElementById('sentences-container');
+            const bank = document.getElementById('word-bank');
+            container.innerHTML = '';
+            bank.innerHTML = '';
+            maxScore += sentences.length;
+
+            let selectedWord = null;
+
+            // Words
+            wordList.forEach(w => {
+                const el = document.createElement('div');
+                el.className = 'draggable-word';
+                el.textContent = w;
+                el.onclick = () => {
+                    if(el.classList.contains('used')) return;
+                    document.querySelectorAll('.draggable-word').forEach(x => x.style.borderColor = '#cbd5e0');
+                    el.style.borderColor = '#805ad5';
+                    selectedWord = { text: w, el: el };
+                };
+                bank.appendChild(el);
             });
 
-            // Render Sentences
-            sentences.forEach(s => {
+            // Sentences
+            sentences.forEach((s, idx) => {
                 const row = document.createElement('div');
                 row.className = 'sentence-row';
-                
-                row.innerHTML = `<span>${s.text}</span> <div class="blank-slot" data-answer="${s.answer}"></div> <span>${s.after}</span>`;
+                row.innerHTML = `<span>${s.pre}</span> <div class="blank-slot" data-ans="${s.ans}" data-idx="${idx}"></div> <span>${s.post}</span>`;
                 
                 const slot = row.querySelector('.blank-slot');
                 slot.onclick = () => {
-                    if (!selectedWord) {
-                        showToast("Select a word from the top box first.");
-                        return;
-                    }
-                    if (slot.classList.contains('filled')) return; // Simple version: one shot
+                    if(!selectedWord) { showToast("Select a word first!"); return; }
+                    if(slot.classList.contains('filled')) return;
 
                     slot.textContent = selectedWord.text;
                     slot.classList.add('filled');
+
+                    // Check: allow partial match or specific set match
+                    // To make it user friendly, check if selected text contains answer or answer contains text (case insensitive)
+                    const cleanSel = selectedWord.text.toLowerCase();
+                    const cleanAns = s.ans.toLowerCase();
                     
-                    // Check logic (Simple: allow any word for practice, or strict?)
-                    // Strict:
-                    if(selectedWord.text === s.answer || (s.answer === "Tier" && selectedWord.text === "das Tier")) {
-                        slot.style.backgroundColor = "#d1fae5"; 
-                        slot.style.borderColor = "#10b981";
+                    if(cleanSel === cleanAns || cleanAns.includes(cleanSel)) {
+                        slot.style.backgroundColor = "#c6f6d5";
+                        slot.style.borderColor = "#2f855a";
                         selectedWord.el.classList.add('used');
-                        selectedWord.el.style.borderColor = '#d1d5db';
+                        selectedWord.el.style.borderColor = '#cbd5e0';
                         selectedWord = null;
+                        updateScore(1);
                     } else {
-                        slot.style.backgroundColor = "#fee2e2";
-                        showToast("Try again!");
+                        slot.style.backgroundColor = "#fed7d7";
+                        showToast("Falsch! Try again.");
                         setTimeout(() => {
                             slot.textContent = "";
                             slot.classList.remove('filled');
-                            slot.style.backgroundColor = "#f3f4f6";
-                            slot.style.borderColor = "#764ba2";
+                            slot.style.backgroundColor = "#f7fafc";
+                            slot.style.borderColor = "#805ad5";
                         }, 800);
                     }
                 };
@@ -833,16 +688,17 @@
             });
         }
 
-        // 3. FLASHCARD LOGIC
-        function initFlashcards() {
+        // 3. FLASHCARDS
+        function setupFlashcards(animals) {
             const container = document.getElementById('flashcard-container');
-            flashcards.forEach(fc => {
+            container.innerHTML = '';
+            animals.forEach(a => {
                 const card = document.createElement('div');
                 card.className = 'flashcard';
                 card.innerHTML = `
                     <div class="flashcard-inner">
-                        <div class="flashcard-front">${fc.emoji}</div>
-                        <div class="flashcard-back">${fc.word}</div>
+                        <div class="flashcard-front">${a.emoji}</div>
+                        <div class="flashcard-back">${a.de}<br><small style="font-weight:normal">${a.en}</small></div>
                     </div>
                 `;
                 card.onclick = () => card.classList.toggle('flipped');
@@ -850,32 +706,34 @@
             });
         }
 
-        // 4. MULTIPLE CHOICE LOGIC
-        function initMCQ() {
+        // 4. MCQ
+        function setupMCQ(questions) {
             const container = document.getElementById('mcq-container');
-            mcqData.forEach((item, index) => {
+            container.innerHTML = '';
+            maxScore += questions.length;
+
+            questions.forEach((q, idx) => {
                 const qDiv = document.createElement('div');
-                qDiv.className = 'mb-4';
-                qDiv.innerHTML = `<p style="margin-bottom:8px; font-weight:bold;">${index + 1}. ${item.q}:</p>`;
+                qDiv.style.marginBottom = "15px";
+                qDiv.innerHTML = `<p style="font-weight:bold; margin-bottom:5px;">${idx+1}. ${q.q}</p>`;
                 
-                item.options.forEach((opt, optIndex) => {
+                q.opts.forEach(opt => {
                     const btn = document.createElement('button');
                     btn.className = 'mcq-option';
                     btn.textContent = opt;
                     btn.onclick = function() {
-                        // Disable siblings
-                        const siblings = qDiv.querySelectorAll('.mcq-option');
-                        siblings.forEach(s => {
-                            s.classList.remove('wrong');
-                            s.disabled = true;
-                        });
+                        if(qDiv.classList.contains('answered')) return;
+                        qDiv.classList.add('answered');
+                        const allBtns = qDiv.querySelectorAll('.mcq-option');
+                        allBtns.forEach(b => b.disabled = true);
 
-                        if (optIndex === item.correct) {
+                        if(opt === q.ans) {
                             this.classList.add('correct');
+                            updateScore(1);
                         } else {
                             this.classList.add('wrong');
                             // Highlight correct one
-                            siblings[item.correct].classList.add('correct');
+                            allBtns.forEach(b => { if(b.textContent === q.ans) b.classList.add('correct'); });
                         }
                     };
                     qDiv.appendChild(btn);
@@ -884,132 +742,57 @@
             });
         }
 
-        // 5. FAMILY TREE LOGIC
-        function initFamilyTree() {
-            const labelsContainer = document.getElementById('node-labels');
+        // 5. FAMILY TREE
+        function setupFamilyTree(treeData) {
+            const labelsCont = document.getElementById('node-labels');
+            labelsCont.innerHTML = '';
             const nodes = document.querySelectorAll('.tree-node');
+            maxScore += nodes.length;
+
+            // Reset nodes visuals
+            nodes.forEach(n => {
+                n.textContent = "?";
+                n.classList.remove('filled');
+                n.dataset.ans = treeData[n.dataset.ans] || "Unknown"; // Update answer data
+            });
+
+            const labels = Object.values(treeData);
             let activeLabel = null;
 
-            familyLabels.forEach(lbl => {
+            labels.forEach(lbl => {
                 const span = document.createElement('div');
                 span.className = 'node-label';
                 span.textContent = lbl;
                 span.onclick = () => {
-                    if (activeLabel) activeLabel.classList.remove('active');
+                    if(activeLabel) activeLabel.classList.remove('active');
                     span.classList.add('active');
                     activeLabel = span;
                 };
-                labelsContainer.appendChild(span);
+                labelsCont.appendChild(span);
             });
 
             nodes.forEach(node => {
                 node.onclick = () => {
-                    if (!activeLabel) {
-                        showToast("Tap a label name below first!");
-                        return;
-                    }
-                    if (node.classList.contains('filled')) return;
+                    if(!activeLabel) { showToast("Tap a label below first!"); return; }
+                    if(node.classList.contains('filled')) return;
 
-                    if (node.dataset.target === activeLabel.textContent) {
+                    if(activeLabel.textContent === node.dataset.ans) {
                         node.textContent = activeLabel.textContent;
                         node.classList.add('filled');
                         activeLabel.classList.add('hidden');
                         activeLabel = null;
-                        showToast("Correct!");
+                        updateScore(1);
                     } else {
-                        showToast("Not quite right. Try again!");
+                        showToast("Not quite right.");
                         node.style.borderColor = "red";
-                        setTimeout(() => node.style.borderColor = "#764ba2", 500);
+                        setTimeout(() => node.style.borderColor = "#805ad5", 500);
                     }
                 };
             });
         }
 
-        // 6. POSSESSIVE PRONOUNS LOGIC
-        function initPossessives() {
-            const container = document.getElementById('possessive-container');
-            
-            possessiveData.forEach((item, idx) => {
-                const row = document.createElement('div');
-                row.className = 'sentence-row';
-                row.style.alignItems = 'center';
-                
-                const pre = document.createElement('span');
-                pre.textContent = item.pre;
-                
-                const select = document.createElement('select');
-                select.style.padding = "5px";
-                select.style.margin = "0 5px";
-                select.style.borderRadius = "4px";
-                select.style.border = "1px solid #d1d5db";
-                
-                // Default option
-                const defOpt = document.createElement('option');
-                defOpt.text = "...";
-                defOpt.value = "";
-                select.add(defOpt);
-                
-                possOptions.forEach(opt => {
-                    const o = document.createElement('option');
-                    o.text = opt;
-                    o.value = opt;
-                    select.add(o);
-                });
-                
-                select.dataset.correct = item.answer;
-                select.id = `poss-sel-${idx}`;
-
-                const post = document.createElement('span');
-                post.textContent = item.post;
-
-                row.appendChild(pre);
-                row.appendChild(select);
-                row.appendChild(post);
-                container.appendChild(row);
-            });
-        }
-
-        function checkPossessives() {
-            const selects = document.querySelectorAll('#possessive-container select');
-            let allCorrect = true;
-            selects.forEach(sel => {
-                if (sel.value === sel.dataset.correct) {
-                    sel.style.backgroundColor = "#d1fae5";
-                    sel.style.borderColor = "#10b981";
-                } else {
-                    sel.style.backgroundColor = "#fee2e2";
-                    sel.style.borderColor = "#ef4444";
-                    allCorrect = false;
-                }
-            });
-            if (allCorrect) showToast("Perfect! All possessive pronouns are correct.");
-            else showToast("Some answers are incorrect (highlighted in red).");
-        }
-
-        // UTILS
-        function showToast(message) {
-            const toast = document.getElementById("toast");
-            toast.textContent = message;
-            toast.className = "show";
-            setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
-        }
-
-        function showSampleAnswer() {
-            const p = document.getElementById('sample-answer');
-            p.style.display = 'block';
-            p.textContent = "Example: Ich habe einen Bruder. Er ist groß. Meine Oma ist sehr alt und nett.";
-        }
-
-        // --- RUN ON LOAD ---
-        window.addEventListener('DOMContentLoaded', () => {
-            initMatching('matching-game', matchingData, matchingAnswers, false);
-            initFillBlank();
-            initFlashcards();
-            initMatching('adj-matching-game', adjQuestions, adjOptions, true);
-            initMCQ();
-            initFamilyTree();
-            initPossessives();
-        });
+        // Start
+        window.onload = initApp;
 
     </script>
 </body>
