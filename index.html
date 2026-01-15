@@ -500,307 +500,20 @@ font-size: 1rem;
 <script>
 // All 10 topics with 3 sets of 5 exercises each
 const allTopics = {
-food: {
-name: "Food & Dining",
-icon: "fa-utensils",
-sets: [
-// Set 1
-[
-{type:"missing-word",sentence:"Ich hätte gern eine Flasche ___.",options:["Wasser","Haus","Auto","Stuhl"],correct:0,explanation:"'Wasser' (water) is a common drink order."},
-{type:"tts",audioText:"Die Suppe schmeckt ausgezeichnet! Können wir bitte die Rechnung haben?",topics:["Complaining","Praising food","Asking for directions","Ordering clothes"],correct:1,explanation:"The speaker is praising the soup and asking for the bill."},
-{type:"missing-word",sentence:"Was kostet das ___?",options:["Menü","Mond","Maus","Mütze"],correct:0,explanation:"'Menü' means menu in a restaurant context."},
-{type:"tts",audioText:"Ich bin Vegetarier. Haben Sie vegetarische Gerichte?",topics:["Dietary needs","Allergies","Cooking at home","Fast food"],correct:0,explanation:"The speaker is asking about vegetarian options."},
-{type:"missing-word",sentence:"Ich möchte gerne ___ bestellen.",options:["ein Bier","ein Buch","ein Bett","ein Boot"],correct:0,explanation:"'Ein Bier' (a beer) is a common order in German-speaking countries."}
-],
-// Set 2
-[
-{type:"missing-word",sentence:"Kann ich bitte die ___ sehen?",options:["Speisekarte","Schere","Schlange","Schüssel"],correct:0,explanation:"'Speisekarte' means menu."},
-{type:"tts",audioText:"Ich hätte gerne das Rindersteak medium gegart, bitte.",topics:["Ordering meat","Asking for drinks","Requesting dessert","Complaining about service"],correct:0,explanation:"The speaker is ordering a steak cooked medium."},
-{type:"missing-word",sentence:"Das Essen war sehr ___.",options:["lecker","langsam","laut","leer"],correct:0,explanation:"'Lecker' means delicious."},
-{type:"tts",audioText:"Haben Sie heute Mittag ein Mittagsmenü?",topics:["Asking about lunch specials","Checking opening hours","Requesting takeout","Asking for reservations"],correct:0,explanation:"The speaker is asking about lunch specials."},
-{type:"missing-word",sentence:"Ich bin ___ und esse kein Fleisch.",options:["vegetarisch","verrückt","verloren","verärgert"],correct:0,explanation:"'Vegetarisch' means vegetarian."}
-],
-// Set 3
-[
-{type:"missing-word",sentence:"Noch ein ___ Kaffee, bitte.",options:["Tasse","Tisch","Tuch","Topf"],correct:0,explanation:"'Tasse' means cup."},
-{type:"tts",audioText:"Die Vorspeise war fantastisch! Ich nehme das gleiche Hauptgericht wie gestern.",topics:["Praising food","Complaining","Asking for recommendations","Requesting the bill"],correct:0,explanation:"The speaker is praising the appetizer and ordering the same main course."},
-{type:"missing-word",sentence:"Die Rechnung, ___!",options:["bitte","besser","billig","bunt"],correct:0,explanation:"'Bitte' means please."},
-{type:"tts",audioText:"Entschuldigung, aber in meiner Suppe schwimmt eine Fliege!",topics:["Complaining about food","Ordering dessert","Asking for water","Requesting a table"],correct:0,explanation:"The speaker is complaining about finding a fly in their soup."},
-{type:"missing-word",sentence:"Ich möchte ein Stück ___ bestellen.",options:["Torte","Tasche","Tür","Treppe"],correct:0,explanation:"'Torte' means cake."}
-]
-]
-},
-travel: {
-name: "Travel & Directions",
-icon: "fa-plane",
-sets: [
-// Set 1
-[
-{type:"missing-word",sentence:"Wo ist der nächste ___?",options:["Bahnhof","Banane","Bär","Buch"],correct:0,explanation:"'Bahnhof' means train station."},
-{type:"tts",audioText:"Entschuldigung, wie komme ich zum Museum? Ist es weit von hier?",topics:["Asking for directions","Buying tickets","Checking into a hotel","Renting a car"],correct:0,explanation:"The speaker is asking how to get to the museum."},
-{type:"missing-word",sentence:"Ich brauche ein ___ für drei Nächte.",options:["Zimmer","Zucker","Zeitung","Zug"],correct:0,explanation:"'Zimmer' means room (in a hotel)."},
-{type:"tts",audioText:"Der Zug nach Köln fährt von Gleis 5 ab. Achtung, bitte beeilen Sie sich!",topics:["Train announcements","Flight information","Bus schedules","Taxi services"],correct:0,explanation:"This is a train announcement about departure from platform 5."},
-{type:"missing-word",sentence:"Wie viel kostet eine Fahrkarte nach ___?",options:["Hamburg","Hund","Haus","Hand"],correct:0,explanation:"'Hamburg' is a major German city."}
-],
-// Set 2
-[
-{type:"missing-word",sentence:"Können Sie mir auf der Karte ___ zeigen?",options:["zeigen","ziehen","zählen","zahlen"],correct:0,explanation:"'Zeigen' means to show."},
-{type:"tts",audioText:"Ich möchte ein einfaches Zimmer mit Dusche und Frühstück buchen.",topics:["Booking a hotel room","Renting a car","Buying souvenirs","Asking for tourist info"],correct:0,explanation:"The speaker is booking a simple room with shower and breakfast."},
-{type:"missing-word",sentence:"Der Flug ___ pünktlich.",options:["startet","steht","steigt","steuert"],correct:0,explanation:"'Startet' means departs (for flights)."},
-{type:"tts",audioText:"Gibt es hier in der Nähe eine Touristeninformation?",topics:["Asking for tourist info","Looking for restaurants","Finding public transport","Locating pharmacies"],correct:0,explanation:"The speaker is asking for a tourist information office."},
-{type:"missing-word",sentence:"Ich habe meinen ___ verloren.",options:["Reisepass","Regenschirm","Rucksack","Ring"],correct:0,explanation:"'Reisepass' means passport."}
-],
-// Set 3
-[
-{type:"missing-word",sentence:"Fahren Sie geradeaus bis zur ___ Ampel.",options:["nächsten","neuen","netten","nassen"],correct:0,explanation:"'Nächsten' means next."},
-{type:"tts",audioText:"Entschuldigung, wo kann ich mein Gepäck aufbewahren?",topics:["Asking about luggage storage","Finding restrooms","Locating currency exchange","Requesting wheelchair assistance"],correct:0,explanation:"The speaker is asking where to store their luggage."},
-{type:"missing-word",sentence:"Ich möchte ein ___ zur Altstadt kaufen.",options:["Ticket","Tisch","Tuch","Topf"],correct:0,explanation:"'Ticket' is commonly used in German for public transport."},
-{type:"tts",audioText:"Der Bus fährt alle 15 Minuten vom Hauptbahnhof ab.",topics:["Bus schedules","Train delays","Flight cancellations","Taxi availability"],correct:0,explanation:"The sentence describes bus frequency from the main station."},
-{type:"missing-word",sentence:"Wie komme ich zum ___ Flughafen?",options:["nächsten","neuen","netten","nassen"],correct:0,explanation:"'Nächsten' means nearest."}
-]
-]
-},
-family: {
-name: "Family & Friends",
-icon: "fa-users",
-sets: [
-// Set 1
-[
-{type:"missing-word",sentence:"Das ist meine ___.",options:["Schwester","Schule","Schuh","Schlange"],correct:0,explanation:"'Schwester' means sister."},
-{type:"tts",audioText:"Mein Vater arbeitet als Arzt und meine Mutter ist Lehrerin.",topics:["Professions","Hobbies","Daily routine","Family members"],correct:3,explanation:"The speaker is talking about their parents (family members)."},
-{type:"missing-word",sentence:"Hast du ___?",options:["Geschwister","Geschenke","Gitarre","Garten"],correct:0,explanation:"'Geschwister' means siblings."},
-{type:"tts",audioText:"Meine Großeltern wohnen in einem kleinen Dorf in Bayern.",topics:["Family members","Travel plans","Housing","Weather"],correct:0,explanation:"The speaker is talking about their grandparents (family members)."},
-{type:"missing-word",sentence:"Wir feiern morgen ___ Geburtstag.",options:["Omas","Obst","Ofen","Ohr"],correct:0,explanation:"'Omas Geburtstag' means grandmother's birthday."}
-],
-// Set 2
-[
-{type:"missing-word",sentence:"Mein ___ heißt Lukas.",options:["Bruder","Brief","Brot","Buch"],correct:0,explanation:"'Bruder' means brother."},
-{type:"tts",audioText:"Meine Cousine kommt nächsten Monat aus Österreich zu Besuch.",topics:["Family visits","Travel plans","Work meetings","School events"],correct:0,explanation:"The speaker is talking about their cousin visiting."},
-{type:"missing-word",sentence:"Meine Eltern wohnen in ___ Haus.",options:["einem","einen","einer","eines"],correct:0,explanation:"'Einem' is the dative case for neuter nouns like 'Haus'."},
-{type:"tts",audioText:"Ich habe zwei Töchter und einen Sohn.",topics:["Family composition","Work colleagues","Pet ownership","Friend groups"],correct:0,explanation:"The speaker is describing their children."},
-{type:"missing-word",sentence:"Mein ___ ist verheiratet.",options:["Onkel","Ofen","Ohr","Ort"],correct:0,explanation:"'Onkel' means uncle."}
-],
-// Set 3
-[
-{type:"missing-word",sentence:"Meine ___ arbeitet in einer Bank.",options:["Tante","Tasche","Tür","Treppe"],correct:0,explanation:"'Tante' means aunt."},
-{type:"tts",audioText:"Wir treffen uns jeden Sonntag mit der ganzen Familie zum Abendessen.",topics:["Family traditions","Work schedules","Hobby clubs","School activities"],correct:0,explanation:"The speaker describes a weekly family dinner tradition."},
-{type:"missing-word",sentence:"Mein ___ ist fünf Jahre alt.",options:["Neffe","Nacht","Name","Norden"],correct:0,explanation:"'Neffe' means nephew."},
-{type:"tts",audioText:"Meine Schwiegereltern kommen morgen zu Besuch.",topics:["In-law visits","Friend gatherings","Business meetings","Doctor appointments"],correct:0,explanation:"The speaker mentions their in-laws visiting."},
-{type:"missing-word",sentence:"Ich habe keine ___ mehr.",options:["Großeltern","Geschenke","Gitarre","Garten"],correct:0,explanation:"'Großeltern' means grandparents."}
-]
-]
-},
-shopping: {
-name: "Shopping",
-icon: "fa-shopping-bag",
-sets: [
-// Set 1
-[
-{type:"missing-word",sentence:"Wie viel kostet diese ___?",options:["Jacke","Jahr","Junge","Joghurt"],correct:0,explanation:"'Jacke' means jacket (an item of clothing)."},
-{type:"tts",audioText:"Haben Sie diese Schuhe auch in Größe 42?",topics:["Asking for size","Returning items","Asking for price","Opening hours"],correct:0,explanation:"The speaker is asking if shoes are available in size 42."},
-{type:"missing-word",sentence:"Ich möchte diese Hose ___.",options:["umtauschen","unterrichten","überlegen","üben"],correct:0,explanation:"'Umtauschen' means to exchange (return an item)."},
-{type:"tts",audioText:"Die Kasse ist an der linken Seite des Geschäfts.",topics:["Finding the cashier","Asking for discounts","Product availability","Store layout"],correct:0,explanation:"The speaker is being told where the cashier is located."},
-{type:"missing-word",sentence:"Gibt es hier einen ___?",options:["Rabatt","Regen","Rucksack","Restaurant"],correct:0,explanation:"'Rabatt' means discount."}
-],
-// Set 2
-[
-{type:"missing-word",sentence:"Kann ich mit ___ bezahlen?",options:["Karte","Käse","Kiste","Kugel"],correct:0,explanation:"'Karte' means card (credit/debit)."},
-{type:"tts",audioText:"Entschuldigung, wo finde ich die Damenabteilung?",topics:["Finding departments","Asking for restrooms","Locating exits","Requesting assistance"],correct:0,explanation:"The speaker is asking for the women's department."},
-{type:"missing-word",sentence:"Das ist zu ___.",options:["teuer","toll","traurig","treu"],correct:0,explanation:"'Teuer' means expensive."},
-{type:"tts",audioText:"Haben Sie dieses Kleid auch in Blau?",topics:["Asking for colors","Checking sizes","Requesting discounts","Inquiring about materials"],correct:0,explanation:"The speaker is asking if the dress comes in blue."},
-{type:"missing-word",sentence:"Ich suche ein Geschenk für meine ___.",options:["Mutter","Mond","Maus","Mütze"],correct:0,explanation:"'Mutter' means mother."}
-],
-// Set 3
-[
-{type:"missing-word",sentence:"Wo ist die ___?",options:["Umkleidekabine","Universität","Uhr","Übung"],correct:0,explanation:"'Umkleidekabine' means fitting room."},
-{type:"tts",audioText:"Können Sie mir helfen? Ich suche nach einem schwarzen Ledermantel.",topics:["Asking for assistance","Complaining about service","Returning items","Checking prices"],correct:0,explanation:"The speaker is asking for help finding a black leather coat."},
-{type:"missing-word",sentence:"Ich nehme die ___ Farbe.",options:["andere","alte","arme","alle"],correct:0,explanation:"'Andere' means other."},
-{type:"tts",audioText:"Die Öffnungszeiten sind von 9 bis 20 Uhr.",topics:["Store hours","Sale periods","Delivery times","Return policies"],correct:0,explanation:"The sentence states store opening hours."},
-{type:"missing-word",sentence:"Kann ich eine ___ bekommen?",options:["Quittung","Qualle","Quelle","Quark"],correct:0,explanation:"'Quittung' means receipt."}
-]
-]
-},
-hobbies: {
-name: "Hobbies & Leisure",
-icon: "fa-film",
-sets: [
-// Set 1
-[
-{type:"missing-word",sentence:"Ich spiele gern ___.",options:["Klavier","Käse","Kiste","Kugel"],correct:0,explanation:"'Klavier' means piano."},
-{type:"tts",audioText:"Am Samstag gehe ich ins Kino, um den neuen Marvel-Film zu sehen.",topics:["Going to the movies","Reading books","Playing sports","Cooking"],correct:0,explanation:"The speaker is going to the cinema to watch a movie."},
-{type:"missing-word",sentence:"Mein Hobby ist ___.",options:["Fotografieren","Fenster","Fisch","Feder"],correct:0,explanation:"'Fotografieren' means photography."},
-{type:"tts",audioText:"Ich lese jeden Abend vor dem Schlafengehen ein Buch.",topics:["Reading","Writing","Painting","Dancing"],correct:0,explanation:"The speaker reads a book every evening before bed."},
-{type:"missing-word",sentence:"Am Wochenende gehe ich oft ___.",options:["wandern","warten","waschen","wünschen"],correct:0,explanation:"'Wandern' means hiking."}
-],
-// Set 2
-[
-{type:"missing-word",sentence:"Ich spiele Fußball im ___.",options:["Verein","Verkehr","Verstand","Vertrag"],correct:0,explanation:"'Verein' means club/team."},
-{type:"tts",audioText:"Meine Lieblingsband spielt heute Abend im Park.",topics:["Attending concerts","Watching sports","Visiting museums","Going to restaurants"],correct:0,explanation:"The speaker mentions their favorite band playing in the park."},
-{type:"missing-word",sentence:"Ich gehe gern ___.",options:["schwimmen","schreiben","schließen","schneiden"],correct:0,explanation:"'Schwimmen' means swimming."},
-{type:"tts",audioText:"Am Sonntag backe ich immer Kuchen für meine Familie.",topics:["Baking","Gardening","Painting","Playing video games"],correct:0,explanation:"The speaker bakes cake every Sunday for their family."},
-{type:"missing-word",sentence:"Ich sammle alte ___.",options:["Münzen","Mützen","Mäuse","Möbel"],correct:0,explanation:"'Münzen' means coins."}
-],
-// Set 3
-[
-{type:"missing-word",sentence:"Ich fotografiere gern ___.",options:["Landschaften","Löffel","Lokale","Lieder"],correct:0,explanation:"'Landschaften' means landscapes."},
-{type:"tts",audioText:"Jeden Donnerstag gehe ich zum Tanzen in die Stadthalle.",topics:["Dancing","Swimming","Reading","Cooking"],correct:0,explanation:"The speaker goes dancing every Thursday."},
-{type:"missing-word",sentence:"Ich spiele ___ Gitarre.",options:["die","der","das","den"],correct:0,explanation:"'Die' is the correct article for 'Gitarre'."},
-{type:"tts",audioText:"In meiner Freizeit male ich gerne Aquarellbilder.",topics:["Painting","Singing","Running","Shopping"],correct:0,explanation:"The speaker paints watercolors in their free time."},
-{type:"missing-word",sentence:"Ich höre gern ___ Musik.",options:["klassische","kalte","kaputte","kurze"],correct:0,explanation:"'Klassische' means classical."}
-]
-]
-},
-animals: {
-name: "Animals & Nature",
-icon: "fa-paw",
-sets: [
-// Set 1
-[
-{type:"missing-word",sentence:"Der ___ bellt laut.",options:["Hund","Hut","Haus","Hand"],correct:0,explanation:"'Hund' means dog."},
-{type:"tts",audioText:"Im Wald gibt es viele Tiere wie Rehe, Füchse und Eichhörnchen.",topics:["City life","Forest animals","Ocean creatures","Farm animals"],correct:1,explanation:"The sentence describes forest animals."},
-{type:"missing-word",sentence:"Die ___ fliegt hoch am Himmel.",options:["Vogel","Vase","Vogt","Voll"],correct:0,explanation:"'Vogel' means bird."},
-{type:"tts",audioText:"Im Frühling blühen die Blumen und die Bäume bekommen neue Blätter.",topics:["Seasons","Weather","Gardening","Nature cycles"],correct:3,explanation:"The sentence describes natural cycles in spring."},
-{type:"missing-word",sentence:"Ich sehe einen ___ im Zoo.",options:["Löwe","Löffel","Lokal","Lied"],correct:0,explanation:"'Löwe' means lion."}
-],
-// Set 2
-[
-{type:"missing-word",sentence:"Die ___ macht Muh.",options:["Kuh","Katze","Kiste","Kugel"],correct:0,explanation:"'Kuh' means cow."},
-{type:"tts",audioText:"Am Strand kann man oft Möwen und Krabben sehen.",topics:["Beach wildlife","Forest animals","Mountain creatures","Desert species"],correct:0,explanation:"The sentence describes animals found at the beach."},
-{type:"missing-word",sentence:"Der ___ klettert auf Bäume.",options:["Affe","Apfel","Arm","Auge"],correct:0,explanation:"'Affe' means monkey."},
-{type:"tts",audioText:"Im Herbst fallen die Blätter von den Bäumen und die Tage werden kürzer.",topics:["Autumn changes","Winter preparations","Spring renewal","Summer activities"],correct:0,explanation:"The sentence describes autumn changes."},
-{type:"missing-word",sentence:"Die ___ summt um die Blumen.",options:["Biene","Banane","Bär","Buch"],correct:0,explanation:"'Biene' means bee."}
-],
-// Set 3
-[
-{type:"missing-word",sentence:"Der ___ brüllt laut.",options:["Tiger","Tisch","Tuch","Topf"],correct:0,explanation:"'Tiger' means tiger."},
-{type:"tts",audioText:"Im Winter ziehen viele Vögel in wärmere Länder.",topics:["Bird migration","Hibernation","Plant growth","Ocean currents"],correct:0,explanation:"The sentence describes bird migration in winter."},
-{type:"missing-word",sentence:"Die ___ hat lange Ohren.",options:["Hasen","Hose","Haus","Hand"],correct:0,explanation:"'Hasen' means rabbits."},
-{type:"tts",audioText:"Im Frühling schlüpfen die Küken aus ihren Eiern.",topics:["Spring hatching","Summer breeding","Autumn harvesting","Winter sleeping"],correct:0,explanation:"The sentence describes chicks hatching in spring."},
-{type:"missing-word",sentence:"Der ___ lebt im Dschungel.",options:["Papagei","Papier","Pferd","Pflanze"],correct:0,explanation:"'Papagei' means parrot."}
-]
-]
-},
-work: {
-name: "Work & Office",
-icon: "fa-briefcase",
-sets: [
-// Set 1
-[
-{type:"missing-word",sentence:"Ich habe ein ___ mit meinem Chef.",options:["Meeting","Messer","Mantel","Mond"],correct:0,explanation:"'Meeting' is commonly used in German office contexts."},
-{type:"tts",audioText:"Könnten Sie mir bitte die Präsentation per E-Mail schicken?",topics:["Making requests","Complaining","Socializing","Giving orders"],correct:0,explanation:"The speaker is politely requesting a presentation via email."},
-{type:"missing-word",sentence:"Mein ___ ist sehr beschäftigt heute.",options:["Kollege","Kuchen","Koffer","Kino"],correct:0,explanation:"'Kollege' means colleague."},
-{type:"tts",audioText:"Die Firma sucht neue Mitarbeiter für die Marketing-Abteilung.",topics:["Job hunting","Company news","Office gossip","Work complaints"],correct:0,explanation:"The sentence is about job openings in marketing."},
-{type:"missing-word",sentence:"Ich muss einen ___ schreiben.",options:["Bericht","Ball","Bett","Boot"],correct:0,explanation:"'Bericht' means report."}
-],
-// Set 2
-[
-{type:"missing-word",sentence:"Ich arbeite als ___.",options:["Ingenieur","Igel","Insel","Idee"],correct:0,explanation:"'Ingenieur' means engineer."},
-{type:"tts",audioText:"Könnten Sie das bitte wiederholen? Ich habe Sie nicht verstanden.",topics:["Asking for clarification","Making complaints","Giving instructions","Sharing personal news"],correct:0,explanation:"The speaker is asking for repetition due to misunderstanding."},
-{type:"missing-word",sentence:"Die ___ beginnt um 9 Uhr.",options:["Arbeit","Arzt","Arm","Auge"],correct:0,explanation:"'Arbeit' means work."},
-{type:"tts",audioText:"Ich muss Überstunden machen, weil das Projekt morgen fertig sein muss.",topics:["Working overtime","Taking vacation","Quitting job","Asking for raise"],correct:0,explanation:"The speaker mentions working overtime to meet a deadline."},
-{type:"missing-word",sentence:"Ich brauche einen neuen ___.",options:["Computer","Cousin","Creme","Cello"],correct:0,explanation:"'Computer' is the same in German."}
-],
-// Set 3
-[
-{type:"missing-word",sentence:"Mein ___ ist krank.",options:["Chef","Chor","Chips","Chemie"],correct:0,explanation:"'Chef' means boss."},
-{type:"tts",audioText:"Könnten Sie mir bitte helfen? Ich verstehe diese Excel-Tabelle nicht.",topics:["Asking for help","Complaining about software","Requesting training","Reporting bugs"],correct:0,explanation:"The speaker is asking for help with an Excel spreadsheet."},
-{type:"missing-word",sentence:"Ich habe heute ___ frei.",options:["Urlaub","Uhr","Universität","Übung"],correct:0,explanation:"'Urlaub' means vacation."},
-{type:"tts",audioText:"Die Konferenz findet nächste Woche im Hauptquartier statt.",topics:["Conference announcements","Team meetings","Client visits","Training sessions"],correct:0,explanation:"The sentence announces a conference at headquarters."},
-{type:"missing-word",sentence:"Ich muss eine ___ senden.",options:["E-Mail","Esel","Erdbeere","Ecke"],correct:0,explanation:"'E-Mail' is commonly used in German."}
-]
-]
-},
-health: {
-name: "Health & Body",
-icon: "fa-heartbeat",
-sets: [
-// Set 1
-[
-{type:"missing-word",sentence:"Mein ___ tut weh.",options:["Kopf","Korb","Koch","Kohl"],correct:0,explanation:"'Kopf' means head."},
-{type:"tts",audioText:"Ich fühle mich nicht gut. Ich habe Fieber und Halsschmerzen.",topics:["Describing symptoms","Making plans","Talking about food","Discussing weather"],correct:0,explanation:"The speaker is describing illness symptoms."},
-{type:"missing-word",sentence:"Nehmen Sie ___ Tabletten dreimal täglich.",options:["diese","dieser","dieses","diesen"],correct:0,explanation:"'Diese' is the correct demonstrative pronoun for plural 'Tabletten'."},
-{type:"tts",audioText:"Sport ist gut für die Gesundheit. Ich gehe jeden Tag joggen.",topics:["Exercise benefits","Diet advice","Medical procedures","Sleep habits"],correct:0,explanation:"The speaker talks about exercise benefits."},
-{type:"missing-word",sentence:"Ich gehe zum ___.",options:["Arzt","Auto","Apfel","Auge"],correct:0,explanation:"'Arzt' means doctor."}
-],
-// Set 2
-[
-{type:"missing-word",sentence:"Ich habe starke ___ Schmerzen.",options:["Bauch","Buch","Bett","Boot"],correct:0,explanation:"'Bauch' means stomach."},
-{type:"tts",audioText:"Ich brauche ein Rezept für Antibiotika.",topics:["Requesting medication","Asking for test results","Scheduling appointments","Discussing diet"],correct:0,explanation:"The speaker needs a prescription for antibiotics."},
-{type:"missing-word",sentence:"Mein ___ pocht.",options:["Herz","Hemd","Hund","Haus"],correct:0,explanation:"'Herz' means heart."},
-{type:"tts",audioText:"Ich sollte mehr Wasser trinken und weniger Kaffee.",topics:["Hydration advice","Sleep recommendations","Exercise routines","Medication schedules"],correct:0,explanation:"The speaker discusses drinking more water and less coffee."},
-{type:"missing-word",sentence:"Ich habe einen ___ Termin.",options:["Arzt","Auto","Apfel","Auge"],correct:0,explanation:"'Arzttermin' means doctor's appointment."}
-],
-// Set 3
-[
-{type:"missing-word",sentence:"Mein ___ juckt.",options:["Arm","Apfel","Auto","Auge"],correct:0,explanation:"'Arm' means arm."},
-{type:"tts",audioText:"Ich muss meine Medikamente um 8 Uhr morgens nehmen.",topics:["Medication schedule","Diet plan","Exercise routine","Sleep schedule"],correct:0,explanation:"The speaker mentions taking medication at 8 AM."},
-{type:"missing-word",sentence:"Ich fühle mich ___.",options:["müde","mild","mager","munter"],correct:0,explanation:"'Müde' means tired."},
-{type:"tts",audioText:"Ich habe seit zwei Tagen Durchfall und Erbrechen.",topics:["Describing severe symptoms","Reporting minor aches","Discussing allergies","Talking about sleep"],correct:0,explanation:"The speaker describes severe gastrointestinal symptoms."},
-{type:"missing-word",sentence:"Ich brauche ___ Ruhe.",options:["mehr","mein","meist","mitten"],correct:0,explanation:"'Mehr' means more."}
-]
-]
-},
-school: {
-name: "School & Education",
-icon: "fa-graduation-cap",
-sets: [
-// Set 1
-[
-{type:"missing-word",sentence:"Die ___ beginnt um 8 Uhr.",options:["Schule","Schuh","Schlange","Schüssel"],correct:0,explanation:"'Schule' means school."},
-{type:"tts",audioText:"Für die Prüfung müssen wir Kapitel 1 bis 5 lernen.",topics:["Exam preparation","Homework complaints","Teacher praise","Classroom rules"],correct:0,explanation:"The speaker is talking about exam preparation."},
-{type:"missing-word",sentence:"Ich habe eine gute ___ in Mathe bekommen.",options:["Note","Nase","Nacht","Nummer"],correct:0,explanation:"'Note' means grade/mark."},
-{type:"tts",audioText:"In der Pause spielen wir Fußball auf dem Schulhof.",topics:["Recess activities","Classroom lessons","Homework","After-school clubs"],correct:0,explanation:"The sentence describes recess activities."},
-{type:"missing-word",sentence:"Mein ___ hilft mir bei den Hausaufgaben.",options:["Lehrer","Löffel","Lokal","Lied"],correct:0,explanation:"'Lehrer' means teacher."}
-],
-// Set 2
-[
-{type:"missing-word",sentence:"Ich gehe in die ___ Klasse.",options:["achte","alte","arme","alle"],correct:0,explanation:"'Achte' means eighth (as in 8th grade)."},
-{type:"tts",audioText:"Die Hausaufgaben für morgen sind auf Seite 45, Aufgabe 3.",topics:["Homework assignments","Test announcements","Field trip details","Club meeting times"],correct:0,explanation:"The speaker gives homework instructions."},
-{type:"missing-word",sentence:"Wir haben heute ___ Unterricht.",options:["Musik","Mutter","Mund","Maus"],correct:0,explanation:"'Musik' means music."},
-{type:"tts",audioText:"Die Klassenarbeit in Geschichte war sehr schwer.",topics:["Test difficulty","Homework load","Teacher behavior","Classroom environment"],correct:0,explanation:"The speaker comments on a difficult history test."},
-{type:"missing-word",sentence:"Ich brauche ein neues ___ Heft.",options:["Mathe","Mutter","Mund","Maus"],correct:0,explanation:"'Mathe' means math."}
-],
-// Set 3
-[
-{type:"missing-word",sentence:"Die ___ klingelt um 12 Uhr.",options:["Pause","Puppe","Pfanne","Pflanze"],correct:0,explanation:"'Pause' means break/recess."},
-{type:"tts",audioText:"Unser Physiklehrer erklärt die Versuche immer sehr anschaulich.",topics:["Teacher praise","Subject complaints","Homework issues","Classroom rules"],correct:0,explanation:"The speaker praises their physics teacher's explanations."},
-{type:"missing-word",sentence:"Ich lerne für die ___ Prüfung.",options:["Abschluss","Apfel","Auto","Auge"],correct:0,explanation:"'Abschlussprüfung' means final exam."},
-{type:"tts",audioText:"In der Bibliothek muss man leise sein.",topics:["Library rules","Classroom behavior","Cafeteria etiquette","Playground safety"],correct:0,explanation:"The sentence states a library rule about being quiet."},
-{type:"missing-word",sentence:"Mein ___ Fach ist Biologie.",options:["Lieblings","Langes","Lautes","Leeres"],correct:0,explanation:"'Lieblingsfach' means favorite subject."}
-]
-]
-},
-cities: {
-name: "Cities & Places",
-icon: "fa-city",
-sets: [
-// Set 1
-[
-{type:"missing-word",sentence:"Berlin ist die ___ von Deutschland.",options:["Hauptstadt","Hauptbahnhof","Hauptstraße","Haupttor"],correct:0,explanation:"'Hauptstadt' means capital city."},
-{type:"tts",audioText:"In München gibt es das berühmte Oktoberfest und viele schöne Parks.",topics:["City attractions","Country comparisons","Rural life","Transport systems"],correct:0,explanation:"The sentence describes attractions in Munich."},
-{type:"missing-word",sentence:"Das ___ ist sehr alt und historisch.",options:["Schloss","Schuh","Schlange","Schüssel"],correct:0,explanation:"'Schloss' means castle."},
-{type:"tts",audioText:"Die Altstadt von Heidelberg ist bekannt für ihre romantische Atmosphäre.",topics:["Historic districts","Modern architecture","Industrial areas","Suburban life"],correct:0,explanation:"The sentence describes Heidelberg's historic old town."},
-{type:"missing-word",sentence:"Ich besuche das ___ am Wochenende.",options:["Museum","Mond","Maus","Mütze"],correct:0,explanation:"'Museum' is the same in German."}
-],
-// Set 2
-[
-{type:"missing-word",sentence:"Hamburg hat einen großen ___ Hafen.",options:["Seehafen","Schuh","Schlange","Schüssel"],correct:0,explanation:"'Seehafen' means seaport."},
-{type:"tts",audioText:"In Frankfurt gibt es viele Wolkenkratzer und die berühmte Skyline.",topics:["City skylines","Historical sites","Natural landscapes","Rural villages"],correct:0,explanation:"The sentence describes Frankfurt's modern skyline."},
-{type:"missing-word",sentence:"Köln ist berühmt für seinen ___ Dom.",options:["Kölner","Kalter","Kleiner","Krummer"],correct:0,explanation:"'Kölner Dom' is the famous Cologne Cathedral."},
-{type:"tts",audioText:"Dresden wird oft als 'Elbflorenz' bezeichnet wegen seiner schönen Architektur.",topics:["Architectural nicknames","Industrial cities","Mountain towns","Coastal resorts"],correct:0,explanation:"The sentence explains Dresden's nickname 'Elbflorenz'."},
-{type:"missing-word",sentence:"In ___ gibt es die berühmte Frauenkirche.",options:["Dresden","Dorf","Dach","Decke"],correct:0,explanation:"The Frauenkirche is a famous church in Dresden."}
-],
-// Set 3
-[
-{type:"missing-word",sentence:"Die ___ ist die längste Straße in Berlin.",options:["Unter den Linden","Unterhemd","Unterlage","Unterkunft"],correct:0,explanation:"'Unter den Linden' is a famous boulevard in Berlin."},
-{type:"tts",audioText:"Der Schwarzwald ist eine beliebte Urlaubsregion im Südwesten Deutschlands.",topics:["Tourist regions","Urban centers","Industrial zones","Coastal areas"],correct:0,explanation:"The sentence describes the Black Forest as a tourist region."},
-{type:"missing-word",sentence:"Der ___ See ist der größte See in Deutschland.",options:["Bodensee","Boden","Boot","Buch"],correct:0,explanation:"'Bodensee' is Lake Constance, the largest lake in Germany."},
-{type:"tts",audioText:"Die Zugspitze ist der höchste Berg Deutschlands und liegt in den Alpen.",topics:["Mountains","Rivers","Forests","Deserts"],correct:0,explanation:"The sentence identifies Germany's highest mountain."},
-{type:"missing-word",sentence:"Der Rhein ist ein wichtiger ___ in Europa.",options:["Fluss","Fisch","Felsen","Feld"],correct:0,explanation:"'Fluss' means river."}
-]
-]
-}
+food: {name:"Food & Dining",icon:"fa-utensils",sets:[[{type:"missing-word",sentence:"Ich hätte gern eine Flasche ___.",options:["Wasser","Haus","Auto","Stuhl"],correct:0,explanation:"'Wasser' (water) is a common drink order."},{type:"tts",audioText:"Die Suppe schmeckt ausgezeichnet! Können wir bitte die Rechnung haben?",topics:["Complaining","Praising food","Asking for directions","Ordering clothes"],correct:1,explanation:"The speaker is praising the soup and asking for the bill."},{type:"missing-word",sentence:"Was kostet das ___?",options:["Menü","Mond","Maus","Mütze"],correct:0,explanation:"'Menü' means menu in a restaurant context."},{type:"tts",audioText:"Ich bin Vegetarier. Haben Sie vegetarische Gerichte?",topics:["Dietary needs","Allergies","Cooking at home","Fast food"],correct:0,explanation:"The speaker is asking about vegetarian options."},{type:"missing-word",sentence:"Ich möchte gerne ___ bestellen.",options:["ein Bier","ein Buch","ein Bett","ein Boot"],correct:0,explanation:"'Ein Bier' (a beer) is a common order in German-speaking countries."}],[{type:"missing-word",sentence:"Kann ich bitte die ___ sehen?",options:["Speisekarte","Schere","Schlange","Schüssel"],correct:0,explanation:"'Speisekarte' means menu."},{type:"tts",audioText:"Ich hätte gerne das Rindersteak medium gegart, bitte.",topics:["Ordering meat","Asking for drinks","Requesting dessert","Complaining about service"],correct:0,explanation:"The speaker is ordering a steak cooked medium."},{type:"missing-word",sentence:"Das Essen war sehr ___.",options:["lecker","langsam","laut","leer"],correct:0,explanation:"'Lecker' means delicious."},{type:"tts",audioText:"Haben Sie heute Mittag ein Mittagsmenü?",topics:["Asking about lunch specials","Checking opening hours","Requesting takeout","Asking for reservations"],correct:0,explanation:"The speaker is asking about lunch specials."},{type:"missing-word",sentence:"Ich bin ___ und esse kein Fleisch.",options:["vegetarisch","verrückt","verloren","verärgert"],correct:0,explanation:"'Vegetarisch' means vegetarian."}],[{type:"missing-word",sentence:"Noch ein ___ Kaffee, bitte.",options:["Tasse","Tisch","Tuch","Topf"],correct:0,explanation:"'Tasse' means cup."},{type:"tts",audioText:"Die Vorspeise war fantastisch! Ich nehme das gleiche Hauptgericht wie gestern.",topics:["Praising food","Complaining","Asking for recommendations","Requesting the bill"],correct:0,explanation:"The speaker is praising the appetizer and ordering the same main course."},{type:"missing-word",sentence:"Die Rechnung, ___!",options:["bitte","besser","billig","bunt"],correct:0,explanation:"'Bitte' means please."},{type:"tts",audioText:"Entschuldigung, aber in meiner Suppe schwimmt eine Fliege!",topics:["Complaining about food","Ordering dessert","Asking for water","Requesting a table"],correct:0,explanation:"The speaker is complaining about finding a fly in their soup."},{type:"missing-word",sentence:"Ich möchte ein Stück ___ bestellen.",options:["Torte","Tasche","Tür","Treppe"],correct:0,explanation:"'Torte' means cake."}]]},
+travel: {name:"Travel & Directions",icon:"fa-plane",sets:[[{type:"missing-word",sentence:"Wo ist der nächste ___?",options:["Bahnhof","Banane","Bär","Buch"],correct:0,explanation:"'Bahnhof' means train station."},{type:"tts",audioText:"Entschuldigung, wie komme ich zum Museum? Ist es weit von hier?",topics:["Asking for directions","Buying tickets","Checking into a hotel","Renting a car"],correct:0,explanation:"The speaker is asking how to get to the museum."},{type:"missing-word",sentence:"Ich brauche ein ___ für drei Nächte.",options:["Zimmer","Zucker","Zeitung","Zug"],correct:0,explanation:"'Zimmer' means room (in a hotel)."},{type:"tts",audioText:"Der Zug nach Köln fährt von Gleis 5 ab. Achtung, bitte beeilen Sie sich!",topics:["Train announcements","Flight information","Bus schedules","Taxi services"],correct:0,explanation:"This is a train announcement about departure from platform 5."},{type:"missing-word",sentence:"Wie viel kostet eine Fahrkarte nach ___?",options:["Hamburg","Hund","Haus","Hand"],correct:0,explanation:"'Hamburg' is a major German city."}],[{type:"missing-word",sentence:"Können Sie mir auf der Karte ___ zeigen?",options:["zeigen","ziehen","zählen","zahlen"],correct:0,explanation:"'Zeigen' means to show."},{type:"tts",audioText:"Ich möchte ein einfaches Zimmer mit Dusche und Frühstück buchen.",topics:["Booking a hotel room","Renting a car","Buying souvenirs","Asking for tourist info"],correct:0,explanation:"The speaker is booking a simple room with shower and breakfast."},{type:"missing-word",sentence:"Der Flug ___ pünktlich.",options:["startet","steht","steigt","steuert"],correct:0,explanation:"'Startet' means departs (for flights)."},{type:"tts",audioText:"Gibt es hier in der Nähe eine Touristeninformation?",topics:["Asking for tourist info","Looking for restaurants","Finding public transport","Locating pharmacies"],correct:0,explanation:"The speaker is asking for a tourist information office."},{type:"missing-word",sentence:"Ich habe meinen ___ verloren.",options:["Reisepass","Regenschirm","Rucksack","Ring"],correct:0,explanation:"'Reisepass' means passport."}],[{type:"missing-word",sentence:"Fahren Sie geradeaus bis zur ___ Ampel.",options:["nächsten","neuen","netten","nassen"],correct:0,explanation:"'Nächsten' means next."},{type:"tts",audioText:"Entschuldigung, wo kann ich mein Gepäck aufbewahren?",topics:["Asking about luggage storage","Finding restrooms","Locating currency exchange","Requesting wheelchair assistance"],correct:0,explanation:"The speaker is asking where to store their luggage."},{type:"missing-word",sentence:"Ich möchte ein ___ zur Altstadt kaufen.",options:["Ticket","Tisch","Tuch","Topf"],correct:0,explanation:"'Ticket' is commonly used in German for public transport."},{type:"tts",audioText:"Der Bus fährt alle 15 Minuten vom Hauptbahnhof ab.",topics:["Bus schedules","Train delays","Flight cancellations","Taxi availability"],correct:0,explanation:"The sentence describes bus frequency from the main station."},{type:"missing-word",sentence:"Wie komme ich zum ___ Flughafen?",options:["nächsten","neuen","netten","nassen"],correct:0,explanation:"'Nächsten' means nearest."}]]},
+family: {name:"Family & Friends",icon:"fa-users",sets:[[{type:"missing-word",sentence:"Das ist meine ___.",options:["Schwester","Schule","Schuh","Schlange"],correct:0,explanation:"'Schwester' means sister."},{type:"tts",audioText:"Mein Vater arbeitet als Arzt und meine Mutter ist Lehrerin.",topics:["Professions","Hobbies","Daily routine","Family members"],correct:3,explanation:"The speaker is talking about their parents (family members)."},{type:"missing-word",sentence:"Hast du ___?",options:["Geschwister","Geschenke","Gitarre","Garten"],correct:0,explanation:"'Geschwister' means siblings."},{type:"tts",audioText:"Meine Großeltern wohnen in einem kleinen Dorf in Bayern.",topics:["Family members","Travel plans","Housing","Weather"],correct:0,explanation:"The speaker is talking about their grandparents (family members)."},{type:"missing-word",sentence:"Wir feiern morgen ___ Geburtstag.",options:["Omas","Obst","Ofen","Ohr"],correct:0,explanation:"'Omas Geburtstag' means grandmother's birthday."}],[{type:"missing-word",sentence:"Mein ___ heißt Lukas.",options:["Bruder","Brief","Brot","Buch"],correct:0,explanation:"'Bruder' means brother."},{type:"tts",audioText:"Meine Cousine kommt nächsten Monat aus Österreich zu Besuch.",topics:["Family visits","Travel plans","Work meetings","School events"],correct:0,explanation:"The speaker is talking about their cousin visiting."},{type:"missing-word",sentence:"Meine Eltern wohnen in ___ Haus.",options:["einem","einen","einer","eines"],correct:0,explanation:"'Einem' is the dative case for neuter nouns like 'Haus'."},{type:"tts",audioText:"Ich habe zwei Töchter und einen Sohn.",topics:["Family composition","Work colleagues","Pet ownership","Friend groups"],correct:0,explanation:"The speaker is describing their children."},{type:"missing-word",sentence:"Mein ___ ist verheiratet.",options:["Onkel","Ofen","Ohr","Ort"],correct:0,explanation:"'Onkel' means uncle."}],[{type:"missing-word",sentence:"Meine ___ arbeitet in einer Bank.",options:["Tante","Tasche","Tür","Treppe"],correct:0,explanation:"'Tante' means aunt."},{type:"tts",audioText:"Wir treffen uns jeden Sonntag mit der ganzen Familie zum Abendessen.",topics:["Family traditions","Work schedules","Hobby clubs","School activities"],correct:0,explanation:"The speaker describes a weekly family dinner tradition."},{type:"missing-word",sentence:"Mein ___ ist fünf Jahre alt.",options:["Neffe","Nacht","Name","Norden"],correct:0,explanation:"'Neffe' means nephew."},{type:"tts",audioText:"Meine Schwiegereltern kommen morgen zu Besuch.",topics:["In-law visits","Friend gatherings","Business meetings","Doctor appointments"],correct:0,explanation:"The speaker mentions their in-laws visiting."},{type:"missing-word",sentence:"Ich habe keine ___ mehr.",options:["Großeltern","Geschenke","Gitarre","Garten"],correct:0,explanation:"'Großeltern' means grandparents."}]]},
+shopping: {name:"Shopping",icon:"fa-shopping-bag",sets:[[{type:"missing-word",sentence:"Wie viel kostet diese ___?",options:["Jacke","Jahr","Junge","Joghurt"],correct:0,explanation:"'Jacke' means jacket (an item of clothing)."},{type:"tts",audioText:"Haben Sie diese Schuhe auch in Größe 42?",topics:["Asking for size","Returning items","Asking for price","Opening hours"],correct:0,explanation:"The speaker is asking if shoes are available in size 42."},{type:"missing-word",sentence:"Ich möchte diese Hose ___.",options:["umtauschen","unterrichten","überlegen","üben"],correct:0,explanation:"'Umtauschen' means to exchange (return an item)."},{type:"tts",audioText:"Die Kasse ist an der linken Seite des Geschäfts.",topics:["Finding the cashier","Asking for discounts","Product availability","Store layout"],correct:0,explanation:"The speaker is being told where the cashier is located."},{type:"missing-word",sentence:"Gibt es hier einen ___?",options:["Rabatt","Regen","Rucksack","Restaurant"],correct:0,explanation:"'Rabatt' means discount."}],[{type:"missing-word",sentence:"Kann ich mit ___ bezahlen?",options:["Karte","Käse","Kiste","Kugel"],correct:0,explanation:"'Karte' means card (credit/debit)."},{type:"tts",audioText:"Entschuldigung, wo finde ich die Damenabteilung?",topics:["Finding departments","Asking for restrooms","Locating exits","Requesting assistance"],correct:0,explanation:"The speaker is asking for the women's department."},{type:"missing-word",sentence:"Das ist zu ___.",options:["teuer","toll","traurig","treu"],correct:0,explanation:"'Teuer' means expensive."},{type:"tts",audioText:"Haben Sie dieses Kleid auch in Blau?",topics:["Asking for colors","Checking sizes","Requesting discounts","Inquiring about materials"],correct:0,explanation:"The speaker is asking if the dress comes in blue."},{type:"missing-word",sentence:"Ich suche ein Geschenk für meine ___.",options:["Mutter","Mond","Maus","Mütze"],correct:0,explanation:"'Mutter' means mother."}],[{type:"missing-word",sentence:"Wo ist die ___?",options:["Umkleidekabine","Universität","Uhr","Übung"],correct:0,explanation:"'Umkleidekabine' means fitting room."},{type:"tts",audioText:"Können Sie mir helfen? Ich suche nach einem schwarzen Ledermantel.",topics:["Asking for assistance","Complaining about service","Returning items","Checking prices"],correct:0,explanation:"The speaker is asking for help finding a black leather coat."},{type:"missing-word",sentence:"Ich nehme die ___ Farbe.",options:["andere","alte","arme","alle"],correct:0,explanation:"'Andere' means other."},{type:"tts",audioText:"Die Öffnungszeiten sind von 9 bis 20 Uhr.",topics:["Store hours","Sale periods","Delivery times","Return policies"],correct:0,explanation:"The sentence states store opening hours."},{type:"missing-word",sentence:"Kann ich eine ___ bekommen?",options:["Quittung","Qualle","Quelle","Quark"],correct:0,explanation:"'Quittung' means receipt."}]]},
+hobbies: {name:"Hobbies & Leisure",icon:"fa-film",sets:[[{type:"missing-word",sentence:"Ich spiele gern ___.",options:["Klavier","Käse","Kiste","Kugel"],correct:0,explanation:"'Klavier' means piano."},{type:"tts",audioText:"Am Samstag gehe ich ins Kino, um den neuen Marvel-Film zu sehen.",topics:["Going to the movies","Reading books","Playing sports","Cooking"],correct:0,explanation:"The speaker is going to the cinema to watch a movie."},{type:"missing-word",sentence:"Mein Hobby ist ___.",options:["Fotografieren","Fenster","Fisch","Feder"],correct:0,explanation:"'Fotografieren' means photography."},{type:"tts",audioText:"Ich lese jeden Abend vor dem Schlafengehen ein Buch.",topics:["Reading","Writing","Painting","Dancing"],correct:0,explanation:"The speaker reads a book every evening before bed."},{type:"missing-word",sentence:"Am Wochenende gehe ich oft ___.",options:["wandern","warten","waschen","wünschen"],correct:0,explanation:"'Wandern' means hiking."}],[{type:"missing-word",sentence:"Ich spiele Fußball im ___.",options:["Verein","Verkehr","Verstand","Vertrag"],correct:0,explanation:"'Verein' means club/team."},{type:"tts",audioText:"Meine Lieblingsband spielt heute Abend im Park.",topics:["Attending concerts","Watching sports","Visiting museums","Going to restaurants"],correct:0,explanation:"The speaker mentions their favorite band playing in the park."},{type:"missing-word",sentence:"Ich gehe gern ___.",options:["schwimmen","schreiben","schließen","schneiden"],correct:0,explanation:"'Schwimmen' means swimming."},{type:"tts",audioText:"Am Sonntag backe ich immer Kuchen für meine Familie.",topics:["Baking","Gardening","Painting","Playing video games"],correct:0,explanation:"The speaker bakes cake every Sunday for their family."},{type:"missing-word",sentence:"Ich sammle alte ___.",options:["Münzen","Mützen","Mäuse","Möbel"],correct:0,explanation:"'Münzen' means coins."}],[{type:"missing-word",sentence:"Ich fotografiere gern ___.",options:["Landschaften","Löffel","Lokale","Lieder"],correct:0,explanation:"'Landschaften' means landscapes."},{type:"tts",audioText:"Jeden Donnerstag gehe ich zum Tanzen in die Stadthalle.",topics:["Dancing","Swimming","Reading","Cooking"],correct:0,explanation:"The speaker goes dancing every Thursday."},{type:"missing-word",sentence:"Ich spiele ___ Gitarre.",options:["die","der","das","den"],correct:0,explanation:"'Die' is the correct article for 'Gitarre'."},{type:"tts",audioText:"In meiner Freizeit male ich gerne Aquarellbilder.",topics:["Painting","Singing","Running","Shopping"],correct:0,explanation:"The speaker paints watercolors in their free time."},{type:"missing-word",sentence:"Ich höre gern ___ Musik.",options:["klassische","kalte","kaputte","kurze"],correct:0,explanation:"'Klassische' means classical."}]]},
+animals: {name:"Animals & Nature",icon:"fa-paw",sets:[[{type:"missing-word",sentence:"Der ___ bellt laut.",options:["Hund","Hut","Haus","Hand"],correct:0,explanation:"'Hund' means dog."},{type:"tts",audioText:"Im Wald gibt es viele Tiere wie Rehe, Füchse und Eichhörnchen.",topics:["City life","Forest animals","Ocean creatures","Farm animals"],correct:1,explanation:"The sentence describes forest animals."},{type:"missing-word",sentence:"Die ___ fliegt hoch am Himmel.",options:["Vogel","Vase","Vogt","Voll"],correct:0,explanation:"'Vogel' means bird."},{type:"tts",audioText:"Im Frühling blühen die Blumen und die Bäume bekommen neue Blätter.",topics:["Seasons","Weather","Gardening","Nature cycles"],correct:3,explanation:"The sentence describes natural cycles in spring."},{type:"missing-word",sentence:"Ich sehe einen ___ im Zoo.",options:["Löwe","Löffel","Lokal","Lied"],correct:0,explanation:"'Löwe' means lion."}],[{type:"missing-word",sentence:"Die ___ macht Muh.",options:["Kuh","Katze","Kiste","Kugel"],correct:0,explanation:"'Kuh' means cow."},{type:"tts",audioText:"Am Strand kann man oft Möwen und Krabben sehen.",topics:["Beach wildlife","Forest animals","Mountain creatures","Desert species"],correct:0,explanation:"The sentence describes animals found at the beach."},{type:"missing-word",sentence:"Der ___ klettert auf Bäume.",options:["Affe","Apfel","Arm","Auge"],correct:0,explanation:"'Affe' means monkey."},{type:"tts",audioText:"Im Herbst fallen die Blätter von den Bäumen und die Tage werden kürzer.",topics:["Autumn changes","Winter preparations","Spring renewal","Summer activities"],correct:0,explanation:"The sentence describes autumn changes."},{type:"missing-word",sentence:"Die ___ summt um die Blumen.",options:["Biene","Banane","Bär","Buch"],correct:0,explanation:"'Biene' means bee."}],[{type:"missing-word",sentence:"Der ___ brüllt laut.",options:["Tiger","Tisch","Tuch","Topf"],correct:0,explanation:"'Tiger' means tiger."},{type:"tts",audioText:"Im Winter ziehen viele Vögel in wärmere Länder.",topics:["Bird migration","Hibernation","Plant growth","Ocean currents"],correct:0,explanation:"The sentence describes bird migration in winter."},{type:"missing-word",sentence:"Die ___ hat lange Ohren.",options:["Hasen","Hose","Haus","Hand"],correct:0,explanation:"'Hasen' means rabbits."},{type:"tts",audioText:"Im Frühling schlüpfen die Küken aus ihren Eiern.",topics:["Spring hatching","Summer breeding","Autumn harvesting","Winter sleeping"],correct:0,explanation:"The sentence describes chicks hatching in spring."},{type:"missing-word",sentence:"Der ___ lebt im Dschungel.",options:["Papagei","Papier","Pferd","Pflanze"],correct:0,explanation:"'Papagei' means parrot."}]]},
+work: {name:"Work & Office",icon:"fa-briefcase",sets:[[{type:"missing-word",sentence:"Ich habe ein ___ mit meinem Chef.",options:["Meeting","Messer","Mantel","Mond"],correct:0,explanation:"'Meeting' is commonly used in German office contexts."},{type:"tts",audioText:"Könnten Sie mir bitte die Präsentation per E-Mail schicken?",topics:["Making requests","Complaining","Socializing","Giving orders"],correct:0,explanation:"The speaker is politely requesting a presentation via email."},{type:"missing-word",sentence:"Mein ___ ist sehr beschäftigt heute.",options:["Kollege","Kuchen","Koffer","Kino"],correct:0,explanation:"'Kollege' means colleague."},{type:"tts",audioText:"Die Firma sucht neue Mitarbeiter für die Marketing-Abteilung.",topics:["Job hunting","Company news","Office gossip","Work complaints"],correct:0,explanation:"The sentence is about job openings in marketing."},{type:"missing-word",sentence:"Ich muss einen ___ schreiben.",options:["Bericht","Ball","Bett","Boot"],correct:0,explanation:"'Bericht' means report."}],[{type:"missing-word",sentence:"Ich arbeite als ___.",options:["Ingenieur","Igel","Insel","Idee"],correct:0,explanation:"'Ingenieur' means engineer."},{type:"tts",audioText:"Könnten Sie das bitte wiederholen? Ich habe Sie nicht verstanden.",topics:["Asking for clarification","Making complaints","Giving instructions","Sharing personal news"],correct:0,explanation:"The speaker is asking for repetition due to misunderstanding."},{type:"missing-word",sentence:"Die ___ beginnt um 9 Uhr.",options:["Arbeit","Arzt","Arm","Auge"],correct:0,explanation:"'Arbeit' means work."},{type:"tts",audioText:"Ich muss Überstunden machen, weil das Projekt morgen fertig sein muss.",topics:["Working overtime","Taking vacation","Quitting job","Asking for raise"],correct:0,explanation:"The speaker mentions working overtime to meet a deadline."},{type:"missing-word",sentence:"Ich brauche einen neuen ___.",options:["Computer","Cousin","Creme","Cello"],correct:0,explanation:"'Computer' is the same in German."}],[{type:"missing-word",sentence:"Mein ___ ist krank.",options:["Chef","Chor","Chips","Chemie"],correct:0,explanation:"'Chef' means boss."},{type:"tts",audioText:"Könnten Sie mir bitte helfen? Ich verstehe diese Excel-Tabelle nicht.",topics:["Asking for help","Complaining about software","Requesting training","Reporting bugs"],correct:0,explanation:"The speaker is asking for help with an Excel spreadsheet."},{type:"missing-word",sentence:"Ich habe heute ___ frei.",options:["Urlaub","Uhr","Universität","Übung"],correct:0,explanation:"'Urlaub' means vacation."},{type:"tts",audioText:"Die Konferenz findet nächste Woche im Hauptquartier statt.",topics:["Conference announcements","Team meetings","Client visits","Training sessions"],correct:0,explanation:"The sentence announces a conference at headquarters."},{type:"missing-word",sentence:"Ich muss eine ___ senden.",options:["E-Mail","Esel","Erdbeere","Ecke"],correct:0,explanation:"'E-Mail' is commonly used in German."}]]},
+health: {name:"Health & Body",icon:"fa-heartbeat",sets:[[{type:"missing-word",sentence:"Mein ___ tut weh.",options:["Kopf","Korb","Koch","Kohl"],correct:0,explanation:"'Kopf' means head."},{type:"tts",audioText:"Ich fühle mich nicht gut. Ich habe Fieber und Halsschmerzen.",topics:["Describing symptoms","Making plans","Talking about food","Discussing weather"],correct:0,explanation:"The speaker is describing illness symptoms."},{type:"missing-word",sentence:"Nehmen Sie ___ Tabletten dreimal täglich.",options:["diese","dieser","dieses","diesen"],correct:0,explanation:"'Diese' is the correct demonstrative pronoun for plural 'Tabletten'."},{type:"tts",audioText:"Sport ist gut für die Gesundheit. Ich gehe jeden Tag joggen.",topics:["Exercise benefits","Diet advice","Medical procedures","Sleep habits"],correct:0,explanation:"The speaker talks about exercise benefits."},{type:"missing-word",sentence:"Ich gehe zum ___.",options:["Arzt","Auto","Apfel","Auge"],correct:0,explanation:"'Arzt' means doctor."}],[{type:"missing-word",sentence:"Ich habe starke ___ Schmerzen.",options:["Bauch","Buch","Bett","Boot"],correct:0,explanation:"'Bauch' means stomach."},{type:"tts",audioText:"Ich brauche ein Rezept für Antibiotika.",topics:["Requesting medication","Asking for test results","Scheduling appointments","Discussing diet"],correct:0,explanation:"The speaker needs a prescription for antibiotics."},{type:"missing-word",sentence:"Mein ___ pocht.",options:["Herz","Hemd","Hund","Haus"],correct:0,explanation:"'Herz' means heart."},{type:"tts",audioText:"Ich sollte mehr Wasser trinken und weniger Kaffee.",topics:["Hydration advice","Sleep recommendations","Exercise routines","Medication schedules"],correct:0,explanation:"The speaker discusses drinking more water and less coffee."},{type:"missing-word",sentence:"Ich habe einen ___ Termin.",options:["Arzt","Auto","Apfel","Auge"],correct:0,explanation:"'Arzttermin' means doctor's appointment."}],[{type:"missing-word",sentence:"Mein ___ juckt.",options:["Arm","Apfel","Auto","Auge"],correct:0,explanation:"'Arm' means arm."},{type:"tts",audioText:"Ich muss meine Medikamente um 8 Uhr morgens nehmen.",topics:["Medication schedule","Diet plan","Exercise routine","Sleep schedule"],correct:0,explanation:"The speaker mentions taking medication at 8 AM."},{type:"missing-word",sentence:"Ich fühle mich ___.",options:["müde","mild","mager","munter"],correct:0,explanation:"'Müde' means tired."},{type:"tts",audioText:"Ich habe seit zwei Tagen Durchfall und Erbrechen.",topics:["Describing severe symptoms","Reporting minor aches","Discussing allergies","Talking about sleep"],correct:0,explanation:"The speaker describes severe gastrointestinal symptoms."},{type:"missing-word",sentence:"Ich brauche ___ Ruhe.",options:["mehr","mein","meist","mitten"],correct:0,explanation:"'Mehr' means more."}]]},
+school: {name:"School & Education",icon:"fa-graduation-cap",sets:[[{type:"missing-word",sentence:"Die ___ beginnt um 8 Uhr.",options:["Schule","Schuh","Schlange","Schüssel"],correct:0,explanation:"'Schule' means school."},{type:"tts",audioText:"Für die Prüfung müssen wir Kapitel 1 bis 5 lernen.",topics:["Exam preparation","Homework complaints","Teacher praise","Classroom rules"],correct:0,explanation:"The speaker is talking about exam preparation."},{type:"missing-word",sentence:"Ich habe eine gute ___ in Mathe bekommen.",options:["Note","Nase","Nacht","Nummer"],correct:0,explanation:"'Note' means grade/mark."},{type:"tts",audioText:"In der Pause spielen wir Fußball auf dem Schulhof.",topics:["Recess activities","Classroom lessons","Homework","After-school clubs"],correct:0,explanation:"The sentence describes recess activities."},{type:"missing-word",sentence:"Mein ___ hilft mir bei den Hausaufgaben.",options:["Lehrer","Löffel","Lokal","Lied"],correct:0,explanation:"'Lehrer' means teacher."}],[{type:"missing-word",sentence:"Ich gehe in die ___ Klasse.",options:["achte","alte","arme","alle"],correct:0,explanation:"'Achte' means eighth (as in 8th grade)."},{type:"tts",audioText:"Die Hausaufgaben für morgen sind auf Seite 45, Aufgabe 3.",topics:["Homework assignments","Test announcements","Field trip details","Club meeting times"],correct:0,explanation:"The speaker gives homework instructions."},{type:"missing-word",sentence:"Wir haben heute ___ Unterricht.",options:["Musik","Mutter","Mund","Maus"],correct:0,explanation:"'Musik' means music."},{type:"tts",audioText:"Die Klassenarbeit in Geschichte war sehr schwer.",topics:["Test difficulty","Homework load","Teacher behavior","Classroom environment"],correct:0,explanation:"The speaker comments on a difficult history test."},{type:"missing-word",sentence:"Ich brauche ein neues ___ Heft.",options:["Mathe","Mutter","Mund","Maus"],correct:0,explanation:"'Mathe' means math."}],[{type:"missing-word",sentence:"Die ___ klingelt um 12 Uhr.",options:["Pause","Puppe","Pfanne","Pflanze"],correct:0,explanation:"'Pause' means break/recess."},{type:"tts",audioText:"Unser Physiklehrer erklärt die Versuche immer sehr anschaulich.",topics:["Teacher praise","Subject complaints","Homework issues","Classroom rules"],correct:0,explanation:"The speaker praises their physics teacher's explanations."},{type:"missing-word",sentence:"Ich lerne für die ___ Prüfung.",options:["Abschluss","Apfel","Auto","Auge"],correct:0,explanation:"'Abschlussprüfung' means final exam."},{type:"tts",audioText:"In der Bibliothek muss man leise sein.",topics:["Library rules","Classroom behavior","Cafeteria etiquette","Playground safety"],correct:0,explanation:"The sentence states a library rule about being quiet."},{type:"missing-word",sentence:"Mein ___ Fach ist Biologie.",options:["Lieblings","Langes","Lautes","Leeres"],correct:0,explanation:"'Lieblingsfach' means favorite subject."}]]},
+cities: {name:"Cities & Places",icon:"fa-city",sets:[[{type:"missing-word",sentence:"Berlin ist die ___ von Deutschland.",options:["Hauptstadt","Hauptbahnhof","Hauptstraße","Haupttor"],correct:0,explanation:"'Hauptstadt' means capital city."},{type:"tts",audioText:"In München gibt es das berühmte Oktoberfest und viele schöne Parks.",topics:["City attractions","Country comparisons","Rural life","Transport systems"],correct:0,explanation:"The sentence describes attractions in Munich."},{type:"missing-word",sentence:"Das ___ ist sehr alt und historisch.",options:["Schloss","Schuh","Schlange","Schüssel"],correct:0,explanation:"'Schloss' means castle."},{type:"tts",audioText:"Die Altstadt von Heidelberg ist bekannt für ihre romantische Atmosphäre.",topics:["Historic districts","Modern architecture","Industrial areas","Suburban life"],correct:0,explanation:"The sentence describes Heidelberg's historic old town."},{type:"missing-word",sentence:"Ich besuche das ___ am Wochenende.",options:["Museum","Mond","Maus","Mütze"],correct:0,explanation:"'Museum' is the same in German."}],[{type:"missing-word",sentence:"Hamburg hat einen großen ___ Hafen.",options:["Seehafen","Schuh","Schlange","Schüssel"],correct:0,explanation:"'Seehafen' means seaport."},{type:"tts",audioText:"In Frankfurt gibt es viele Wolkenkratzer und die berühmte Skyline.",topics:["City skylines","Historical sites","Natural landscapes","Rural villages"],correct:0,explanation:"The sentence describes Frankfurt's modern skyline."},{type:"missing-word",sentence:"Köln ist berühmt für seinen ___ Dom.",options:["Kölner","Kalter","Kleiner","Krummer"],correct:0,explanation:"'Kölner Dom' is the famous Cologne Cathedral."},{type:"tts",audioText:"Dresden wird oft als 'Elbflorenz' bezeichnet wegen seiner schönen Architektur.",topics:["Architectural nicknames","Industrial cities","Mountain towns","Coastal resorts"],correct:0,explanation:"The sentence explains Dresden's nickname 'Elbflorenz'."},{type:"missing-word",sentence:"In ___ gibt es die berühmte Frauenkirche.",options:["Dresden","Dorf","Dach","Decke"],correct:0,explanation:"The Frauenkirche is a famous church in Dresden."}],[{type:"missing-word",sentence:"Die ___ ist die längste Straße in Berlin.",options:["Unter den Linden","Unterhemd","Unterlage","Unterkunft"],correct:0,explanation:"'Unter den Linden' is a famous boulevard in Berlin."},{type:"tts",audioText:"Der Schwarzwald ist eine beliebte Urlaubsregion im Südwesten Deutschlands.",topics:["Tourist regions","Urban centers","Industrial zones","Coastal areas"],correct:0,explanation:"The sentence describes the Black Forest as a tourist region."},{type:"missing-word",sentence:"Der ___ See ist der größte See in Deutschland.",options:["Bodensee","Boden","Boot","Buch"],correct:0,explanation:"'Bodensee' is Lake Constance, the largest lake in Germany."},{type:"tts",audioText:"Die Zugspitze ist der höchste Berg Deutschlands und liegt in den Alpen.",topics:["Mountains","Rivers","Forests","Deserts"],correct:0,explanation:"The sentence identifies Germany's highest mountain."},{type:"missing-word",sentence:"Der Rhein ist ein wichtiger ___ in Europa.",options:["Fluss","Fisch","Felsen","Feld"],correct:0,explanation:"'Fluss' means river."}]]}
 };
+
+// Track last used sets per topic to ensure variety
+let topicSetHistory = JSON.parse(localStorage.getItem('deutschLernenSetHistory')) || {};
 
 // Shuffle array helper function
 function shuffleArray(array) {
@@ -836,6 +549,52 @@ function randomizeOptions(options, correctIndex) {
     };
 }
 
+// Select a random set that hasn't been used recently
+function selectRandomSet(topicKey) {
+    const sets = allTopics[topicKey].sets;
+    const numSets = sets.length;
+    
+    // Initialize history if needed
+    if (!topicSetHistory[topicKey]) {
+        topicSetHistory[topicKey] = [];
+    }
+    
+    // Get available sets (not in last 2 used)
+    const availableSets = [];
+    for (let i = 0; i < numSets; i++) {
+        if (!topicSetHistory[topicKey].slice(-2).includes(i)) {
+            availableSets.push(i);
+        }
+    }
+    
+    // If all sets were recently used, reset history
+    if (availableSets.length === 0) {
+        topicSetHistory[topicKey] = [];
+        for (let i = 0; i < numSets; i++) {
+            availableSets.push(i);
+        }
+    }
+    
+    // Select random from available
+    const randomIndex = availableSets[Math.floor(Math.random() * availableSets.length)];
+    
+    // Update history
+    topicSetHistory[topicKey].push(randomIndex);
+    localStorage.setItem('deutschLernenSetHistory', JSON.stringify(topicSetHistory));
+    
+    return randomIndex;
+}
+
+// Scroll to next button smoothly
+function scrollToNextButton() {
+    setTimeout(() => {
+        const nextBtn = document.querySelector('.btn-next');
+        if (nextBtn) {
+            nextBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    }, 100);
+}
+
 // App state
 let currentTopic = null;
 let currentExercise = 0;
@@ -844,7 +603,7 @@ let userAnswers = [];
 let speechSynthesis = window.speechSynthesis;
 let isDarkMode = localStorage.getItem('darkMode') === 'true';
 let topicBestScores = JSON.parse(localStorage.getItem('deutschLernenBestScores')) || {};
-let currentSetIndex = null; // Track which set is in use
+let currentSetIndex = null;
 
 // DOM elements
 const exerciseContainer = document.getElementById('exercise-container');
@@ -870,7 +629,6 @@ themeToggle.addEventListener('click', () => {
     localStorage.setItem('darkMode', isDarkMode);
     applyTheme();
     
-    // Update icon
     const icon = themeToggle.querySelector('i');
     icon.className = isDarkMode ? 'fas fa-sun' : 'fas fa-moon';
 });
@@ -910,7 +668,6 @@ function applyTheme() {
 function initApp() {
     renderTopicSelection();
     
-    // Event listeners
     newTopicBtn.addEventListener('click', showTopicSelection);
     restartTopicBtn.addEventListener('click', () => startTopicExercises(currentTopic));
 }
@@ -948,8 +705,8 @@ function startTopicExercises(topicKey) {
     currentExercise = 0;
     points = 0;
     
-    // Select a RANDOM set each time (even on revisit)
-    currentSetIndex = Math.floor(Math.random() * 3);
+    // GUARANTEED NEW SET EVERY TIME
+    currentSetIndex = selectRandomSet(topicKey);
     const exercises = allTopics[topicKey].sets[currentSetIndex];
     userAnswers = new Array(exercises.length).fill(null);
     
@@ -965,7 +722,6 @@ function loadExercise(index) {
     const exercise = exercises[index];
     exerciseContainer.innerHTML = '';
     
-    // Create title with topic name and back button
     const titleContainer = document.createElement('div');
     titleContainer.className = 'exercise-title';
     titleContainer.innerHTML = `
@@ -979,7 +735,6 @@ function loadExercise(index) {
     `;
     exerciseContainer.appendChild(titleContainer);
     
-    // Add back button listener
     setTimeout(() => {
         const backBtn = document.getElementById('back-to-topics-btn');
         if (backBtn) {
@@ -987,14 +742,12 @@ function loadExercise(index) {
         }
     }, 0);
     
-    // Randomize options for missing-word exercises
     if (exercise.type === 'missing-word') {
         const randomized = randomizeOptions(exercise.options, exercise.correct);
         exercise.currentOptions = randomized.options;
         exercise.currentCorrect = randomized.correctIndex;
     }
     
-    // Randomize topics for TTS exercises
     if (exercise.type === 'tts') {
         const topics = [...exercise.topics];
         const correctTopic = topics[exercise.correct];
@@ -1034,7 +787,6 @@ function renderMissingWordExercise(exercise, exercises) {
         optionBtn.textContent = option;
         optionBtn.dataset.index = index;
         
-        // Only disable if user has already answered
         if (userAnswers[currentExercise] !== undefined && userAnswers[currentExercise] !== null) {
             optionBtn.disabled = true;
             if (index === userAnswers[currentExercise]) {
@@ -1055,7 +807,6 @@ function renderMissingWordExercise(exercise, exercises) {
     
     content.appendChild(optionsContainer);
     
-    // Feedback element
     const feedback = document.createElement('div');
     feedback.className = 'feedback';
     feedback.id = 'feedback';
@@ -1069,13 +820,11 @@ function renderMissingWordExercise(exercise, exercises) {
 function handleMissingWordAnswer(selectedIndex, correctIndex, exercise, exercises) {
     userAnswers[currentExercise] = selectedIndex;
     
-    // Update points
     if (selectedIndex === correctIndex) {
         points += 10;
         pointsDisplay.textContent = points;
     }
     
-    // Update UI
     const buttons = document.querySelectorAll('.option-btn');
     buttons.forEach((btn, index) => {
         btn.disabled = true;
@@ -1091,24 +840,23 @@ function handleMissingWordAnswer(selectedIndex, correctIndex, exercise, exercise
         }
     });
     
-    // Show feedback
     const feedback = document.getElementById('feedback');
     if (selectedIndex === correctIndex) {
         feedback.textContent = `Correct! ${exercise.explanation}`;
         feedback.className = 'feedback correct';
-        // SPEAK THE FULL CORRECT SENTENCE
         const fullCorrectSentence = exercise.sentence.replace("___", exercise.options[exercise.correct]);
         setTimeout(() => speakText(fullCorrectSentence), 500);
     } else {
         feedback.textContent = `Incorrect. ${exercise.explanation}`;
         feedback.className = 'feedback incorrect';
-        // Also speak the correct sentence
         const fullCorrectSentence = exercise.sentence.replace("___", exercise.options[exercise.correct]);
         setTimeout(() => speakText(fullCorrectSentence), 1000);
     }
     
-    // Enable next button
     document.querySelector('.btn-next').disabled = false;
+    
+    // SCROLL TO NEXT BUTTON
+    scrollToNextButton();
 }
 
 // Render TTS exercise
@@ -1122,7 +870,6 @@ function renderTTsExercise(exercise) {
     instruction.style.fontSize = '1.1rem';
     content.appendChild(instruction);
     
-    // Audio controls
     const audioControls = document.createElement('div');
     audioControls.className = 'audio-controls';
     
@@ -1142,7 +889,6 @@ function renderTTsExercise(exercise) {
     audioControls.appendChild(playBtn);
     content.appendChild(audioControls);
     
-    // Topics
     const topicsContainer = document.createElement('div');
     topicsContainer.className = 'topics-container';
     
@@ -1155,13 +901,11 @@ function renderTTsExercise(exercise) {
         topicCard.textContent = topic;
         topicCard.dataset.index = index;
         
-        // Only lock if user has already answered
         if (userAnswers[currentExercise] !== undefined && userAnswers[currentExercise] !== null) {
             topicCard.classList.add('locked');
             if (index === userAnswers[currentExercise]) {
                 topicCard.classList.add('selected');
             }
-            // Highlight correct answer if wrong
             if (userAnswers[currentExercise] !== correctIndex && index === correctIndex) {
                 topicCard.classList.add('correct');
             }
@@ -1173,7 +917,6 @@ function renderTTsExercise(exercise) {
     
     content.appendChild(topicsContainer);
     
-    // Feedback element
     const feedback = document.createElement('div');
     feedback.className = 'feedback';
     feedback.id = 'feedback';
@@ -1187,13 +930,11 @@ function renderTTsExercise(exercise) {
 function handleTTSAnswer(selectedIndex, correctIndex, exercise) {
     userAnswers[currentExercise] = selectedIndex;
     
-    // Update points
     if (selectedIndex === correctIndex) {
         points += 10;
         pointsDisplay.textContent = points;
     }
     
-    // Update UI - lock all cards and highlight correct
     const cards = document.querySelectorAll('.topic-card');
     cards.forEach((card, index) => {
         card.classList.add('locked');
@@ -1205,18 +946,20 @@ function handleTTSAnswer(selectedIndex, correctIndex, exercise) {
         }
     });
     
-    // Show feedback (NO TTS on answer)
     const feedback = document.getElementById('feedback');
     if (selectedIndex === correctIndex) {
         feedback.textContent = `Correct! ${exercise.explanation}`;
         feedback.className = 'feedback correct';
+        // NO TTS ON ANSWER - only visual feedback
     } else {
         feedback.textContent = `Incorrect. ${exercise.explanation}`;
         feedback.className = 'feedback incorrect';
     }
     
-    // Enable next button
     document.querySelector('.btn-next').disabled = false;
+    
+    // SCROLL TO NEXT BUTTON
+    scrollToNextButton();
 }
 
 // Text-to-speech function
@@ -1275,7 +1018,6 @@ function updateProgress() {
 
 // Finish topic and save score
 function finishTopic() {
-    // Save best score
     if (points > (topicBestScores[currentTopic] || 0)) {
         topicBestScores[currentTopic] = points;
         localStorage.setItem('deutschLernenBestScores', JSON.stringify(topicBestScores));
@@ -1298,10 +1040,10 @@ function finishTopic() {
     completionMessage.textContent = message;
     completionMessage.style.color = color;
     
-    // Show completion screen with FIXED score format
+    // FIXED SCORE DISPLAY: Only one update point
     exerciseContainer.classList.add('hidden');
     progressContainer.classList.add('hidden');
-    finalScore.textContent = `${points}/50`; // FIXED: no extra "/50"
+    finalScore.textContent = `${points}/50`; // CORRECT FORMAT
     completionScreen.classList.remove('hidden');
 }
 
@@ -1311,7 +1053,7 @@ function showTopicSelection() {
     exerciseContainer.classList.add('hidden');
     progressContainer.classList.add('hidden');
     topicSelectionScreen.classList.remove('hidden');
-    renderTopicSelection(); // Refresh scores
+    renderTopicSelection();
 }
 
 // Initialize the app when page loads
