@@ -587,18 +587,12 @@ function selectRandomSet(topicKey) {
 
 // Scroll to next button smoothly
 function scrollToNextButton() {
-  setTimeout(() => {
-    const nextBtn = document.querySelector('.btn-next');
-    if (nextBtn) {
-      nextBtn.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center', // or 'start' for more aggressive positioning
-        inline: 'nearest'
-      });
-      // Optional: Add small delay then focus for keyboard users
-      setTimeout(() => nextBtn.focus(), 300);
-    }
-  }, 150);
+    setTimeout(() => {
+        const nextBtn = document.querySelector('.btn-next');
+        if (nextBtn) {
+            nextBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    }, 100);
 }
 
 // App state
@@ -1024,31 +1018,33 @@ function updateProgress() {
 
 // Finish topic and save score
 function finishTopic() {
-  if (points > (topicBestScores[currentTopic] || 0)) {
-    topicBestScores[currentTopic] = points;
-    localStorage.setItem('deutschLernenBestScores', JSON.stringify(topicBestScores));
-  }
-
-  let message = "Keep practicing! 📚";
-  let color = "#f8961e";
-  if (points >= 45) {
-    message = "Outstanding! 🌟";
-    color = "#4ade80";
-  } else if (points >= 35) {
-    message = "Great job! 👏";
-    color = "#4cc9f0";
-  } else if (points >= 25) {
-    message = "Good effort! 💪";
-    color = "#f8961e";
-  }
-
-  completionMessage.textContent = message;
-  completionMessage.style.color = color;
-
-  exerciseContainer.classList.add('hidden');
-  progressContainer.classList.add('hidden');
-  finalScore.textContent = points; // ✅ Only the number, e.g., "10"
-  completionScreen.classList.remove('hidden');
+    if (points > (topicBestScores[currentTopic] || 0)) {
+        topicBestScores[currentTopic] = points;
+        localStorage.setItem('deutschLernenBestScores', JSON.stringify(topicBestScores));
+    }
+    
+    // Dynamic completion message
+    let message = "Keep practicing! 📚";
+    let color = "#f8961e";
+    if (points >= 45) {
+        message = "Outstanding! 🌟";
+        color = "#4ade80";
+    } else if (points >= 35) {
+        message = "Great job! 👏";
+        color = "#4cc9f0";
+    } else if (points >= 25) {
+        message = "Good effort! 💪";
+        color = "#f8961e";
+    }
+    
+    completionMessage.textContent = message;
+    completionMessage.style.color = color;
+    
+    // FIXED SCORE DISPLAY: Only one update point
+    exerciseContainer.classList.add('hidden');
+    progressContainer.classList.add('hidden');
+    finalScore.textContent = `${points}/50`; // CORRECT FORMAT
+    completionScreen.classList.remove('hidden');
 }
 
 // Show topic selection screen
