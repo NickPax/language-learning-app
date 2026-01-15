@@ -35,8 +35,6 @@
             --feedback-correct-dark: #064e3b;
             --feedback-incorrect-light: #fee2e2;
             --feedback-incorrect-dark: #7f1d1d;
-            --score-badge-bg: #fbbf24; /* Bright yellow for high contrast */
-            --score-badge-text: #1e293b; /* Dark text for readability */
         }
         
         body {
@@ -385,29 +383,22 @@
             margin: 20px 0;
         }
         
-        .action-buttons {
-            margin-top: 25px;
-            display: flex;
-            justify-content: center;
-            gap: 15px; /* Prevents button overlap on hover */
-            flex-wrap: wrap;
-        }
-        
         .restart-btn, .continue-btn, .new-topic-btn, .full-restart-btn {
             background: var(--success);
             color: white;
-            padding: 12px 25px; /* Slightly smaller padding for better fit */
+            padding: 12px 30px;
             border: none;
             border-radius: 8px;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: 600;
             cursor: pointer;
+            margin-top: 20px;
             transition: all 0.2s;
         }
         
         .restart-btn:hover, .continue-btn:hover, .new-topic-btn:hover, .full-restart-btn:hover {
             background: #3ab7e4;
-            transform: scale(1.03);
+            transform: scale(1.05);
         }
         
         .topic-options {
@@ -446,8 +437,8 @@
             position: absolute;
             top: 10px;
             right: 10px;
-            background: var(--score-badge-bg);
-            color: var(--score-badge-text);
+            background: var(--success);
+            color: white;
             border-radius: 50%;
             width: 28px;
             height: 28px;
@@ -456,7 +447,6 @@
             justify-content: center;
             font-size: 0.8rem;
             font-weight: bold;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
         
         .hidden {
@@ -489,15 +479,6 @@
                 width: 24px;
                 height: 24px;
                 font-size: 0.7rem;
-            }
-            
-            .action-buttons {
-                gap: 10px;
-            }
-            
-            .restart-btn, .new-topic-btn {
-                padding: 10px 20px;
-                font-size: 1rem;
             }
         }
     </style>
@@ -536,10 +517,8 @@
             <h2>Great Job! 🌟</h2>
             <p>You've completed the topic!</p>
             <div class="final-score">Your Score: <span id="final-score">0</span>/50 points</div>
-            <div class="action-buttons">
-                <button class="new-topic-btn" id="new-topic-btn">Choose Another Topic</button>
-                <button class="restart-btn" id="restart-topic-btn">Retry This Topic</button>
-            </div>
+            <button class="new-topic-btn" id="new-topic-btn">Choose Another Topic</button>
+            <button class="restart-btn" id="restart-topic-btn">Retry This Topic</button>
         </div>
         
         <div class="topic-selection-screen" id="topic-selection-screen">
@@ -1192,7 +1171,7 @@
                     }
                 }
                 
-                optionBtn.addEventListener('click', () => handleMissingWordAnswer(index, correctIndex, exercise.sentence.replace("___", option)));
+                optionBtn.addEventListener('click', () => handleMissingWordAnswer(index, correctIndex, option));
                 optionsContainer.appendChild(optionBtn);
             });
             
@@ -1209,11 +1188,10 @@
         }
         
         // Handle missing word answer
-        function handleMissingWordAnswer(selectedIndex, correctIndex, fullSentence) {
+        function handleMissingWordAnswer(selectedIndex, correctIndex, selectedWord) {
             userAnswers[currentExercise] = selectedIndex;
             
-            // Speak the selected word (as requested)
-            const selectedWord = allTopics[currentTopic].exercises[currentExercise].currentOptions[selectedIndex];
+            // Speak the selected word
             speakText(selectedWord);
             
             // Update points
@@ -1245,8 +1223,6 @@
             if (selectedIndex === correctIndex) {
                 feedback.textContent = `Correct! ${exercise.explanation}`;
                 feedback.className = 'feedback correct';
-                // Speak the full correct sentence after a short delay
-                setTimeout(() => speakText(fullSentence), 800);
             } else {
                 feedback.textContent = `Incorrect. ${exercise.explanation}`;
                 feedback.className = 'feedback incorrect';
@@ -1313,7 +1289,7 @@
                     }
                 }
                 
-                topicCard.addEventListener('click', () => handleTTSAnswer(index, correctIndex, exercise.audioText));
+                topicCard.addEventListener('click', () => handleTTSAnswer(index, correctIndex));
                 topicsContainer.appendChild(topicCard);
             });
             
@@ -1330,7 +1306,7 @@
         }
         
         // Handle TTS answer
-        function handleTTSAnswer(selectedIndex, correctIndex, audioText) {
+        function handleTTSAnswer(selectedIndex, correctIndex) {
             userAnswers[currentExercise] = selectedIndex;
             
             // Update points
@@ -1355,8 +1331,6 @@
             if (selectedIndex === correctIndex) {
                 feedback.textContent = `Correct! ${exercise.explanation}`;
                 feedback.className = 'feedback correct';
-                // Speak the correct sentence again
-                setTimeout(() => speakText(audioText), 800);
             } else {
                 feedback.textContent = `Incorrect. ${exercise.explanation}`;
                 feedback.className = 'feedback incorrect';
@@ -1434,7 +1408,7 @@
             // Show completion screen
             exerciseContainer.classList.add('hidden');
             progressContainer.classList.add('hidden');
-            finalScore.textContent = `${points}/50`; // Fixed: no extra "/50"
+            finalScore.textContent = `${points}/50`;
             completionScreen.classList.remove('hidden');
         }
         
